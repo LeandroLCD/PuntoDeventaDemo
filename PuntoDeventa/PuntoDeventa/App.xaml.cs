@@ -1,4 +1,7 @@
-﻿using Xamarin.Forms;
+﻿using PuntoDeventa.Data.Repository.Auth;
+using PuntoDeventa.Domain.Helpers;
+using PuntoDeventa.UI.Auth.Models;
+using Xamarin.Forms;
 
 namespace PuntoDeventa
 {
@@ -8,9 +11,19 @@ namespace PuntoDeventa
         {
             InitializeComponent();
 
+            CallApi();
+
+
+
+
+
             MainPage = new MainPage();
         }
-
+        private async void CallApi()
+        {
+            var repositoy = new AuthRepository();
+          var resp = await repositoy.Login("blipblipcode@gmail.com", "A1B2C3");
+        }
         protected override void OnStart()
         {
 
