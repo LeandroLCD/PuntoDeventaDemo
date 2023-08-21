@@ -7,6 +7,12 @@ namespace PuntoDeventa.Data.DTO
 {
     internal class AuthUserDataDTO
     {
+        public AuthUserDataDTO(string email, string password)
+        {
+            Email = email;
+            Password = password;
+            ReturnSecureToken = true;
+        }
         [JsonProperty("email")]
         public string Email { get; set; }
 

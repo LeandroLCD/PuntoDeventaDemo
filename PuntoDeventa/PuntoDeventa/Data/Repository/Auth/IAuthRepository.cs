@@ -1,4 +1,5 @@
-﻿using PuntoDeventa.Domain.Helpers.Models;
+﻿using PuntoDeventa.Domain;
+using PuntoDeventa.Domain.Helpers.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,12 @@ namespace PuntoDeventa.Data.Repository.Auth
 {
     public interface IAuthRepository
     {
-        Task<Response<UserData>> Login(string username, string password);
+        Task<AuthStates> Login(string email, string password);
+
+        Task<AuthStates> Register(string email, string password);
+
+        Task<bool> Logout();
+
+        UserData GetUserCurren();
     }
 }

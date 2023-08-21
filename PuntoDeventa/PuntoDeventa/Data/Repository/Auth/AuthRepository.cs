@@ -1,90 +1,127 @@
 ﻿using Newtonsoft.Json;
+using PuntoDeventa.Core.LocalData;
 using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.Mappers;
+using PuntoDeventa.Data.Models.Errors;
+using PuntoDeventa.Domain;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Helpers.Models;
 using PuntoDeventa.UI.Auth.Models;
+using PuntoDeVenta.Domain.Models;
 using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace PuntoDeventa.Data.Repository.Auth
 {
-    internal class AuthRepository : IAuthRepository
+    internal class AuthRepository : BaseRepository, IAuthRepository
     {
 
         #region Fields
         private HttpClient _httpClient;
+        private IDataPreferences _dataPreferences;
 
 
 
         #endregion
 
         #region Constructor
-        public AuthRepository()
+        public AuthRepository(IDataPreferences dataPreferences)
         {
             _httpClient = new HttpClient()
             {
                 Timeout = new TimeSpan(0, 0, 30)
             };
+            _dataPreferences = dataPreferences;
         }
         #endregion
 
         #region Methods
 
-        public async Task<Response<UserData>> Login(string email, string password)
+        public async Task<AuthStates> Login(string email, string password)
         {
-            var user = new AuthUserDataDTO()
+            return await LoginOrRegister(email, password, $"accounts:signInWithPassword?key");                
+        }
+       
+
+        public async Task<AuthStates> Register(string email, string password)
+        {
+            return await LoginOrRegister(email, password, $"accounts:signUp?key");
+        }
+        public Task<bool> Logout()
+        {
+            throw new NotImplementedException();
+        }
+        private async Task<AuthStates> LoginOrRegister(string email, string password, string path)
+        {
+
+            ResultType<UserDataDTO> makeCallResult = await MakeCallNetwork<UserDataDTO>(async () =>
             {
-                Email = email,
-                Password = password,
-                ReturnSecureToken = true
-            };
-            try
-            {
-                string body = JsonConvert.SerializeObject(user);
+                string body = JsonConvert.SerializeObject(new AuthUserDataDTO(email, password));
                 StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+                return await _httpClient.PostAsync(GetUri(path), content);
 
-                HttpResponseMessage response = await _httpClient.PostAsync($"{Properties.Resources.BaseUrlAuth}accounts:signInWithPassword?key={Properties.Resources.KeyApplication}", content);
-                string jsonResult = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode.Equals(HttpStatusCode.OK))
+            });
+
+            if (makeCallResult.Success)
+            {
+                //TODO
+                //Save User Task.run{}
+                _dataPreferences.SetUserData(makeCallResult.Data);
+                return new AuthStates.Success(makeCallResult.Data.ToUserData());
+            }
+            else
+            {
+                string message = CatchError(makeCallResult.Errors.FirstOrDefault().Message);
+                return new AuthStates.Error(message);
+            }
+        }
+        private string CatchError(string message)
+        {
+            var error = JsonConvert.DeserializeObject<ErrorAuth>(message);
+
+            if (error.IsNotNull())
                 {
-                    var dto = JsonConvert.DeserializeObject<UserDataDTO>(jsonResult);
-                    if(dto.IsNotNull())
-                    {
-                        return new Response<UserData>()
-                        {
-                            Success = true,
-                            Message = "Cualquier cosa",
-                            StatusCode = response.StatusCode.GetHashCode(),
-                            Data = dto.ToUserData()
-                        };
+                if (error.Error.Message.Contains("INVALID_PASSWORD"))
+                {
+                    return "La contraseña no es válida o el usuario no tiene contraseña.";
+                }
+                else if (error.Error.Message.Contains("EMAIL_NOT_FOUND"))
+                {
+                    return " No existe registro de usuario correspondiente a este email. Es posible que el usuario haya sido eliminado.";
+                                }
+                else if (error.Error.Message.Contains("USER_DISABLED"))
+                {
+                    return "La cuenta de usuario ha sido deshabilitada por un administrador.";
                     }
-
+                else
+                {
+                    return error.Error.Message;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                var t = ex.ToString();
+                return "Error No controlado (Falla en la deserealización del json).";
             }
 
-
-            return new Response<UserData>();
-
-
         }
 
-        public Task<Response<bool>> Logout()
+        private Uri GetUri(string path)
         {
-            throw new NotImplementedException();
+            return new Uri(Path.Combine(Properties.Resources.BaseUrlAuth, $"{path}={Properties.Resources.KeyApplication}"));
         }
 
-        public Task<Response<AuthDataUser>> Register(AuthDataUser model)
+        public UserData GetUserCurren()
         {
-            throw new NotImplementedException();
+            return  _dataPreferences.GetUserData().ToUserData(); 
         }
+
+
 
 
         #endregion
