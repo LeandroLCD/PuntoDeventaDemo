@@ -12,6 +12,6 @@ namespace PuntoDeventa.Domain.Helpers.Models
         public string DisplayName { get; set; }
         public string IdToken { get; set; }
         public DateTime DateLogin { get; set; }
-        public bool IsAuthValid => DateLogin > DateTime.Now.AddHours(12) ? false : true;
+        public bool IsAuthValid => DateTime.Now > DateLogin.AddHours(12) ? false : true;
     }
 }

@@ -59,5 +59,32 @@ namespace PuntoDeventa.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://identitytoolkit.googleapis.com/v1/.
+        /// </summary>
+        internal static string BaseUrlAuth {
+            get {
+                return ResourceManager.GetString("BaseUrlAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AIzaSyAYR81n079m-eiWgukzYnaDgIp2AXVqGo8.
+        /// </summary>
+        internal static string KeyApplication {
+            get {
+                return ResourceManager.GetString("KeyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
     }
 }
