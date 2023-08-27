@@ -13,9 +13,13 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="22.2.10" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="22.2.10" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="22.2.10" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2612" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +34,9 @@
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UI\Auth\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

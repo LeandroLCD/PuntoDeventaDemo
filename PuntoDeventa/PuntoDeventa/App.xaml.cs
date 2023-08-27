@@ -1,8 +1,12 @@
-﻿using PuntoDeventa.Core.LocalData;
+﻿using PuntoDeventa.Core.DI;
+using PuntoDeventa.Core.LocalData;
 using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Domain;
 using PuntoDeventa.Domain.Helpers;
+using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.UI.Auth;
 using PuntoDeventa.UI.Auth.Models;
+using System;
 using Xamarin.Forms;
 using static PuntoDeventa.Domain.AuthStates;
 
@@ -12,17 +16,35 @@ namespace PuntoDeventa
     {
         public App()
         {
-            DependencyService.RegisterSingleton<IDataPreferences>(new DataPreferences());
+            new DependencyInjectionService();
             InitializeComponent();
 
-            CallApi();
+            //CallApi();
 
 
+            //TestUseCase();
+
+            //TestViewmodel();
 
 
-
-            MainPage = new MainPage();
+            MainPage = new LoginPage();
         }
+
+        private void TestViewmodel()
+        {
+            var viewModel = DependencyService.Get<LoginPageViewModel>();
+            var user = viewModel.GetUserData();
+        }
+
+        private async void TestUseCase()
+        {
+            var repo = new AuthRepository(DependencyService.Get<IDataPreferences>());
+            var usecase = new LoginUseCase(repo);
+            var user = new AuthDataUser() { Email = "blipblipcode@gmail.com", Password = "A1B2C3" };
+
+           var estado = await usecase.Login(user);
+        }
+
         private async void CallApi()
         {
             var repositoy = new AuthRepository(DependencyService.Get<IDataPreferences>());

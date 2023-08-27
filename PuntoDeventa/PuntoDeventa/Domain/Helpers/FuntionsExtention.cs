@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System;
-using PuntoDeventa.Domain.Helpers.Models;
 using System.Linq;
 using System.Reflection;
+using PuntoDeventa.Domain.Models;
 
 namespace PuntoDeventa.Domain.Helpers
 {

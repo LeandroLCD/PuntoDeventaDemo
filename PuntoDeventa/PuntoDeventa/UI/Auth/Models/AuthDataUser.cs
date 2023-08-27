@@ -10,8 +10,11 @@ namespace PuntoDeventa.UI.Auth.Models
         [EmailAddress(ErrorMessage = "El campo {0} no corresponde a un {0}")]
         public string Email { get; set; }
 
-
         public string EmailErrorText { get; set; }
+
+        public bool HasEmail => !string.IsNullOrEmpty(EmailErrorText);
+
+
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [DisplayName("Password")]
@@ -20,5 +23,13 @@ namespace PuntoDeventa.UI.Auth.Models
         public string Password { get; set; }
 
         public string PasswordErrorText { get; set; }
+
+        public bool HasPassword => !string.IsNullOrEmpty(PasswordErrorText);
+
+        public void ErrorClear()
+        {
+            PasswordErrorText = string.Empty;
+            EmailErrorText = string.Empty;
+        }
     }
 }

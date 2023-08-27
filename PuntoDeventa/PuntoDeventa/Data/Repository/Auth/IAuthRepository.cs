@@ -1,5 +1,5 @@
 ﻿using PuntoDeventa.Domain;
-using PuntoDeventa.Domain.Helpers.Models;
+using PuntoDeventa.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +14,5 @@ namespace PuntoDeventa.Data.Repository.Auth
         Task<AuthStates> Register(string email, string password);
 
         Task<bool> Logout();
-
-        UserData GetUserCurren();
     }
 }

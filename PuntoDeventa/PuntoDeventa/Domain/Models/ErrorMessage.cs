@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PuntoDeventa.Domain.Helpers.Models
+namespace PuntoDeventa.Domain.Models
 {
     public class ErrorMessage
     {
