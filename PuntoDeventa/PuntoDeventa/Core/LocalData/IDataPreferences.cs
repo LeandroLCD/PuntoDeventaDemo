@@ -9,6 +9,10 @@ namespace PuntoDeventa.Core.LocalData
     {
         UserDataDTO GetUserData();
 
+        RemembermeUserDTO GetRemembermeUser();
+
         void SetUserData(UserDataDTO user);
+
+        void SetRemembermeUser(RemembermeUserDTO user);
     }
 }

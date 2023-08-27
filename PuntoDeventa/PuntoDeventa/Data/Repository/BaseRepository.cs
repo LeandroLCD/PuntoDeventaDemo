@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PuntoDeventa.Domain.Helpers;
-using PuntoDeventa.Domain.Helpers.Models;
+using PuntoDeventa.Domain.Models;
 using PuntoDeVenta.Domain.Models;
 using System;
 using System.Net;

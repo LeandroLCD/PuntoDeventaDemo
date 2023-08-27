@@ -1,4 +1,4 @@
-﻿using PuntoDeventa.Domain.Helpers.Models;
+﻿using PuntoDeventa.Domain.Models;
 using System.Collections.Generic;
 
 namespace PuntoDeVenta.Domain.Models

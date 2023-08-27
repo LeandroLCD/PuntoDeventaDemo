@@ -5,21 +5,18 @@ using PuntoDeventa.Data.Mappers;
 using PuntoDeventa.Data.Models.Errors;
 using PuntoDeventa.Domain;
 using PuntoDeventa.Domain.Helpers;
-using PuntoDeventa.Domain.Helpers.Models;
-using PuntoDeventa.UI.Auth.Models;
+using PuntoDeventa.Domain.Models;
 using PuntoDeVenta.Domain.Models;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 
 namespace PuntoDeventa.Data.Repository.Auth
 {
-    internal class AuthRepository : BaseRepository, IAuthRepository
+    internal class AuthRepository : BaseRepository, IAuthRepository, IUserRepository
     {
 
         #region Fields
@@ -45,9 +42,9 @@ namespace PuntoDeventa.Data.Repository.Auth
 
         public async Task<AuthStates> Login(string email, string password)
         {
-            return await LoginOrRegister(email, password, $"accounts:signInWithPassword?key");                
+            return await LoginOrRegister(email, password, $"accounts:signInWithPassword?key");
         }
-       
+
 
         public async Task<AuthStates> Register(string email, string password)
         {
@@ -86,7 +83,7 @@ namespace PuntoDeventa.Data.Repository.Auth
             var error = JsonConvert.DeserializeObject<ErrorAuth>(message);
 
             if (error.IsNotNull())
-                {
+            {
                 if (error.Error.Message.Contains("INVALID_PASSWORD"))
                 {
                     return "La contraseña no es válida o el usuario no tiene contraseña.";
@@ -94,11 +91,11 @@ namespace PuntoDeventa.Data.Repository.Auth
                 else if (error.Error.Message.Contains("EMAIL_NOT_FOUND"))
                 {
                     return " No existe registro de usuario correspondiente a este email. Es posible que el usuario haya sido eliminado.";
-                                }
+                }
                 else if (error.Error.Message.Contains("USER_DISABLED"))
                 {
                     return "La cuenta de usuario ha sido deshabilitada por un administrador.";
-                    }
+                }
                 else
                 {
                     return error.Error.Message;
@@ -118,7 +115,22 @@ namespace PuntoDeventa.Data.Repository.Auth
 
         public UserData GetUserCurren()
         {
-            return  _dataPreferences.GetUserData().ToUserData(); 
+            return _dataPreferences.GetUserData().ToUserData();
+        }
+
+        public Task<AuthStates> RecoveryPassword(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RemembermeUser GetIsRememberme()
+        {
+            return _dataPreferences.GetRemembermeUser().ToRemembermeUser();
+        }
+
+        public void SetIsRememberme(RemembermeUser user)
+        {
+            _dataPreferences.SetRemembermeUser(user.ToRemembermeUserDTO());
         }
 
 

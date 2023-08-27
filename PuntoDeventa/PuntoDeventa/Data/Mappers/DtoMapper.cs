@@ -1,5 +1,7 @@
 ﻿using PuntoDeventa.Data.DTO;
-using PuntoDeventa.Domain.Helpers.Models;
+using PuntoDeventa.Domain.Helpers;
+using PuntoDeventa.Domain.Models;
+using PuntoDeVenta.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,14 +12,32 @@ namespace PuntoDeventa.Data.Mappers
     {
         public static UserData ToUserData(this UserDataDTO dto)
         {
-            return new UserData() 
-            { 
-            DateLogin = DateTime.Now,
-            DisplayName = dto.DisplayName,
-            Email = dto.Email,
-            IdToken = dto.IdToken,
-            LocalId = dto.LocalId,
-            };
+            if (dto.IsNotNull())
+                return new UserData()
+                {
+                    DateLogin = DateTime.Now,
+                    DisplayName = dto.DisplayName,
+                    Email = dto.Email,
+                    IdToken = dto.IdToken,
+                    LocalId = dto.LocalId,
+                };
+            else
+                return null;
+        }
+        public static RemembermeUser ToRemembermeUser(this RemembermeUserDTO dto)
+        {
+            if (dto.IsNotNull())
+                return new RemembermeUser(dto.Email, dto.IsRememberme);
+            else
+                return null;
+        }
+
+        public static RemembermeUserDTO ToRemembermeUserDTO(this RemembermeUser dto)
+        {
+            if (dto.IsNotNull())
+                return new RemembermeUserDTO(dto.Email, dto.IsRememberme);
+            else
+                return null;
         }
     }
 }
