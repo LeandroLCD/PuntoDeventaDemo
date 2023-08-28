@@ -13,7 +13,7 @@
     <!--</ContentPage.BindingContext>/ -->
     
     <ContentPage.Content>
-        <Grid >
+        <Grid x:Name="GridParent" >
             <Grid Padding=" 50" VerticalOptions="CenterAndExpand" RowDefinitions="40,40,400" >
 
 

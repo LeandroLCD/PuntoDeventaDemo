@@ -1,9 +1,6 @@
 ﻿using PuntoDeventa.Domain.Models;
+using PuntoDeventa.UI.Auth.States;
 using PuntoDeVenta.Domain.Models;
-using PuntoDeventa.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PuntoDeventa.Data.Repository.Auth

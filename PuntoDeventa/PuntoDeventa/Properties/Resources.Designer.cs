@@ -61,6 +61,16 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] animation_eye {
+            get {
+                object obj = ResourceManager.GetObject("animation_eye", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://identitytoolkit.googleapis.com/v1/.
         /// </summary>
         internal static string BaseUrlAuth {
@@ -70,11 +80,41 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] icecreams {
+            get {
+                object obj = ResourceManager.GetObject("icecreams", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AIzaSyAYR81n079m-eiWgukzYnaDgIp2AXVqGo8.
         /// </summary>
         internal static string KeyApplication {
             get {
                 return ResourceManager.GetString("KeyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] montacargas {
+            get {
+                object obj = ResourceManager.GetObject("montacargas", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] paymethods {
+            get {
+                object obj = ResourceManager.GetObject("paymethods", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

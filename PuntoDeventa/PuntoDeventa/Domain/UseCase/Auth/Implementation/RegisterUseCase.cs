@@ -1,8 +1,8 @@
 ﻿using PuntoDeventa.Data.Repository.Auth;
-using PuntoDeventa.Domain;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
 using PuntoDeventa.UI.Auth.Models;
+using PuntoDeventa.UI.Auth.States;
 using System.Threading.Tasks;
 
 namespace PuntoDeVenta.Demo.Domain.UsesCase.Auth.Implementation

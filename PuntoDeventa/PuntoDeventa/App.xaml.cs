@@ -1,14 +1,10 @@
 ﻿using PuntoDeventa.Core.DI;
 using PuntoDeventa.Core.LocalData;
 using PuntoDeventa.Data.Repository.Auth;
-using PuntoDeventa.Domain;
-using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
 using PuntoDeventa.UI.Auth;
 using PuntoDeventa.UI.Auth.Models;
-using System;
 using Xamarin.Forms;
-using static PuntoDeventa.Domain.AuthStates;
 
 namespace PuntoDeventa
 {
@@ -42,7 +38,7 @@ namespace PuntoDeventa
             var usecase = new LoginUseCase(repo);
             var user = new AuthDataUser() { Email = "blipblipcode@gmail.com", Password = "A1B2C3" };
 
-           var estado = await usecase.Login(user);
+            var estado = await usecase.Login(user);
         }
 
         private async void CallApi()
@@ -50,26 +46,26 @@ namespace PuntoDeventa
             var repositoy = new AuthRepository(DependencyService.Get<IDataPreferences>());
 
             //var userCurren = repositoy.GetUserCurren();
-          //AuthStates resp = await repositoy.Login("correodeprueba@gmail.com", "A1B2C3");
+            //AuthStates resp = await repositoy.Login("correodeprueba@gmail.com", "A1B2C3");
 
-          //  switch (resp)
-          //  {
-          //      case AuthStates.Success success:
-          //          // Acciones para Success
-          //          break;
+            //  switch (resp)
+            //  {
+            //      case AuthStates.Success success:
+            //          // Acciones para Success
+            //          break;
 
-          //      case AuthStates.Error error:
-          //          // Acciones para Error
-          //          break;
+            //      case AuthStates.Error error:
+            //          // Acciones para Error
+            //          break;
 
-          //      case AuthStates.Loaded loaded:
-          //          // Acciones para Loaded
-          //          break;
+            //      case AuthStates.Loaded loaded:
+            //          // Acciones para Loaded
+            //          break;
 
-          //      case AuthStates.Loading loading:
-          //          // Acciones para Loading
-          //          break;
-          //  }
+            //      case AuthStates.Loading loading:
+            //          // Acciones para Loading
+            //          break;
+            //  }
         }
         protected override void OnStart()
         {

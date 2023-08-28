@@ -1,7 +1,8 @@
 ﻿using PuntoDeventa.Domain.Helpers;
-using System.Threading.Tasks;
+using PuntoDeventa.UI.Auth.States;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PuntoDeventa.Domain.UseCase.Auth.Implementation
 {

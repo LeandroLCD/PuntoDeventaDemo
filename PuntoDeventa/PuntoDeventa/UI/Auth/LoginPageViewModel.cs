@@ -1,13 +1,14 @@
-﻿using PuntoDeventa.Domain;
-using PuntoDeventa.Domain.Helpers;
+﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.Domain.UseCase.Auth;
-using PuntoDeventa.Domain.UseCase.Auth.Implementation;
 using PuntoDeventa.UI.Auth.Models;
+using PuntoDeventa.UI.Auth.Screen;
+using PuntoDeventa.UI.Auth.States;
 using PuntoDeVenta.Domain.Helpers;
 using PuntoDeVenta.Domain.Models;
 using PuntoDeVenta.Domain.UsesCase.Auth;
 using PuntoDeVenta.IU;
+using PuntoDeVenta.IU.Auth.Screen;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Auth
@@ -37,7 +38,7 @@ namespace PuntoDeventa.UI.Auth
             InicializeCommads();
         }
 
-        public LoginPageViewModel(ILoginUseCase loginUseCase, IUserCurrentUseCase userCurrentUseCase, IRememberUserUseCase rememberUserUseCase )
+        public LoginPageViewModel(ILoginUseCase loginUseCase, IUserCurrentUseCase userCurrentUseCase, IRememberUserUseCase rememberUserUseCase)
         {
             _loginUseCase = loginUseCase;
             _isRemembermeUseCase = rememberUserUseCase;
@@ -81,21 +82,25 @@ namespace PuntoDeventa.UI.Auth
                 SetProperty(ref _getStates, value);
             }
         }
+        private Grid GridParent { get; set; }
 
-        
         #endregion
 
         #region commands
-        public Command LoginCommand { get; set; }
+        public Command<AuthDataUser> LoginCommand { get; set; }
 
         public Command IsPasswordCommand { get; set; }
+
+        public Command RecoveryCommand { get; set; }
+        
         #endregion
 
         #region methods
         //test
-        public void OnApperning()
+        public void OnApperning(Grid gridParent)
         {
-
+            GridParent = gridParent;
+            GetAuthStates = AuthStates.Loaded.Instance;
         }
         //test
         public UserData GetUserData()
@@ -104,22 +109,24 @@ namespace PuntoDeventa.UI.Auth
         }
         private void InicializeCommads()
         {
-            GetAuthStates = AuthStates.Loaded.Instance;
-            LoginCommand = new Command(LoginMethods);
-            IsPasswordCommand = new Command(() => { 
-                IsPassword = !IsPassword; 
+            
+            LoginCommand = new Command<AuthDataUser>(LoginMethods);
+            IsPasswordCommand = new Command(() =>
+            {
+                IsPassword = !IsPassword;
             });
 
         }
 
-        private async void LoginMethods(object obj)
+        private async void LoginMethods(AuthDataUser dataUser)
         {
             GetAuthStates = AuthStates.Loading.Instance;
-
+            DataUser.ErrorClear();
             GetAuthStates = await _loginUseCase.Login(DataUser);
 
 
         }
+
         private async void HandlerState(AuthStates state)
         {
             switch (state)
@@ -136,6 +143,13 @@ namespace PuntoDeventa.UI.Auth
                         }
 
                     });
+                    GridParent?.Apply(() =>
+                    {
+                        GridParent.Children.Clear();
+                        GridParent.Children.Add(new LoginScreen(DataUser, IsRememberme, LoginCommand, RecoveryCommand));
+
+                    });
+
                     break;
                 case AuthStates.Loading loading:
                     DataUser.ErrorClear();
@@ -153,10 +167,22 @@ namespace PuntoDeventa.UI.Auth
 
                 case AuthStates.Error error:
                     // Implementamos logica error
-                    if(!DataUser.HasEmail && !DataUser.HasPassword)
-                        await App.Current.MainPage.DisplayAlert("Error", error.Message, "OK");
+                    if (DataUser.HasEmail.Equals(false) && DataUser.HasPassword.Equals(false))
+                    {
+                       
+                            GridParent.Children.Clear();
+                            GridParent.Children.Add(new ErrorScreen(error.Message, () =>
+                            {
+
+                                GetAuthStates = AuthStates.Loaded.Instance;
+
+                            }, height: GridParent.Height, width: GridParent.Width));
+                        
+                    }
+                        
+                            //await App.Current.MainPage.DisplayAlert("Error", error.Message, "OK");
                     else
-                    NotifyPropertyChanged(nameof(DataUser));
+                        NotifyPropertyChanged(nameof(DataUser));
                     break;
             }
         }
