@@ -1,6 +1,5 @@
 ﻿using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.Auth.States;
-using PuntoDeVenta.Domain.Models;
 using System.Threading.Tasks;
 
 namespace PuntoDeventa.Data.Repository.Auth

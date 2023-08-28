@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
-using PuntoDeVenta.Domain.Models;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -22,7 +21,7 @@ namespace PuntoDeventa.Data.Repository
 
                 resultType.Success = resp.StatusCode.Equals(HttpStatusCode.OK);
 
-                if(resp.StatusCode.Equals(HttpStatusCode.OK))
+                if (resp.StatusCode.Equals(HttpStatusCode.OK))
                 {
                     var data = JsonConvert.DeserializeObject<T>(jsonResult);
                     if (data.IsNotNull())
@@ -43,7 +42,7 @@ namespace PuntoDeventa.Data.Repository
                 }
 
             }
-            catch(Exception e) 
+            catch (Exception e)
             {
                 resultType.Success = false;
                 resultType.Errors.Add(new ErrorMessage(e.GetHashCode().ToString(), e.Message));

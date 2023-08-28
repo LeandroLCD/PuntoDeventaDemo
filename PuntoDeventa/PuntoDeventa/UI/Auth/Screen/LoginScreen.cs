@@ -5,16 +5,12 @@ using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.PancakeView;
 
-namespace PuntoDeVenta.IU.Auth.Screen
+namespace PuntoDeventa.IU.Auth.Screen
 {
     public class LoginScreen : ContentView
     {
-        bool isPassword;
-        private AuthDataUser _dataUser;
-
-        public LoginScreen(AuthDataUser dataUser, bool IsRememberme, Command LoginCommand, Command RecoveryCommand)
+        public LoginScreen(AuthDataUser dataUser, bool IsRememberme, Command LoginCommand, Command RegisterCommand)
         {
-            _dataUser = dataUser;
             Grid mainGrid = new Grid
             {
                 Padding = new Thickness(50),
@@ -31,7 +27,7 @@ namespace PuntoDeVenta.IU.Auth.Screen
 
 
 
-            mainGrid.Children.Add(PancakeContent(dataUser, IsRememberme, LoginCommand, RecoveryCommand), 0, 1, 1, 3);
+            mainGrid.Children.Add(PancakeContent(dataUser, IsRememberme, LoginCommand, RegisterCommand), 0, 1, 1, 3);
 
             Image iconImage = new Image
             {
@@ -45,8 +41,7 @@ namespace PuntoDeVenta.IU.Auth.Screen
         }
         private PancakeView PancakeContent(AuthDataUser dataUser, bool isRememberme, Command loginCommand, Command recoveryCommand)
         {
-
-
+            BindingContext = dataUser;
             Grid gridLayout = new Grid
             {
                 HorizontalOptions = LayoutOptions.Center,
@@ -60,9 +55,9 @@ namespace PuntoDeVenta.IU.Auth.Screen
                 }
             };
 
-            gridLayout.Children.Add(EntryInput(), 0, 0);
+            gridLayout.Children.Add(EntryInput(dataUser), 0, 0);
 
-            gridLayout.Children.Add(PasswordInput(isPassword), 0, 1);
+            gridLayout.Children.Add(PasswordInput(dataUser), 0, 1);
 
             gridLayout.Children.Add(Rememberme(isRememberme), 0, 2);
 
@@ -95,7 +90,7 @@ namespace PuntoDeVenta.IU.Auth.Screen
         }
         private Button LoginButton(Command login)
         {
-            var button = new Button()
+            return new Button()
             {
                 Text = "Login",
                 TextColor = Color.Black,
@@ -108,10 +103,6 @@ namespace PuntoDeVenta.IU.Auth.Screen
                 BackgroundColor = Color.Red,
                 CornerRadius = 12,
             };
-
-            button.SetBinding(Button.CommandParameterProperty, new Binding(nameof(_dataUser)));
-
-            return button;
         }
 
         private StackLayout Rememberme(bool IsRememberme)
@@ -138,64 +129,63 @@ namespace PuntoDeVenta.IU.Auth.Screen
             };
         }
 
-        private SfTextInputLayout EntryInput(bool isPassword = false)
+        private SfTextInputLayout EntryInput(AuthDataUser authData)
         {
-            Entry entry = new Entry()
-            {
-                IsPassword = isPassword,
-            };
+            Entry entry = new Entry();
 
-            entry.SetBinding(Entry.TextProperty, new Binding(nameof(_dataUser.Email)));
+            entry.SetBinding(Entry.TextProperty, new Binding(nameof(authData.Email)));
 
             SfTextInputLayout sfTextInput = new SfTextInputLayout
             {
                 ContainerType = ContainerType.Outlined,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Hint = nameof(_dataUser.Email),
+                Hint = "Email",
                 InputView = entry,
                 ErrorColor = Color.Red
             };
-            sfTextInput.SetBinding(SfTextInputLayout.ErrorTextProperty, new Binding(nameof(_dataUser.EmailErrorText)));
-            sfTextInput.SetBinding(SfTextInputLayout.HasErrorProperty, new Binding(nameof(_dataUser.HasEmail)));
+            sfTextInput.SetBinding(SfTextInputLayout.ErrorTextProperty, new Binding(nameof(authData.PasswordErrorText)));
+            sfTextInput.SetBinding(SfTextInputLayout.HasErrorProperty, new Binding(nameof(authData.HasEmail)));
             return sfTextInput;
         }
-        private Grid PasswordInput( bool isPassword = false)
+        private Grid PasswordInput(AuthDataUser authData)
         {
             Entry entry = new Entry()
             {
-                IsPassword = isPassword,
+                IsPassword = true,
             };
-            entry.SetBinding(Entry.TextProperty, new Binding(nameof(_dataUser.Password)));
+            entry.SetBinding(Entry.TextProperty, new Binding(nameof(authData.Password)));
             SfTextInputLayout sfTextInput = new SfTextInputLayout
             {
                 ContainerType = ContainerType.Outlined,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Hint = nameof(_dataUser.Password),
+                Hint = "Password",
                 InputView = entry,
                 ErrorColor = Color.Red
             };
-            sfTextInput.SetBinding(SfTextInputLayout.ErrorTextProperty, new Binding(nameof(_dataUser.PasswordErrorText)));
-            sfTextInput.SetBinding(SfTextInputLayout.HasErrorProperty, new Binding(nameof(_dataUser.HasPassword)));
+            sfTextInput.SetBinding(SfTextInputLayout.ErrorTextProperty, new Binding(nameof(authData.PasswordErrorText)));
+            sfTextInput.SetBinding(SfTextInputLayout.HasErrorProperty, new Binding(nameof(authData.HasPassword)));
 
-            Stream json = new MemoryStream(PuntoDeventa.Properties.Resources.animation_eye);
+            Stream json = new MemoryStream(Properties.Resources.eye);
 
             AnimationView animationView = new AnimationView()
             {
+                Margin = new Thickness(0, 0, 5, 1),
+                BackgroundColor = Color.Transparent,
                 HorizontalOptions = LayoutOptions.EndAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                WidthRequest = 30,
-                HeightRequest = 30,
-                RepeatMode = RepeatMode.Restart,
-                AutoPlay = false,
+                WidthRequest = 25,
+                HeightRequest = 25,
+                RepeatMode = RepeatMode.Infinite,
+                AutoPlay = true,
                 Speed = 0.5f,
                 Animation = json,
-                AnimationSource = AnimationSource.Stream
+                AnimationSource = AnimationSource.Stream,
 
             };
             animationView.Command = new Command(() =>
             {
                 animationView.PlayAnimation();
-                isPassword = !isPassword;
+                entry.IsPassword = !entry.IsPassword;
             });
 
 

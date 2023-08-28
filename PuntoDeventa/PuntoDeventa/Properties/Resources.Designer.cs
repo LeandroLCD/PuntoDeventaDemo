@@ -61,21 +61,21 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] animation_eye {
-            get {
-                object obj = ResourceManager.GetObject("animation_eye", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://identitytoolkit.googleapis.com/v1/.
         /// </summary>
         internal static string BaseUrlAuth {
             get {
                 return ResourceManager.GetString("BaseUrlAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] eye {
+            get {
+                object obj = ResourceManager.GetObject("eye", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -95,6 +95,16 @@ namespace PuntoDeventa.Properties {
         internal static string KeyApplication {
             get {
                 return ResourceManager.GetString("KeyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] login_success {
+            get {
+                object obj = ResourceManager.GetObject("login_success", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

@@ -1,7 +1,6 @@
-﻿using PuntoDeventa.Domain.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace PuntoDeVenta.Domain.Models
+namespace PuntoDeventa.Domain.Models
 {
     internal class ResultType<T>
     {

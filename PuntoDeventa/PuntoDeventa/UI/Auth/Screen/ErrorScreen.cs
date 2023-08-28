@@ -18,8 +18,8 @@ namespace PuntoDeventa.UI.Auth.Screen
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 RowDefinitions = new RowDefinitionCollection()
                 {
-                    new RowDefinition(){ Height = 200},
-                    new RowDefinition() { Height = height.Equals(0) ? 400 : height - 300},
+                    new RowDefinition(){ Height = 300},
+                    new RowDefinition() { Height = height.Equals(0) ? 400 : height - 550},
                     new RowDefinition{ Height = 100 },
                 },
                 Children =
@@ -58,10 +58,10 @@ namespace PuntoDeventa.UI.Auth.Screen
                 Text = error, 
                 Margin = new Thickness(20),
                 TextColor = Color.Black,
-                HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.StartAndExpand,
+                HorizontalTextAlignment = TextAlignment.Start,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
                 VerticalOptions = LayoutOptions.Center,
-                FontSize = 17
+                FontSize = 20
             };
              
         }
@@ -74,7 +74,7 @@ namespace PuntoDeventa.UI.Auth.Screen
                 TextColor = Color.Black,
                 FontAttributes = FontAttributes.Bold,
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Start,
                 FontSize = 15,
                 Command = new Command(action),
                 BorderColor = Color.Black,

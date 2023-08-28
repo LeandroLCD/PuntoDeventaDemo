@@ -1,6 +1,6 @@
 ﻿using PuntoDeventa.Domain.Models;
 
-namespace PuntoDeVenta.Domain.UsesCase.Auth
+namespace PuntoDeventa.Domain.UsesCase.Auth
 {
     public interface IUserCurrentUseCase
     {

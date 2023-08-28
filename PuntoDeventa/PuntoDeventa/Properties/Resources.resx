@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="animation_eye" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\animation_eye.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="BaseUrlAuth" xml:space="preserve">
     <value>https://identitytoolkit.googleapis.com/v1/</value>
     <comment>Url de autententicacion de Firebase</comment>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="eye" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\eye.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="icecreams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icecreams.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -131,6 +131,9 @@
   <data name="KeyApplication" xml:space="preserve">
     <value>AIzaSyAYR81n079m-eiWgukzYnaDgIp2AXVqGo8</value>
     <comment>Clave de API web</comment>
+  </data>
+  <data name="login_success" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\login_success.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="montacargas" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\montacargas.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

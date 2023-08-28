@@ -5,7 +5,7 @@ using PuntoDeventa.UI.Auth.Models;
 using PuntoDeventa.UI.Auth.States;
 using System.Threading.Tasks;
 
-namespace PuntoDeVenta.Demo.Domain.UsesCase.Auth.Implementation
+namespace PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation
 {
     internal class RegisterUseCase : BaseAuthUseCase, IRegisterUseCase
     {

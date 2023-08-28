@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PuntoDeVenta.Domain.Helpers
+namespace PuntoDeventa.Domain.Helpers
 {
     public static class ApplyFuntion
     {

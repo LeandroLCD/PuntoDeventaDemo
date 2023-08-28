@@ -1,6 +1,6 @@
-﻿using PuntoDeVenta.Domain.Models;
+﻿using PuntoDeventa.Domain.Models;
 
-namespace PuntoDeVenta.Domain.UsesCase.Auth
+namespace PuntoDeventa.Domain.UsesCase.Auth
 {
     internal interface IRememberUserUseCase
     {

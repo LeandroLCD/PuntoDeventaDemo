@@ -1,14 +1,13 @@
 ﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.Domain.UseCase.Auth;
+using PuntoDeventa.Domain.UsesCase.Auth;
+using PuntoDeventa.IU;
+using PuntoDeventa.IU.Auth.Screen;
 using PuntoDeventa.UI.Auth.Models;
 using PuntoDeventa.UI.Auth.Screen;
 using PuntoDeventa.UI.Auth.States;
-using PuntoDeVenta.Domain.Helpers;
-using PuntoDeVenta.Domain.Models;
-using PuntoDeVenta.Domain.UsesCase.Auth;
-using PuntoDeVenta.IU;
-using PuntoDeVenta.IU.Auth.Screen;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Auth
@@ -96,7 +95,6 @@ namespace PuntoDeventa.UI.Auth
         #endregion
 
         #region methods
-        //test
         public void OnApperning(Grid gridParent)
         {
             GridParent = gridParent;
@@ -115,13 +113,18 @@ namespace PuntoDeventa.UI.Auth
             {
                 IsPassword = !IsPassword;
             });
+            RecoveryCommand = new Command(async () => {
+                await App.Current.MainPage.DisplayAlert("404", "En construción", "ok");
+            });
 
         }
 
         private async void LoginMethods(AuthDataUser dataUser)
         {
             GetAuthStates = AuthStates.Loading.Instance;
-            DataUser.ErrorClear();
+
+            await Task.Delay(2000);
+
             GetAuthStates = await _loginUseCase.Login(DataUser);
 
 
@@ -149,40 +152,36 @@ namespace PuntoDeventa.UI.Auth
                         GridParent.Children.Add(new LoginScreen(DataUser, IsRememberme, LoginCommand, RecoveryCommand));
 
                     });
-
                     break;
                 case AuthStates.Loading loading:
                     DataUser.ErrorClear();
-                    NotifyPropertyChanged(nameof(DataUser));
-                    IsLoading = true;
+                    //NotifyPropertyChanged(nameof(DataUser));
                     //Logica para la pantalla de carga
+                    GridParent.Children.Clear();
+                    GridParent.Children.Add(new LoadingScreen());
+
                     break;
                 case AuthStates.Success success:
                     if (IsRememberme)
-                        _isRemembermeUseCase.SetRemembermeUser(new RemembermeUser(DataUser.Email, true));
-                    await App.Current.MainPage.DisplayAlert("Success", $"{((UserData)success.Data).Email}", "OK");
-
+                        _isRemembermeUseCase.SetRemembermeUser(new RemembermeUser(DataUser.Email, IsRememberme));
                     // Acciones para success navegamos a al home.
+                    GridParent?.Apply(() =>
+                    {
+                        GridParent.Children.Clear();
+                        GridParent.Children.Add(new SuccessScreem());
+
+                    });
+
                     break;
 
                 case AuthStates.Error error:
                     // Implementamos logica error
-                    if (DataUser.HasEmail.Equals(false) && DataUser.HasPassword.Equals(false))
+                    NotifyPropertyChanged(nameof(DataUser));
+                    GridParent.Children.Clear();
+                    GridParent.Children.Add(new ErrorScreen(error.Message, () =>
                     {
-                       
-                            GridParent.Children.Clear();
-                            GridParent.Children.Add(new ErrorScreen(error.Message, () =>
-                            {
-
-                                GetAuthStates = AuthStates.Loaded.Instance;
-
-                            }, height: GridParent.Height, width: GridParent.Width));
-                        
-                    }
-                        
-                            //await App.Current.MainPage.DisplayAlert("Error", error.Message, "OK");
-                    else
-                        NotifyPropertyChanged(nameof(DataUser));
+                        GetAuthStates = AuthStates.Loaded.Instance;
+                    }));
                     break;
             }
         }
