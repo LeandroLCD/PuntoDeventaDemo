@@ -1,4 +1,4 @@
-﻿namespace PuntoDeventa.Domain
+﻿namespace PuntoDeventa.UI.Auth.States
 {
     public abstract class AuthStates
     {

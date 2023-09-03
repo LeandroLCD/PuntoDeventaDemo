@@ -1,8 +1,8 @@
 ﻿using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Domain.Models;
-using PuntoDeVenta.Domain.UsesCase.Auth;
+using PuntoDeventa.Domain.UsesCase.Auth;
 
-namespace PuntoDeVenta.Demo.Domain.UsesCase.Auth.Implementation
+namespace PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation
 {
     internal class UserCurrentUseCase : IUserCurrentUseCase
     {

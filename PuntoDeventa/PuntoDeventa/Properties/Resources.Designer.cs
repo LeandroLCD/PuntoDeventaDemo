@@ -70,11 +70,61 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] eye {
+            get {
+                object obj = ResourceManager.GetObject("eye", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] icecreams {
+            get {
+                object obj = ResourceManager.GetObject("icecreams", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AIzaSyAYR81n079m-eiWgukzYnaDgIp2AXVqGo8.
         /// </summary>
         internal static string KeyApplication {
             get {
                 return ResourceManager.GetString("KeyApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] login_success {
+            get {
+                object obj = ResourceManager.GetObject("login_success", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] montacargas {
+            get {
+                object obj = ResourceManager.GetObject("montacargas", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] paymethods {
+            get {
+                object obj = ResourceManager.GetObject("paymethods", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

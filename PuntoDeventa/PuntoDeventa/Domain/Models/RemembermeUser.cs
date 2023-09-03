@@ -1,4 +1,4 @@
-﻿namespace PuntoDeVenta.Domain.Models
+﻿namespace PuntoDeventa.Domain.Models
 {
     public class RemembermeUser
     {

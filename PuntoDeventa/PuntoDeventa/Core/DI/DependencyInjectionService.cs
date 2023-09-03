@@ -1,14 +1,11 @@
 ﻿using PuntoDeventa.Core.LocalData;
 using PuntoDeventa.Data.Repository.Auth;
-using PuntoDeVenta.Demo.Domain.UsesCase.Auth.Implementation;
-using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
-using PuntoDeVenta.Domain.UsesCase.Auth;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
+using Xamarin.Forms;
 
 namespace PuntoDeventa.Core.DI
 {
@@ -17,7 +14,7 @@ namespace PuntoDeventa.Core.DI
         private AuthRepository _authRepository;
         private IUserRepository _userRepository;
 
-        public DependencyInjectionService() 
+        public DependencyInjectionService()
         {
             RegisterCoreDependencies();
 
@@ -28,7 +25,7 @@ namespace PuntoDeventa.Core.DI
             RegisterUserInterfaceDependencies();
         }
 
-        
+
 
 
         /// <summary>
@@ -53,7 +50,7 @@ namespace PuntoDeventa.Core.DI
         /// </summary>
         private void RegisterDomainDependencies()
         {
-             _userRepository = DependencyService.Get<IUserRepository>();
+            _userRepository = DependencyService.Get<IUserRepository>();
             DependencyService.RegisterSingleton<IUserCurrentUseCase>(new UserCurrentUseCase(_userRepository));
             DependencyService.RegisterSingleton<ILoginUseCase>(new LoginUseCase(_authRepository));
             DependencyService.RegisterSingleton<IRegisterUseCase>(new RegisterUseCase(_authRepository));
@@ -66,7 +63,7 @@ namespace PuntoDeventa.Core.DI
         {
             var login = DependencyService.Get<ILoginUseCase>();
             var isRememberme = DependencyService.Get<IRememberUserUseCase>();
-                var userCurrentUseCase = DependencyService.Get<IUserCurrentUseCase>();
+            var userCurrentUseCase = DependencyService.Get<IUserCurrentUseCase>();
             //Inyección por contructor
             DependencyService.RegisterSingleton(new LoginPageViewModel(login, userCurrentUseCase, isRememberme));
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Auth" 
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
-             xmlns:controls="clr-namespace:PuntoDeVenta.IU.Controls"
+             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls"
              x:Class="PuntoDeventa.UI.Auth.LoginPage"
              BackgroundColor="#A7A7A7">
     
@@ -13,7 +13,7 @@
     <!--</ContentPage.BindingContext>/ -->
     
     <ContentPage.Content>
-        <Grid >
+        <Grid x:Name="GridParent" >
             <Grid Padding=" 50" VerticalOptions="CenterAndExpand" RowDefinitions="40,40,400" >
 
 

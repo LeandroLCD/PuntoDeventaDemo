@@ -1,10 +1,7 @@
 ﻿using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
-using PuntoDeVenta.Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PuntoDeventa.Data.Mappers
 {

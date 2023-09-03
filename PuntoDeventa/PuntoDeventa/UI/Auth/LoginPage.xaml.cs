@@ -17,7 +17,7 @@ namespace PuntoDeventa.UI.Auth
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //var user = _viewModel.OnAppearing();
+            _viewModel.OnApperning(GridParent);
         }
     }
 }

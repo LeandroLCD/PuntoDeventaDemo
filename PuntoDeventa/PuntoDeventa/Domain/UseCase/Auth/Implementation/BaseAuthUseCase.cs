@@ -1,7 +1,8 @@
 ﻿using PuntoDeventa.Domain.Helpers;
-using System.Threading.Tasks;
+using PuntoDeventa.UI.Auth.States;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PuntoDeventa.Domain.UseCase.Auth.Implementation
 {
@@ -13,7 +14,7 @@ namespace PuntoDeventa.Domain.UseCase.Auth.Implementation
 
             if (isValid.IsNotNull())
             {
-                return new AuthStates.Error(string.Join("-", isValid.Select(e => e.Message).ToList()));
+                return new AuthStates.Error(string.Join(Environment.NewLine, isValid.Select(e => $".- {e.Message}").ToList()));
             }
 
             return await func.Invoke();

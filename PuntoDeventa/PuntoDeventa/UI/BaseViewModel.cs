@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
-namespace PuntoDeVenta.IU
+namespace PuntoDeventa.IU
 {
     [Preserve(AllMembers = true)]
     [DataContract]

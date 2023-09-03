@@ -1,7 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.PancakeView;
 
-namespace PuntoDeVenta.IU.Controls
+namespace PuntoDeventa.IU.Controls
 {
     public class CustomActivity : ContentView
     {

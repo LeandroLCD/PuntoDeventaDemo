@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="22.2.10" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="22.2.10" />
