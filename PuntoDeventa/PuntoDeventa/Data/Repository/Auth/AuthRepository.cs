@@ -6,6 +6,7 @@ using PuntoDeventa.Data.Models.Errors;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.Auth.States;
+using PuntoDeVenta.Domain.Models;
 using System;
 using System.IO;
 using System.Linq;
