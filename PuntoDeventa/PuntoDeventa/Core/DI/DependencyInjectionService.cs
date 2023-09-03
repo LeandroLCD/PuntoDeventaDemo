@@ -1,4 +1,5 @@
 ﻿using PuntoDeventa.Core.LocalData;
+using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
@@ -35,6 +36,7 @@ namespace PuntoDeventa.Core.DI
         {
             //Registro de dependencia DataPreferences
             DependencyService.Register<IDataPreferences, DataPreferences>();
+            DependencyService.Register<IDataStore, DataStore>();
         }
         /// <summary>
         /// Registra las dependencias de la capa Data utilizando DependencyService.

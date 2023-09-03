@@ -121,6 +121,10 @@
     <value>https://identitytoolkit.googleapis.com/v1/</value>
     <comment>Url de autententicacion de Firebase</comment>
   </data>
+  <data name="BaseUrlRealDataBase" xml:space="preserve">
+    <value>https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/</value>
+    <comment>Url de Firebase</comment>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="eye" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eye.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -140,8 +144,5 @@
   </data>
   <data name="paymethods" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\paymethods.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value />
   </data>
 </root>

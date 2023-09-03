@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using PuntoDeventa.Domain.Models;
+using Xamarin.Forms.Internals;
 
 namespace PuntoDeventa.Domain.Helpers
 {
@@ -48,6 +49,27 @@ namespace PuntoDeventa.Domain.Helpers
         public static bool IsNotNull(this object obj)
         {
             return obj != null;
+        }
+
+        public static void CopyPropertiesFrom(this object destination, object source)
+        {
+            if (destination == null || source == null)
+            {
+                return;
+            }
+
+            var sourceProperties = source.GetType().GetProperties();
+            var destinationType = destination.GetType();
+
+            sourceProperties.ForEach(e =>
+            {
+                var destinationProperty = destinationType.GetProperty(e.Name);
+                var value = e.GetValue(source, null);
+                if (value.IsNotNull() && destinationProperty.IsNotNull() && destinationProperty.CanWrite)
+                {
+                    destinationProperty.SetValue(destination, value, null);
+                }
+            });
         }
 
     }

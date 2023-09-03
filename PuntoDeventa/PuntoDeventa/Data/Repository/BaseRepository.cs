@@ -15,7 +15,7 @@ namespace PuntoDeventa.Data.Repository
             ResultType<T> resultType = new ResultType<T>();
             try
             {
-                var resp = await apiCallFunction();
+                var resp = await Task.Run( () =>  apiCallFunction());
 
                 string jsonResult = await resp.Content.ReadAsStringAsync();
 

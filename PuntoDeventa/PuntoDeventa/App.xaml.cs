@@ -1,9 +1,13 @@
 ﻿using PuntoDeventa.Core.DI;
 using PuntoDeventa.Core.LocalData;
 using PuntoDeventa.Data.Repository.Auth;
+using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
 using PuntoDeventa.UI.Auth;
 using PuntoDeventa.UI.Auth.Models;
+using PuntoDeventa.UI.CategoryProduct.Models;
+using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PuntoDeventa
@@ -22,8 +26,58 @@ namespace PuntoDeventa
 
             //TestViewmodel();
 
+            TestBrand();
 
             MainPage = new LoginPage();
+        }
+
+        private async void TestBrand()
+        {
+            var repository = new CategoryProductRepository();
+
+
+            var Category = new Category()
+            {
+                Id= "-NdNlhlKWHhUgZLHgaWN",
+                Name = "Promacion",
+                Brand = "Blip Blip Code!!!!"
+            };
+
+            //var resp = await repository.InsertAsync(Category);
+
+            //var product = new List<Product>() {
+
+
+
+            //};
+
+            //for(var i = 0; i < 10; i++)
+            //{
+            //    product.Add(new Product()
+            //    {
+            //        CategoryId = Category.Id,
+            //        Name = $"ProductTest{i}",
+            //        PriceGross = i * 5896,
+            //        IVA = 0.19f
+            //    });
+            //}
+            //product.ForEach(async p =>
+            //{
+            //    var rep = await repository.InsertProductAsync(p);
+            //});
+
+
+
+            //    var prod = new Product()
+            //    {
+            //        CategoryId = Category.Id,
+            //        Name = $"ProductTest",
+            //        Id = "-NdNnuhUwY8dFvm-dQZV"
+            //    };
+
+            //    var respn = await repository.DeleteProdctAsync(prod);
+
+            var rsp = await repository.GetAsync("-NdNlhlKWHhUgZLHgaWN");
         }
 
         private void TestViewmodel()

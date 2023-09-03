@@ -70,6 +70,15 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/.
+        /// </summary>
+        internal static string BaseUrlRealDataBase {
+            get {
+                return ResourceManager.GetString("BaseUrlRealDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] eye {
@@ -125,15 +134,6 @@ namespace PuntoDeventa.Properties {
             get {
                 object obj = ResourceManager.GetObject("paymethods", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
