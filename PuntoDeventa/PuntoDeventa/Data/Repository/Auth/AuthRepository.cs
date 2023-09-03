@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PuntoDeventa.Core.LocalData;
+using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.Mappers;
 using PuntoDeventa.Data.Models.Errors;
