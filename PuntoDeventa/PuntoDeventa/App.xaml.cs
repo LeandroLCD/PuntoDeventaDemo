@@ -1,5 +1,5 @@
 ﻿using PuntoDeventa.Core.DI;
-using PuntoDeventa.Core.LocalData;
+using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
@@ -8,6 +8,7 @@ using PuntoDeventa.UI.Auth.Models;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PuntoDeventa
@@ -77,7 +78,16 @@ namespace PuntoDeventa
 
             //    var respn = await repository.DeleteProdctAsync(prod);
 
-            var rsp = await repository.GetAsync("-NdNlhlKWHhUgZLHgaWN");
+            
+
+
+            await foreach (var item in repository.GetAllAsync())
+            {
+                Console.WriteLine(item.Name);
+                await Task.Delay(150);
+            }
+
+            //var rsp = await repository.GetAsync("-NdNlhlKWHhUgZLHgaWN");
         }
 
         private void TestViewmodel()

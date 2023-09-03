@@ -1,5 +1,6 @@
 ﻿using PuntoDeventa.UI.CategoryProduct.Models;
 using PuntoDeventa.UI.CategoryProduct.States;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PuntoDeventa.Data.Repository.CategoryProduct
@@ -14,6 +15,6 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         Task<CategoryStates> DeleteProdctAsync(Product item);
         Task<CategoryStates> GetAsync(string FireBaseId);
-        // IEnumerable<Category> GetAllAsync();
+        IAsyncEnumerable<Category> GetAllAsync();
     }
 }

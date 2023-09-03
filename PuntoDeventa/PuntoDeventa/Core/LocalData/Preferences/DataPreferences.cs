@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using PuntoDeventa.Data.DTO;
-using Xamarin.Essentials;
-
-namespace PuntoDeventa.Core.LocalData
+﻿namespace PuntoDeventa.Core.LocalData.Preferences
 {
+    using Xamarin.Essentials;
+    using Newtonsoft.Json;
+    using PuntoDeventa.Data.DTO;
     internal class DataPreferences : IDataPreferences
     {
         #region fields
