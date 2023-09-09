@@ -30,9 +30,7 @@ namespace PuntoDeventa.UI.CategoryProduct.Models
         [Required(ErrorMessage = "El nombre de la categoria es requerido.")]
         public double PriceGross { get; set; }
 
-        [Required(ErrorMessage = "El nombre de la categoria es requerido.")]
+        [Required(ErrorMessage = "El ID de la categoria es requerido.")]
         public string CategoryId { get; set; }
-
-        public Category Category { get; set; }
     }
 }

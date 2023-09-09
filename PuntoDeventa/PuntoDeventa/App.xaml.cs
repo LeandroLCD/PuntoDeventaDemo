@@ -3,11 +3,13 @@ using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.UI.Auth;
 using PuntoDeventa.UI.Auth.Models;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -15,6 +17,7 @@ namespace PuntoDeventa
 {
     public partial class App : Application
     {
+        CancellationTokenSource TokenSource { get; set; }
         public App()
         {
             new DependencyInjectionService();
@@ -22,14 +25,33 @@ namespace PuntoDeventa
 
             //CallApi();
 
-
+            TokenSource = new CancellationTokenSource();
             //TestUseCase();
 
             //TestViewmodel();
 
-            TestBrand();
+            //TestBrand();
+
+            //TestGetCategoryUseCase();
 
             MainPage = new LoginPage();
+        }
+
+        private async void TestGetCategoryUseCase()
+        {
+            var useCase = DependencyService.Get<IGetCategoryListUseCase>();
+            List<Category> list = new List<Category>();
+            
+            int x = 0;
+            await foreach(var category in useCase.Emit(TokenSource.Token))
+            {
+                list.AddRange(category);
+                if(x > 0)
+                {
+                    TokenSource.Cancel();
+                }
+                x++;
+            }
         }
 
         private async void TestBrand()

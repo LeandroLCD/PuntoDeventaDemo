@@ -1,4 +1,5 @@
-﻿using PuntoDeventa.Data.DTO;
+﻿using PuntoDeventa.Core.LocalData.DataBase.Entities;
+using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.CategoryProduct.Models;
@@ -116,6 +117,30 @@ namespace PuntoDeventa.Data.Mappers
                 ProductDTO DTO = new ProductDTO();
                 DTO.CopyPropertiesFrom(model);
                 return DTO;
+            }
+
+            else
+                return null;
+        }
+
+        public static Product ToProduct(this ProductEntity model)
+        {
+            if (model.IsNotNull())
+            {
+
+                return new Product()
+                {
+                    Name = model.Name,
+                    Id = model.Id,
+                    IsOffer = model.IsOffer,
+                    BarCode = model.BarCode,
+                    Description = model.Description,
+                    UDM = model.UDM,
+                    Percentage = model.Percentage,
+                    PriceGross= model.PriceGross,
+                    Sku = model.Code,
+                    CategoryId = model.CategoryId
+                };
             }
 
             else
