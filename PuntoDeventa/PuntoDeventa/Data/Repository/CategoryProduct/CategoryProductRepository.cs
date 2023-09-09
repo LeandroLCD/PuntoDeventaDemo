@@ -11,13 +11,14 @@ using PuntoDeventa.UI.CategoryProduct.States;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
+using PuntoDeventa.Data.Mappers;
 
 namespace PuntoDeventa.Data.Repository.CategoryProduct
 {
-    internal class CategoryProductRepository: BaseRepository, ICategoryProductRepository
+    internal class CategoryProductRepository : BaseRepository, ICategoryProductRepository
     {
         private IDataStore _dataStore;
         private IDataPreferences _dataPreferences;
@@ -34,7 +35,8 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         public async Task<CategoryStates> DeleteAsync(Category item)
         {
-            var resultType = await MakeCallNetwork<Category>(() => {
+            var resultType = await MakeCallNetwork<Category>(() =>
+            {
                 return _dataStore.DeleteAsync<Category>(GetUri($"CategoryProduct/{item.Id}"));
             });
 
@@ -44,12 +46,15 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         public async Task<CategoryStates> DeleteProdctAsync(Product item)
         {
-            var resultType = await MakeCallNetwork<Product>(() => {
+            var resultType = await MakeCallNetwork<Product>(() =>
+            {
                 return _dataStore.DeleteAsync<Product>(GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}"));
             });
 
             return ResultTypeToCategoryStates(item, resultType);
         }
+
+
 
         public async IAsyncEnumerable<Category> GetAllAsync()
         {
@@ -57,7 +62,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             {
                 return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
             });
-             
+
             foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
             {
                 var category = new Category()
@@ -83,7 +88,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                     prodEntity.CopyPropertiesFrom(product);
                     entity.Products.Add(prodEntity);
                 }
-                
+
 
                 _DAO.InsertOrUpdate(entity);
 
@@ -94,15 +99,16 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         public async Task<CategoryStates> GetAsync(string FireBaseId)
         {
-            var resultType = await MakeCallNetwork<CategoryDTO>(() => {
+            var resultType = await MakeCallNetwork<CategoryDTO>(() =>
+            {
                 return _dataStore.GetAsync<CategoryDTO>(GetUri($"CategoryProduct/{FireBaseId}"));
             });
-            //tester
 
+            /* tester
             var list = _DAO.GetAll<CategoryEntity>();
 
             var list2  = _DAO.GetAll<ProductEntity>();
-
+            */
             if (resultType.Success)
             {
                 return new CategoryStates.Success(resultType.Data.ToCategory(FireBaseId));
@@ -113,20 +119,21 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             }
         }
 
+
         public async Task<CategoryStates> InsertAsync(Category item)
         {
-            var resultType = await MakeCallNetwork<CategoryDTO>(() => {
+            var resultType = await MakeCallNetwork<CategoryDTO>(() =>
+            {
                 return _dataStore.PostAsync(item, GetUri($"CategoryProduct"));
             });
 
             return ResultTypeToCategoryStates(item, resultType);
         }
 
-       
-
         public async Task<CategoryStates> InsertProductAsync(Product item)
         {
-            var resultType = await MakeCallNetwork<ProductDTO>(() => {
+            var resultType = await MakeCallNetwork<ProductDTO>(() =>
+            {
                 return _dataStore.PostAsync(item, GetUri($"CategoryProduct/{item.CategoryId}/Products"));
             });
 
@@ -143,12 +150,76 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             throw new NotImplementedException();
         }
 
+        public List<Category> GetAll()
+        {
+            var listCategory = new List<Category>();
+            var categoryEntity = _DAO.GetAll<CategoryEntity>();
+            categoryEntity.ForEach(Entry =>
+            {
+                var category = new Category()
+                {
+                    Name = Entry.Name,
+                    Brand = Entry.Brand,
+                    Id = Entry.Id,
+                    Products = new List<Product>()
+                };
+                Entry.Products.ForEach(productEntity =>
+                {
+                    var produc = productEntity.ToProduct();
+                    category.Products.Add(produc);
+                });
+                listCategory.Add(category);
+
+            });
+            return listCategory;
+        }
+
+        public List<Product> GetProductsAll()
+        {
+            var listProduct = new List<Product>();
+            var productEntity = _DAO.GetAll<ProductEntity>();
+            productEntity.ForEach(Entity =>
+            {
+                var produc = new Product();
+                produc.CopyPropertiesFrom(Entity);
+                listProduct.Add(produc);
+            });
+            return listProduct;
+
+        }
+
+        public async void SyncDataAsync()
+        {
+            var resulType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() =>
+            {
+                return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
+            });
+
+            foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+            {
+                var entity = new CategoryEntity()
+                {
+                    Id = item.Key,
+                    Name = item.Value.Name,
+                    Products = new List<ProductEntity>()
+                };
+                foreach (KeyValuePair<string, ProductDTO> p in item.Value.Products)
+                {
+
+                    var prodEntity = new ProductEntity();
+                    prodEntity.CopyPropertiesFrom(p.Value);
+                    entity.Products.Add(prodEntity);
+                }
+                _DAO.InsertOrUpdate(entity);
+            }
+        }
+
         private Uri GetUri(string path)
         {
             return new Uri(Path.Combine(Properties.Resources.BaseUrlRealDataBase, $"{path}.json?auth={tokenID}"));
-        } 
-        
-        private CategoryStates ResultTypeToCategoryStates<T>(object item,ResultType<T> resultType)
+        }
+
+        private CategoryStates ResultTypeToCategoryStates<T>(object item, ResultType<T> resultType)
         {
             if (resultType.Success)
             {

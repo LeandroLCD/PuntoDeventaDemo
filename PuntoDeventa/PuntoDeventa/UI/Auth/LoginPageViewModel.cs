@@ -7,6 +7,7 @@ using PuntoDeventa.IU.Auth.Screen;
 using PuntoDeventa.UI.Auth.Models;
 using PuntoDeventa.UI.Auth.Screen;
 using PuntoDeventa.UI.Auth.States;
+using PuntoDeventa.UI.Menu;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -130,11 +131,19 @@ namespace PuntoDeventa.UI.Auth
 
         }
 
-        private async void HandlerState(AuthStates state)
+        private void HandlerState(AuthStates state)
         {
             switch (state)
             {
                 case AuthStates.Loaded loaded:
+                    var userCurren = _getUserCurrent.GetUserData();
+                    userCurren?.Apply(() => { 
+                                 if(userCurren.IsAuthValid)
+                                     App.Current.MainPage = new MenuAppShell();
+                                    return;
+                    });
+
+
                     var rememberme = _isRemembermeUseCase.GetRemembermeUser();
                     rememberme?.Apply(() =>
                     {
@@ -169,7 +178,9 @@ namespace PuntoDeventa.UI.Auth
                     {
                         GridParent.Children.Clear();
                         GridParent.Children.Add(new SuccessScreem());
-
+                        Task.Delay(1000);
+                        App.Current.MainPage = new MenuAppShell();
+                        return;
                     });
 
                     break;

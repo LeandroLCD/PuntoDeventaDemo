@@ -65,10 +65,11 @@ namespace PuntoDeventa.Domain.Helpers
             {
                 var destinationProperty = destinationType.GetProperty(e.Name);
                 var value = e.GetValue(source, null);
-                if (value.IsNotNull() && destinationProperty.IsNotNull() && destinationProperty.CanWrite)
-                {
-                    destinationProperty.SetValue(destination, value, null);
-                }
+                  if (value.IsNotNull() && destinationProperty.IsNotNull() && destinationProperty.CanWrite)
+                  {
+                      destinationProperty.SetValue(destination, value, null);
+                  }
+                
             });
         }
 

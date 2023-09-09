@@ -16,5 +16,10 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
         Task<CategoryStates> DeleteProdctAsync(Product item);
         Task<CategoryStates> GetAsync(string FireBaseId);
         IAsyncEnumerable<Category> GetAllAsync();
+
+        void SyncDataAsync();
+        List<Category> GetAll();
+        List<Product> GetProductsAll();
+
     }
 }

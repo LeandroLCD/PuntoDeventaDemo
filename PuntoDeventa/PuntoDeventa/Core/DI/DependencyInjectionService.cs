@@ -2,9 +2,12 @@
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.Repository.Auth;
+using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Domain.UseCase.CategoryProduct;
+using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
 using Xamarin.Forms;
@@ -50,6 +53,7 @@ namespace PuntoDeventa.Core.DI
             _authRepository = new AuthRepository(DependencyService.Get<IDataPreferences>());
             DependencyService.RegisterSingleton<IAuthRepository>(_authRepository);
             DependencyService.RegisterSingleton<IUserRepository>(_authRepository);
+            DependencyService.Register<ICategoryProductRepository, CategoryProductRepository>();
         }
         /// <summary>
         /// Registra las dependencias de la capa Domain utilizando DependencyService.
@@ -61,6 +65,8 @@ namespace PuntoDeventa.Core.DI
             DependencyService.RegisterSingleton<ILoginUseCase>(new LoginUseCase(_authRepository));
             DependencyService.RegisterSingleton<IRegisterUseCase>(new RegisterUseCase(_authRepository));
             DependencyService.RegisterSingleton<IRememberUserUseCase>(new RememberUserUseCase(_userRepository));
+            DependencyService.Register<IGetCategoryListUseCase, GetCategoryListUseCase>();
+
         }
         /// <summary>
         /// Registra las dependencias de la capa UserInterface utilizando DependencyService.

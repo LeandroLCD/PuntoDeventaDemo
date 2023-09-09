@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PuntoDeventa.UI.Menu.MenuAppShell"
+               xmlns:categories="clr-namespace:PuntoDeventa.UI.CategoryProduct"       
+                Shell.TabBarBackgroundColor="Red">
+    
+    <FlyoutItem Title="Catalgo Productos" Icon="ic_product.png">
+        <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate categories:CategoryHome}" />
+    </FlyoutItem>
+
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="200" BackgroundColor="Red">
+                <Image Source="logo.png" />
+
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+    <!--
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="60" BackgroundColor="Red">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <ImageButton  Source="ic_config.png" WidthRequest="25" Margin="20,0" BackgroundColor="Red"  HorizontalOptions="Start" Clicked="Button_Clicked"/>
+                    <Button BackgroundColor="Transparent" WidthRequest="140" TextTransform="None" Text="Configuración" Clicked="Button_Clicked" />
+                </StackLayout>
+            </Grid>
+            
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
+
+    // ItemTemplate is for ShellItems as displayed in a Flyout
+    // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-flyoutitem-appearance
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                Bindable Properties: Title, Icon
+            </ContentView>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    // MenuItemTemplate is for MenuItems as displayed in a Flyout
+    // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-menuitem-appearance
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                Bindable Properties: Text, Icon
+            </ContentView>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>-->
+
+</Shell>
