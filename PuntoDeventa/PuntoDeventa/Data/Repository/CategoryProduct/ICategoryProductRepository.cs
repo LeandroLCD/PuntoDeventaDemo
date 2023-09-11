@@ -20,6 +20,6 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
         void SyncDataAsync();
         List<Category> GetAll();
         List<Product> GetProductsAll();
-
+        CategoryStates GetCategory(string id);
     }
 }

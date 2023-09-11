@@ -49,7 +49,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public T Get<T>(object primaryKey) where T : new()
         {
-            return _connection.Get<T>(primaryKey);
+            return _connection.GetWithChildren<T>(primaryKey);
         }
 
         public IEnumerable<T> GetAll<T>() where T : new()

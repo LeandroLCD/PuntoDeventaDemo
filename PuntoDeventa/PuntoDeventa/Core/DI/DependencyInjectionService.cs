@@ -10,6 +10,7 @@ using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
+using System;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Core.DI
@@ -28,6 +29,14 @@ namespace PuntoDeventa.Core.DI
             RegisterDomainDependencies();
 
             RegisterUserInterfaceDependencies();
+
+            Sync();
+        }
+
+        private void Sync()
+        {
+            var useCase = DependencyService.Get<ISyncDataUseCase>();
+            useCase.Sync();
         }
 
 
@@ -60,12 +69,21 @@ namespace PuntoDeventa.Core.DI
         /// </summary>
         private void RegisterDomainDependencies()
         {
+            #region Auth
             _userRepository = DependencyService.Get<IUserRepository>();
             DependencyService.RegisterSingleton<IUserCurrentUseCase>(new UserCurrentUseCase(_userRepository));
             DependencyService.RegisterSingleton<ILoginUseCase>(new LoginUseCase(_authRepository));
             DependencyService.RegisterSingleton<IRegisterUseCase>(new RegisterUseCase(_authRepository));
             DependencyService.RegisterSingleton<IRememberUserUseCase>(new RememberUserUseCase(_userRepository));
+            #endregion
+
+            #region Categories
             DependencyService.Register<IGetCategoryListUseCase, GetCategoryListUseCase>();
+            DependencyService.Register<ISyncDataUseCase, SyncDataUseCase>();
+            DependencyService.Register<IAddCategoryUseCase, AddCategoryUseCase>();
+            DependencyService.Register<IAddProductUseCase, AddProductUseCase>();
+            DependencyService.Register<IGetCategoryUseCase, GetCategoryUseCase>();
+            #endregion
 
         }
         /// <summary>

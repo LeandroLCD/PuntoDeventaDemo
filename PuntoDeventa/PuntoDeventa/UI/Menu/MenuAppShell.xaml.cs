@@ -14,6 +14,7 @@ namespace PuntoDeventa.UI.Menu
         private void RegisterRoutes()
         {
              Routing.RegisterRoute(nameof(CategoryHome), typeof(CategoryHome));
+            Routing.RegisterRoute($"//{nameof(CategoryHome)}/{nameof(CategoryDetailPage)}", typeof(CategoryDetailPage));
         }
     }
 }

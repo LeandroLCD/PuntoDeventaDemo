@@ -147,5 +147,40 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
+        public static CategoryEntity ToCategoryEntity(this Category model)
+        {
+            if (model.IsNotNull())
+            {
+                List<ProductEntity> product = new List<ProductEntity>();
+                model.Products?.ForEach(item =>
+                {
+                    product.Add(new ProductEntity()
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        BarCode = item.BarCode,
+                        Code = item.Sku,
+                        Description = item.Description,
+                        UDM = item.UDM,
+                        IsOffer = item.IsOffer,
+                        Percentage = item.Percentage,
+                        PriceGross = item.PriceGross,
+                    });
+                });
+                return new CategoryEntity()
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Brand = model.Brand,
+                    Products = product.Count > 0 ? product : null,
+
+                };
+            }
+
+            else
+                return null;
+        }
+
+
     }
 }

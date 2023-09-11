@@ -11,10 +11,10 @@ using PuntoDeventa.UI.CategoryProduct.States;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using PuntoDeventa.Data.Mappers;
 
 namespace PuntoDeventa.Data.Repository.CategoryProduct
 {
@@ -203,10 +203,12 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                     Name = item.Value.Name,
                     Products = new List<ProductEntity>()
                 };
+                if(item.Value.Products.IsNotNull())
                 foreach (KeyValuePair<string, ProductDTO> p in item.Value.Products)
                 {
 
                     var prodEntity = new ProductEntity();
+                    prodEntity.Id = p.Key;
                     prodEntity.CopyPropertiesFrom(p.Value);
                     entity.Products.Add(prodEntity);
                 }
@@ -224,12 +226,30 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             if (resultType.Success)
             {
                 item.CopyPropertiesFrom(resultType.Data);
+                _DAO.InsertOrUpdate(((Category)item).ToCategoryEntity());
                 return new CategoryStates.Success(item);
             }
             else
             {
                 return new CategoryStates.Error(string.Join(Environment.NewLine, resultType.Errors));
             }
+        }
+
+        public CategoryStates GetCategory(string id)
+        {
+            var categoryEntity = _DAO.Get<CategoryEntity>(id);
+            if (categoryEntity.IsNotNull())
+            {
+                var category = new Category()
+                {
+                    Name = categoryEntity.Name,
+                    Id = categoryEntity.Id,
+                    Brand = categoryEntity.Brand,
+                    Products = categoryEntity.Products.Select(p => p.ToProduct()).ToList(),
+                };
+                return new CategoryStates.Success(category);
+            }
+            return new CategoryStates.Error("Categoria no encontrada");
         }
     }
 }
