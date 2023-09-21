@@ -28,6 +28,9 @@ namespace PuntoDeventa.Data.DTO
         [JsonProperty("IsOffer")]
         public bool IsOffer { get; set; }
 
+        [JsonProperty("InReport")]
+        public bool InReport { get; set; }
+
         [JsonProperty("Percentage")]
         public float Percentage { get; set; }
 

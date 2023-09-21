@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PuntoDeventa.UI.CategoryProduct;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -65,10 +66,21 @@ namespace PuntoDeventa.IU
         /// <summary>
         /// Ejecuta el NavigationBack, para retirnar a la vista anterior.
         /// </summary>
-        public Action NavigationBack = async () =>
+        public async void NavigationBack (Type page, string backDataPass = null)
+        {
+                var uri = Shell.Current.CurrentState.Location.OriginalString;
+                var remove = page.Name.Length + 1;
+                var path = uri.Remove(uri.Length - remove);
+            if(!string.IsNullOrEmpty(backDataPass)) 
+            { 
+                await Shell.Current.GoToAsync($"//{path}?{backDataPass}");
+            }
+            else
             {
-                await Shell.Current.Navigation.PopAsync();
-            };
+                await Shell.Current.GoToAsync($"//{path}");
+            }
+                
+        }
 
         #endregion
 

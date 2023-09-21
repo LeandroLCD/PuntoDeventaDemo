@@ -12,8 +12,8 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
-            
-            <StackLayout Margin="0,0,0,0">
+
+            <StackLayout Margin="15">
 
 
 

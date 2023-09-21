@@ -21,6 +21,7 @@ namespace PuntoDeventa
         public App()
         {
             new DependencyInjectionService();
+            
             InitializeComponent();
 
             //CallApi();

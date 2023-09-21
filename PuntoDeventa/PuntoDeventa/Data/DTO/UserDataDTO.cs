@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace PuntoDeventa.Data.DTO
 {
@@ -21,5 +22,7 @@ namespace PuntoDeventa.Data.DTO
 
         [JsonProperty("expiresIn")]
         public long ExpiresIn { get; set; }
+
+        public DateTime DateLogin { get; set; }
     }
 }

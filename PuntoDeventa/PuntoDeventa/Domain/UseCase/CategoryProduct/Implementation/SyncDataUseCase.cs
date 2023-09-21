@@ -15,11 +15,10 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
 
         public void Sync(int reStarInMinutes = 10)
         {
-            _repository.SyncDataAsync();
+            _repository.SyncData();
             Device.StartTimer(TimeSpan.FromMinutes(reStarInMinutes), ()=> {
 
-                _repository.SyncDataAsync();
-
+                _repository.SyncData();
                 return true;
             });
         }

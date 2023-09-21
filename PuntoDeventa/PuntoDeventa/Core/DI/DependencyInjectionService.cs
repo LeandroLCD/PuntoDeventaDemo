@@ -10,7 +10,7 @@ using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
-using System;
+using Syncfusion.Licensing;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Core.DI
@@ -30,13 +30,7 @@ namespace PuntoDeventa.Core.DI
 
             RegisterUserInterfaceDependencies();
 
-            Sync();
-        }
-
-        private void Sync()
-        {
-            var useCase = DependencyService.Get<ISyncDataUseCase>();
-            useCase.Sync();
+            SyncfusionLicenseProvider.RegisterLicense(LicenseProvider.LicenceKey);
         }
 
 
@@ -79,10 +73,20 @@ namespace PuntoDeventa.Core.DI
 
             #region Categories
             DependencyService.Register<IGetCategoryListUseCase, GetCategoryListUseCase>();
+            DependencyService.Register<IGetCategoryUseCase, GetCategoryUseCase>();
+            DependencyService.Register<IGetProductUseCase, GetProductUseCase>();
+
             DependencyService.Register<ISyncDataUseCase, SyncDataUseCase>();
+
             DependencyService.Register<IAddCategoryUseCase, AddCategoryUseCase>();
             DependencyService.Register<IAddProductUseCase, AddProductUseCase>();
-            DependencyService.Register<IGetCategoryUseCase, GetCategoryUseCase>();
+
+            DependencyService.Register<IDeleteCategoryUseCase, DeleteCategoryUseCase>();
+            DependencyService.Register<IDeleteProductUseCase, DeleteProductUseCase>();
+
+            DependencyService.Register<IEdictCategoryUseCase, EdictCategoryUseCase>();
+            DependencyService.Register<IEditProductUseCase, EditProductUseCase>();
+
             #endregion
 
         }

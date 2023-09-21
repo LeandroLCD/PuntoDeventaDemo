@@ -16,7 +16,7 @@ namespace PuntoDeventa.Data.Mappers
             if (dto.IsNotNull())
                 return new UserData()
                 {
-                    DateLogin = DateTime.Now,
+                    DateLogin = dto.DateLogin,
                     DisplayName = dto.DisplayName,
                     Email = dto.Email,
                     IdToken = dto.IdToken,
@@ -25,7 +25,6 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
-
         public static RemembermeUser ToRemembermeUser(this RemembermeUserDTO dto)
         {
             if (dto.IsNotNull())
@@ -139,7 +138,57 @@ namespace PuntoDeventa.Data.Mappers
                     Percentage = model.Percentage,
                     PriceGross= model.PriceGross,
                     Sku = model.Code,
-                    CategoryId = model.CategoryId
+                    CategoryId = model.CategoryId,
+                    InReport = model.InReport,
+                };
+            }
+
+            else
+                return null;
+        }
+
+        public static ProductEntity ToProductEntity(this ProductDTO model, string productId, string categoryId)
+        {
+            if (model.IsNotNull())
+            {
+
+                return new ProductEntity()
+                {
+                    Name = model.Name,
+                    Id = productId,
+                    IsOffer = model.IsOffer,
+                    BarCode = model.BarCode,
+                    Description = model.Description,
+                    UDM = model.UDM,
+                    Percentage = model.Percentage,
+                    PriceGross = model.PriceGross,
+                    Code = model.Sku,
+                    CategoryId = categoryId,
+                    InReport = model.InReport
+                };
+            }
+
+            else
+                return null;
+        }
+        public static ProductEntity ToProductEntity(this Product model)
+        {
+            if (model.IsNotNull())
+            {
+
+                return new ProductEntity()
+                {
+                    Name = model.Name,
+                    Id = model.Id,
+                    IsOffer = model.IsOffer,
+                    BarCode = model.BarCode,
+                    Description = model.Description,
+                    UDM = model.UDM,
+                    Percentage = model.Percentage,
+                    PriceGross = model.PriceGross,
+                    Code = model.Sku,
+                    CategoryId = model.CategoryId,
+                    InReport = model.InReport
                 };
             }
 

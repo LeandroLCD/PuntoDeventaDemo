@@ -9,14 +9,14 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="ADD" 
-                     Command="{Binding AddProductCommand}">
+                     Command="{Binding NewProductCommand}">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
             <StackLayout Margin="15">
 
-                <Frame Padding="0" Margin="3,10" BorderColor="Gray">
+                <Frame Padding="0" Margin="3,10" BorderColor="Black">
                     <StackLayout Orientation="Horizontal">
                         <SearchBar HorizontalOptions="FillAndExpand" 
                                    Placeholder="Buscar Category" 
@@ -37,24 +37,25 @@
 
                 <CollectionView x:Name="ProducList" SelectionMode="Single" 
                                 ItemsSource="{Binding ProductsList}" 
-                                SelectionChangedCommand="{Binding ProductCahngedCommand}" 
+                                SelectionChangedCommand="{Binding ProductChangedCommand}" 
                                 SelectionChangedCommandParameter="{Binding Source={x:Reference ProducList}, Path=SelectedItem}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Padding="0,3">
-                                <Frame HorizontalOptions="FillAndExpand">
-                                    <StackLayout>
-                                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
-                                            <Label TextColor="Black" FontSize="16" Text="{Binding Name}" HorizontalOptions="FillAndExpand"></Label>
-                                        </StackLayout>
-                                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
-                                            <Label TextColor="Black" FontSize="16" Text="{Binding Sku, StringFormat='Sku:{0}'}" ></Label>
-                                            <Label TextColor="Black" FontSize="16" Text="{Binding Percentage, StringFormat='{0}%'}" IsVisible="{Binding IsOffer}" HorizontalOptions="CenterAndExpand"></Label>
-                                            <Label TextColor="Black" FontSize="16" FontAttributes="Bold" Text="{Binding PriceNeto, StringFormat='{0:C0}'}" HorizontalOptions="EndAndExpand"></Label>
-                                        </StackLayout>
+                            <Frame HorizontalOptions="FillAndExpand" >
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Name}" HorizontalOptions="FillAndExpand"></Label>
                                     </StackLayout>
-                                </Frame>
-                            </StackLayout>
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Sku, StringFormat='Sku:{0}'}" ></Label>
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Percentage, StringFormat='{0}%'}" IsVisible="{Binding IsOffer}" HorizontalOptions="CenterAndExpand"></Label>
+                                        <Label TextColor="Black" FontSize="16" FontAttributes="Bold" Text="{Binding PriceNeto, StringFormat='{0:C0}'}" HorizontalOptions="EndAndExpand"></Label>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -23,6 +23,8 @@ namespace PuntoDeventa.Core.LocalData.DataBase.Entities
 
         public bool IsOffer { get; set; }
 
+        public bool InReport { get; set; }
+
         public float Percentage { get; set; }
 
         public double PriceGross { get; set; }

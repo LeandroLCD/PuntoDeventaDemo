@@ -35,7 +35,6 @@ namespace PuntoDeventa.Core.Network
 
         public async Task<HttpResponseMessage> PutAsync<T>(T DTO, Uri url)
         {
-           
                 var Settings = new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore

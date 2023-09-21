@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using Xamarin.Forms;
 
@@ -32,7 +31,7 @@ namespace PuntoDeventa.UI.CategoryProduct
 
             _addCProductUseCase = DependencyService.Get<IAddProductUseCase>();
             _getCategoryUseCase = DependencyService.Get<IGetCategoryUseCase>();
-
+            TokenSource = new CancellationTokenSource();
         }
 
         #endregion
@@ -77,7 +76,9 @@ namespace PuntoDeventa.UI.CategoryProduct
 
         public Command<string> SearchBarCommand { get; set; }
 
-        public Command<Product> AddProductCommand { get; set; }
+        public Command<Product> ProductChangedCommand { get; set; }
+
+        public Command NewProductCommand { get; set; }
         #endregion
 
         #region Methods
@@ -93,7 +94,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             TokenSource.Dispose();
         }
         private void InicializeProperties()
-        {            
+        {
 
             ProductsList = new ObservableCollection<Product>();
         }
@@ -106,7 +107,20 @@ namespace PuntoDeventa.UI.CategoryProduct
                 _searchText = test;
             });
 
+            ProductChangedCommand = new Command<Product>(async (product) =>
+            {
+                if (product.IsNotNull())
+                {
+                    await Shell.Current.GoToAsync($"{nameof(ProductPage)}?ProductId={product.Id}&CategoryId={product.CategoryId}", true);
+                }
+            });
 
+            NewProductCommand = new Command( async() =>
+            {
+                
+                    await Shell.Current.GoToAsync($"{nameof(ProductPage)}?CategoryId={GetCategory.Id}", true);
+                
+            });
         }
 
         private async void HandlerStates(CategoryStates categoryStates)

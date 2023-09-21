@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0809: Obsolete member overrides non-obsolete member
+dotnet_diagnostic.CS0809.severity = none

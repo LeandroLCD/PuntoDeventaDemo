@@ -62,12 +62,6 @@ namespace PuntoDeventa.UI.Auth
             set => SetProperty(ref _dataUser, value);
         }
 
-        public bool IsRememberme
-        {
-            get => _isRememberme;
-            set => SetProperty(ref _isRememberme, value);
-        }
-
         public bool IsPassword
         {
             get => _isPassword;
@@ -91,8 +85,10 @@ namespace PuntoDeventa.UI.Auth
 
         public Command IsPasswordCommand { get; set; }
 
+        public Command<bool> IsRemembermeCommand { get; set; }
+
         public Command RecoveryCommand { get; set; }
-        
+
         #endregion
 
         #region methods
@@ -106,9 +102,10 @@ namespace PuntoDeventa.UI.Auth
         {
             return _getUserCurrent.GetUserData();
         }
+
         private void InicializeCommads()
         {
-            
+
             LoginCommand = new Command<AuthDataUser>(LoginMethods);
             IsPasswordCommand = new Command(() =>
             {
@@ -118,13 +115,14 @@ namespace PuntoDeventa.UI.Auth
                 await App.Current.MainPage.DisplayAlert("404", "En construción", "ok");
             });
 
+            IsRemembermeCommand = new Command<bool>((isCheked) => { _isRememberme = isCheked; });
+
+
         }
 
         private async void LoginMethods(AuthDataUser dataUser)
         {
             GetAuthStates = AuthStates.Loading.Instance;
-
-            await Task.Delay(2000);
 
             GetAuthStates = await _loginUseCase.Login(DataUser);
 
@@ -137,10 +135,10 @@ namespace PuntoDeventa.UI.Auth
             {
                 case AuthStates.Loaded loaded:
                     var userCurren = _getUserCurrent.GetUserData();
-                    userCurren?.Apply(() => { 
-                                 if(userCurren.IsAuthValid)
-                                     App.Current.MainPage = new MenuAppShell();
-                                    return;
+                    userCurren?.Apply(() => {
+                        if (userCurren.IsAuthValid)
+                            App.Current.MainPage = new MenuAppShell();
+                        return;
                     });
 
 
@@ -150,7 +148,7 @@ namespace PuntoDeventa.UI.Auth
                         if (rememberme.IsRememberme)
                         {
                             DataUser.Email = rememberme.Email;
-                            IsRememberme = true;
+                            DataUser.IsRememberme = _isRememberme = rememberme.IsRememberme;
                             NotifyPropertyChanged(nameof(DataUser));
                         }
 
@@ -158,7 +156,7 @@ namespace PuntoDeventa.UI.Auth
                     GridParent?.Apply(() =>
                     {
                         GridParent.Children.Clear();
-                        GridParent.Children.Add(new LoginScreen(DataUser, IsRememberme, LoginCommand, RecoveryCommand));
+                        GridParent.Children.Add(new LoginScreen(DataUser, IsRemembermeCommand, LoginCommand, RecoveryCommand));
 
                     });
                     break;
@@ -171,8 +169,8 @@ namespace PuntoDeventa.UI.Auth
 
                     break;
                 case AuthStates.Success success:
-                    if (IsRememberme)
-                        _isRemembermeUseCase.SetRemembermeUser(new RemembermeUser(DataUser.Email, IsRememberme));
+                    if (_isRememberme)
+                        _isRemembermeUseCase.SetRemembermeUser(new RemembermeUser(DataUser.Email, _isRememberme));
                     // Acciones para success navegamos a al home.
                     GridParent?.Apply(() =>
                     {
