@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using PuntoDeventa.Data.DTO;
-using Xamarin.Essentials;
-
-namespace PuntoDeventa.Core.LocalData
+﻿namespace PuntoDeventa.Core.LocalData.Preferences
 {
+    using Xamarin.Essentials;
+    using Newtonsoft.Json;
+    using System;
+    using PuntoDeventa.Data.DTO.Auth;
+
     internal class DataPreferences : IDataPreferences
     {
         #region fields
@@ -28,6 +29,7 @@ namespace PuntoDeventa.Core.LocalData
 
         public void SetUserData(UserDataDTO user)
         {
+            user.DateLogin = DateTime.Now;
             _userData = SetDataPreferencesKey(_userKey, user);
         }
 

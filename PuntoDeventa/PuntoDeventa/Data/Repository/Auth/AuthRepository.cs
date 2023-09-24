@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
-using PuntoDeventa.Core.LocalData;
-using PuntoDeventa.Data.DTO;
+using PuntoDeventa.Core.LocalData.Preferences;
+using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Data.Mappers;
 using PuntoDeventa.Data.Models.Errors;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.Auth.States;
-using PuntoDeVenta.Domain.Models;
 using System;
 using System.IO;
 using System.Linq;

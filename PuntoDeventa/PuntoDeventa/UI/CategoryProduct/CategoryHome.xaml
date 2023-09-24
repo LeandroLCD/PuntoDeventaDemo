@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct" xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger"
+             x:Class="PuntoDeventa.UI.CategoryProduct.CategoryHome">
+    <ContentPage.BindingContext>
+        <viewModel:CategoryHomeViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="ADD" 
+                     Command="{Binding IsVisibleAddCategoryCommand}">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+
+            <StackLayout Margin="15">
+
+
+
+                <Frame Padding="0" Margin="3,10" BorderColor="Gray">
+                    <StackLayout Orientation="Horizontal">
+                        <SearchBar HorizontalOptions="FillAndExpand" 
+                                   Placeholder="Buscar Category" 
+                                   FontSize="15" 
+                                   x:Name="Searsh"                                   
+                                   SearchCommand="{Binding SearchBarCommand}" 
+                                   SearchCommandParameter="{Binding Source={x:Reference Searsh}, Path=Text}"
+                                   Text="{Binding SearchText}">
+                            <SearchBar.Behaviors>
+                                <behaviorsPack:EventToCommandBehavior Command="{Binding SearchBarCommand}"
+                                                                      EventArgsPropertyPath="NewTextValue"
+                                                                      EventName="TextChanged"/>
+                            </SearchBar.Behaviors>
+                        </SearchBar>
+                    </StackLayout>
+                </Frame>
+
+
+                <CollectionView x:Name="Categories"  SelectionMode="Single" ItemsSource="{Binding CategoryList}" VerticalOptions="EndAndExpand"
+                                SelectionChangedCommand="{Binding CategoryChangedCommand}" 
+                                SelectionChangedCommandParameter="{Binding Source={x:Reference Categories}, Path=SelectedItem}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="Transparent" Padding="10,20">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label TextColor="Black" FontSize="Medium" FontAttributes="Bold" Text="{Binding Name}" HorizontalOptions="StartAndExpand"/>
+                                    <Label TextColor="Black" 
+                                           FontSize="Medium" 
+                                           FontAttributes="Bold" 
+                                           Text="{Binding ProductCount, StringFormat='#  {0}'}"
+                                           Margin="10,0"/>
+
+                                    <ImageButton Source="delete.png" 
+                                                 x:Name="Delete" 
+                                                 Command="{Binding Source={x:Reference Categories}, Path=BindingContext.DeleteCategoryCommand}" 
+                                                 CommandParameter="{Binding Source={x:Reference Delete}, Path=BindingContext}"
+                                                 BackgroundColor="Transparent"/>
+
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+
+                </CollectionView>
+            </StackLayout>
+
+
+            <ContentView BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleAddCategory}" AbsoluteLayout.LayoutBounds="0,0,1,1" Opacity="0">
+                <ContentView.Triggers>
+                    <DataTrigger TargetType="ContentView" Binding="{Binding IsVisibleAddCategory}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <trigger:FadeToTrigger To="1" Duration="500"/>
+                        </DataTrigger.EnterActions>
+                        <DataTrigger.ExitActions>
+                            <trigger:FadeToTrigger To="1" Duration="500"/>
+                        </DataTrigger.ExitActions>
+
+                    </DataTrigger>
+
+
+
+                </ContentView.Triggers>
+                <Grid HorizontalOptions="Center" VerticalOptions="Center" >
+                    <Frame BorderColor="Black" BackgroundColor="White" x:Name="ModalCategory">
+
+
+                        <StackLayout HorizontalOptions="EndAndExpand" WidthRequest="300" Padding="10.0">
+                            <Label Text="Nueva Categoria"/>
+
+                            <inputLayout:SfTextInputLayout
+                                     ContainerType="Outlined" HorizontalOptions="FillAndExpand" 
+                                     Hint="Nombre"
+                                    HelperText="Ej. Barquillos.">
+                                <Entry HeightRequest="60" 
+                                       Text="{Binding NewCategory.Name}"
+                                       HorizontalTextAlignment="Center" 
+                                       HorizontalOptions="FillAndExpand" 
+                                       VerticalOptions="CenterAndExpand"/>
+
+                            </inputLayout:SfTextInputLayout>
+
+                            <inputLayout:SfTextInputLayout
+                                     ContainerType="Outlined" HorizontalOptions="FillAndExpand" 
+                                     Hint="Marca"
+                                    HelperText="Ej. Bresler o San Francisco.">
+                                <Entry HeightRequest="60" 
+                                       Text="{Binding NewCategory.Brand}"
+                                       HorizontalTextAlignment="Center" 
+                                       HorizontalOptions="FillAndExpand" 
+                                       VerticalOptions="CenterAndExpand"/>
+
+                            </inputLayout:SfTextInputLayout>
+                            <Button Text="Aceptar" 
+                                    BackgroundColor="White" 
+                                    TextColor="Red" 
+                                    HorizontalOptions="CenterAndExpand"
+                                    Command="{Binding NewCategoryCommand}"
+                                    CommandParameter="{Binding NewCategory}"/>
+
+                        </StackLayout>
+                    </Frame>
+                    <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" 
+                                     HorizontalOptions="End" VerticalOptions="Start"  
+                                     BackgroundColor="Transparent"
+                                     Margin="3,0" Command="{Binding IsVisibleAddCategoryCommand}"/>
+
+
+
+
+                </Grid>
+            </ContentView>
+
+
+            <controls:CustomActivity IsRunning="{Binding IsLoading}" Icon="icon" Text="{Binding StatusMessage}"/>
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
