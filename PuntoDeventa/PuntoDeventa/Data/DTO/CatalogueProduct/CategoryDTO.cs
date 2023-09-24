@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace PuntoDeventa.Data.DTO
+namespace PuntoDeventa.Data.DTO.CatalogueProduct
 {
     public class CategoryDTO
     {

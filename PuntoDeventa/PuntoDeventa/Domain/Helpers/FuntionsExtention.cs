@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using PuntoDeventa.Domain.Models;
 using Xamarin.Forms.Internals;
+using System.Collections;
 
 namespace PuntoDeventa.Domain.Helpers
 {
@@ -65,11 +66,37 @@ namespace PuntoDeventa.Domain.Helpers
             {
                 var destinationProperty = destinationType.GetProperty(e.Name);
                 var value = e.GetValue(source, null);
-                  if (value.IsNotNull() && destinationProperty.IsNotNull() && destinationProperty.CanWrite)
-                  {
-                      destinationProperty.SetValue(destination, value, null);
-                  }
-                
+                if (value.IsNotNull() && destinationProperty.IsNotNull() && destinationProperty.CanWrite)
+                {
+                    if (value is IEnumerable sourceCollection && destinationProperty.PropertyType.IsGenericType)
+                    {
+                        // Obtén el tipo genérico de la colección de destino
+                        var destinationGenericType = destinationProperty.PropertyType.GetGenericArguments().FirstOrDefault();
+
+                        if (destinationGenericType != null)
+                        {
+                            // Crea una instancia de la colección de destino
+                            var destinationCollection = Activator.CreateInstance(typeof(List<>).MakeGenericType(destinationGenericType));
+
+                            // Itera sobre los elementos de la colección de origen y cárgalos en la colección de destino
+                            foreach (var sourceItem in sourceCollection)
+                            {
+                                var destinationItem = Activator.CreateInstance(destinationGenericType);
+                                destinationItem.CopyPropertiesFrom(sourceItem);
+                                destinationCollection.GetType().GetMethod("Add").Invoke(destinationCollection, new[] { destinationItem });
+                            }
+
+                            // Asigna la colección de destino al destino principal
+                            destinationProperty.SetValue(destination, destinationCollection, null);
+                        }
+                    }
+                    else
+                    {
+                        // Si no es una propiedad IEnumerable, simplemente establece el valor en la propiedad de destino
+                        destinationProperty.SetValue(destination, value, null);
+                    }
+                }
+
             });
         }
 

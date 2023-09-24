@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PuntoDeventa.Data.DTO
+namespace PuntoDeventa.Data.DTO.Auth
 {
     public class RefeshTokenResponseDTO
     {

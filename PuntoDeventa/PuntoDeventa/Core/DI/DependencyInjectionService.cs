@@ -31,6 +31,8 @@ namespace PuntoDeventa.Core.DI
             RegisterUserInterfaceDependencies();
 
             SyncfusionLicenseProvider.RegisterLicense(LicenseProvider.LicenceKey);
+
+
         }
 
 
@@ -45,6 +47,8 @@ namespace PuntoDeventa.Core.DI
             DependencyService.Register<IDataPreferences, DataPreferences>();
             DependencyService.Register<IDataAccessObject, DataAccessObject>();
             DependencyService.Register<IDataStore, DataStore>();
+            DependencyService.Register<IElectronicEmissionSystem, ElectronicEmissionSystem>();
+
 
 
         }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace PuntoDeventa.Data.DTO
+namespace PuntoDeventa.Data.DTO.Auth
 {
     public class UserDataDTO
     {

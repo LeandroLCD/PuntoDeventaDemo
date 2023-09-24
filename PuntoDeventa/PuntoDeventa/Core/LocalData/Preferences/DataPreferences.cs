@@ -2,8 +2,8 @@
 {
     using Xamarin.Essentials;
     using Newtonsoft.Json;
-    using PuntoDeventa.Data.DTO;
     using System;
+    using PuntoDeventa.Data.DTO.Auth;
 
     internal class DataPreferences : IDataPreferences
     {

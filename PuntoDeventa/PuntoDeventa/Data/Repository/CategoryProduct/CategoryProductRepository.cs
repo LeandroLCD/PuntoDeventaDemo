@@ -3,6 +3,7 @@ using PuntoDeventa.Core.LocalData.DataBase.Entities;
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.DTO;
+using PuntoDeventa.Data.DTO.CatalogueProduct;
 using PuntoDeventa.Data.Mappers;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;

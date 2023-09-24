@@ -2,6 +2,7 @@
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.DTO;
+using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using System;
@@ -41,6 +42,41 @@ namespace PuntoDeventa.Data.Repository
                         if (token.IsCompleted)
                         {
                             await MakeCallNetwork<T>(apiCallFunction);
+                        }
+                        break;
+
+                    default:
+                        resultType.Errors.Add(new ErrorMessage("Error No Controlado", jsonResult));
+                        break;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                resultType.Errors.Add(new ErrorMessage(e.GetHashCode().ToString(), e.Message));
+            }
+
+            return resultType;
+        }
+
+        public async Task<ResultType<T>> MakeCallNetwork<T>(HttpResponseMessage HttpResponse)
+        {
+            ResultType<T> resultType = new ResultType<T>();
+            try
+            {
+
+                string jsonResult = await HttpResponse.Content.ReadAsStringAsync();
+
+                resultType.Success = HttpResponse.StatusCode.Equals(HttpStatusCode.OK);
+
+                switch (HttpResponse.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        var data = JsonConvert.DeserializeObject<T>(jsonResult);
+                        if (data.IsNotNull())
+                        {
+                            resultType.Data = data;
                         }
                         break;
 
