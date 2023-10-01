@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PuntoDeventa.UI.CatalogueClient.Model
+﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
     public class EconomicActivities
     {

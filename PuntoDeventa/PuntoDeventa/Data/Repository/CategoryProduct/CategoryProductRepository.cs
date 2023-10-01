@@ -1,25 +1,23 @@
-﻿using PuntoDeventa.Core.LocalData.DataBase;
-using PuntoDeventa.Core.LocalData.DataBase.Entities;
-using PuntoDeventa.Core.LocalData.Preferences;
-using PuntoDeventa.Core.Network;
-using PuntoDeventa.Data.DTO;
-using PuntoDeventa.Data.DTO.CatalogueProduct;
-using PuntoDeventa.Data.Mappers;
-using PuntoDeventa.Domain.Helpers;
-using PuntoDeventa.Domain.Models;
-using PuntoDeventa.UI.CategoryProduct.Models;
-using PuntoDeventa.UI.CategoryProduct.States;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-
-namespace PuntoDeventa.Data.Repository.CategoryProduct
+﻿namespace PuntoDeventa.Data.Repository.CategoryProduct
 {
+    using PuntoDeventa.Core.LocalData.DataBase;
+    using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+    using PuntoDeventa.Core.LocalData.Preferences;
+    using PuntoDeventa.Core.Network;
+    using PuntoDeventa.Data.DTO;
+    using PuntoDeventa.Data.DTO.CatalogueProduct;
+    using PuntoDeventa.Data.Mappers;
+    using PuntoDeventa.Domain.Helpers;
+    using PuntoDeventa.Domain.Models;
+    using PuntoDeventa.UI.CategoryProduct.Models;
+    using PuntoDeventa.UI.CategoryProduct.States;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Xamarin.Forms;
+    using Xamarin.Forms.Internals;
     internal class CategoryProductRepository : BaseRepository, ICategoryProductRepository
     {
         private IDataStore _dataStore;
@@ -123,7 +121,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                 return _dataStore.PostAsync(item, GetUri($"CategoryProduct"));
             });
 
-            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, item, resultType);
+            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, item.ToCategoryEntity(), resultType);
         }
 
         public async Task<CategoryStates> InsertProductAsync(Product item)
@@ -133,7 +131,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                 return _dataStore.PostAsync(item, GetUri($"CategoryProduct/{item.CategoryId}/Products"));
             });
 
-            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, item, resultType);
+            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, item.ToProductEntity(), resultType);
         }
 
         public Task<CategoryStates> UpdateAsync(Category item)
@@ -143,19 +141,22 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         public async Task<CategoryStates> UpdateProductAsync(Product item)
         {
-            
+
             var resultType = await MakeCallNetwork<ProductDTO>(() =>
             {
                 return _dataStore.PutAsync(item.ToProductDTO(), GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}"));
             });
 
-            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, item.ToProductEntity(), resultType);
+            var entity = item.ToProductEntity();
+            entity.Category = _DAO.Get<CategoryEntity>(item.CategoryId);
+
+            return ResultTypeToCategoryStates(OperationDTO.InsertOrUpdate, entity, resultType);
         }
 
         public List<Category> GetAll()
         {
-            return _DAO.GetAll<CategoryEntity>()?.Select(c=> new Category()
-            {                
+            return _DAO.GetAll<CategoryEntity>()?.Select(c => new Category()
+            {
                 Brand = c.Brand,
                 Id = c.Id,
                 Name = c.Name,
@@ -176,18 +177,22 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                 {
                     return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
                 });
-
-                foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+                if(resulType.Success)
                 {
-                    var entity = new CategoryEntity()
+                    foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
                     {
-                        Id = item.Key,
-                        Name = item.Value.Name,
-                        Brand = item.Value.Brand,
-                        Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
-                    };
-                    _DAO.InsertOrUpdate(entity);
+                        var entity = new CategoryEntity()
+                        {
+                            Id = item.Key,
+                            Name = item.Value.Name,
+                            Brand = item.Value.Brand,
+                            Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
+                        };
+                        _DAO.InsertOrUpdate(entity);
+                    }
+
                 }
+                
 
             });
 
@@ -198,21 +203,23 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             return new Uri(Path.Combine(Properties.Resources.BaseUrlRealDataBase, $"{path}.json?auth={tokenID}"));
         }
 
-        private CategoryStates ResultTypeToCategoryStates<T>(OperationDTO method,object item, ResultType<T> resultType)
+        private CategoryStates ResultTypeToCategoryStates<T>(OperationDTO method, object itemEntity, ResultType<T> resultType)
         {
             if (resultType.Success)
             {
-                item.CopyPropertiesFrom(resultType.Data);
-                switch(method)
+                itemEntity.CopyPropertiesFrom(resultType.Data);
+                switch (method)
                 {
                     case OperationDTO.Delete:
-                        _DAO.Delete(item);
+                        _DAO.Delete(itemEntity);
                         break;
                     default:
-                        _DAO.InsertOrUpdate(item);
+                        _DAO.InsertOrUpdate(itemEntity);
                         break;
                 }
-                return new CategoryStates.Success(item);
+                var category = Activator.CreateInstance(typeof(T));
+                category.CopyPropertiesFrom(resultType.Data);
+                return new CategoryStates.Success(category);
             }
             else
             {
@@ -222,9 +229,10 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
 
         public CategoryStates GetCategory(string id)
         {
-           
+
             var categoryEntity = _DAO.Get<CategoryEntity>(id);
-            if(categoryEntity.IsNotNull())
+            var product = _DAO.GetAll<ProductEntity>().Where(p => p.CategoryId == id);
+            if (categoryEntity.IsNotNull())
             {
                 var category = new Category()
                 {
@@ -243,7 +251,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             var productEntity = _DAO.Get<ProductEntity>(id);
             if (productEntity.IsNotNull())
             {
-                
+
                 return new CategoryStates.Success(productEntity.ToProduct());
             }
             return new CategoryStates.Error("Producto no encontrado");

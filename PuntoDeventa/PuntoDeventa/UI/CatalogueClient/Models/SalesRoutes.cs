@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace PuntoDeventa.UI.CatalogueClient.Model
+﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
-    internal class SalesRoutes
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    public class SalesRoutes
     {
         public SalesRoutes()
         {

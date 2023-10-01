@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PuntoDeventa.UI.CatalogueClient.Models
+﻿namespace PuntoDeventa.UI.CatalogueClient.Models
 {
+    using System.ComponentModel.DataAnnotations;
     public class Rut
     {
         public Rut()

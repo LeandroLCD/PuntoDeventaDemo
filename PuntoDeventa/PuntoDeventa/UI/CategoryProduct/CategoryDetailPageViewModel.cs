@@ -132,7 +132,6 @@ namespace PuntoDeventa.UI.CategoryProduct
                     break;
                 case CategoryStates.Error error:
                     await Shell.Current.DisplayAlert("Error", error.Message, "Ok");
-                    await Shell.Current.Navigation.PopAsync();
                     break;
             }
         }
@@ -152,10 +151,9 @@ namespace PuntoDeventa.UI.CategoryProduct
                 var id = HttpUtility.UrlDecode(query["CategoryId"]);
                 HandlerStates(_getCategoryUseCase.Get(id));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                await Shell.Current.Navigation.PopAsync();
+                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok");
             }
 
         }

@@ -37,7 +37,7 @@ namespace PuntoDeventa.UI.CategoryProduct
 
             _deleteCategoryUserCase = DependencyService.Get<IDeleteCategoryUseCase>();
 
-            TokenSource = new CancellationTokenSource();
+            
 
         }
 
@@ -114,6 +114,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         }
         private void InicializeProperties()
         {
+            TokenSource = new CancellationTokenSource();
 
             Task.Run(async () =>
             {

@@ -19,6 +19,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         private Product _geProduct;
         private bool _isEdit;
         private string _percentaje;
+        private string _titlePage;
 
         #endregion
 
@@ -50,7 +51,13 @@ namespace PuntoDeventa.UI.CategoryProduct
                 }
                 return _geProduct;
             }
-            set => SetProperty(ref _geProduct, value);
+            set
+            {
+
+                _percentaje = value.Percentage.ToString();
+                NotifyPropertyChanged(nameof(Percentage));
+                SetProperty(ref _geProduct, value);
+            }
 
         }
         public bool IsEdit
@@ -63,15 +70,25 @@ namespace PuntoDeventa.UI.CategoryProduct
         {
             get
             {
-                if (string.IsNullOrEmpty(_percentaje))
+                if (_percentaje.IsNull())
                 {
-                    _percentaje = "0";
+                    _percentaje = GetProduct.Percentage.ToString();
                 }
                 return _percentaje;
             }
 
-            private set => SetProperty(ref _percentaje, value);
+            private set 
+            {
+               
+                SetProperty(ref _percentaje, value); 
+            }
 
+        }
+
+        public string TitlePage
+        {
+            get => _titlePage;
+            private set => SetProperty(ref _titlePage, value);
         }
         #endregion
 
@@ -151,40 +168,25 @@ namespace PuntoDeventa.UI.CategoryProduct
 
            
 
-            PercentageChangedCommand = new Command<string>(PercentageCompleted);
+            PercentageChangedCommand = new Command<string>((value) =>
+            {
+                Console.WriteLine($"Percentage {value}");
+                Percentage = value;
+                if (_percentaje.Length > 0)
+                    GetProduct.Percentage = float.Parse(_percentaje);
+                NotifyPropertyChanged(nameof(GetProduct));
 
-            PercentageCompletedCommand = new Command<string>(PercentageCompleted);
+                Console.WriteLine($"_percentaje {_percentaje}");
+
+
+            });
 
             NotifyChangedCommand = new Command(() =>
             {
                 NotifyPropertyChanged(nameof(GetProduct));
             });
 
-        }
-
-        private void PercentageCompleted(string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                int index = value.Length;
-                char[] ch = new char[index];
-
-                // Copy character by character into array 
-                for (int i = 0; i < index; i++)
-                {
-                    ch[i] = value[i];
-                }
-
-                if (ch[index - 1].Equals(Char.Parse(",")) || ch[index - 1].Equals(Char.Parse(".")))
-                {
-                    Percentage = value.Replace(",", "");
-                };
-            }
-            else
-            {
-                Percentage = "0";
-            }
-        }
+        }       
 
         private async void HandlerStates(CategoryStates categoryStates)
         {
@@ -205,33 +207,28 @@ namespace PuntoDeventa.UI.CategoryProduct
             try
             {
                 var id = HttpUtility.UrlDecode(query["ProductId"]);
-                if (id.IsNotNull())
-                {
-                    id.Apply(() =>
+                 id.Apply(() =>
                     {
                         HandlerStates(_getProductUseCase.Get(id));
                         IsEdit = true;
                     });
-                    return;
-                }
-                else
-                {
-                    var idCategory = HttpUtility.UrlDecode(query["CategoryId"]);
-                    idCategory?.Apply(() =>
-                    {
-                        GetProduct = new Product()
-                        {
-                            CategoryId = id,
-                        };
-
-
-                    });
-                }
+                TitlePage = $"Editar Producto.";
+                    return; 
+                
             }
             catch (Exception)
             {
 
-                BackButtonCommand.Execute(null);
+                var idCategory = HttpUtility.UrlDecode(query["CategoryId"]);
+                idCategory.Apply(() =>
+                {
+                    GetProduct = new Product()
+                    {
+                        CategoryId = idCategory,
+                    };
+                    TitlePage = $"Agregar Producto.";
+
+                });
             }
         }
         #endregion

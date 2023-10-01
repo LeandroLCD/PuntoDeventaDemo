@@ -8,7 +8,8 @@
              xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
              xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger" 
              xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct"
-             x:Class="PuntoDeventa.UI.CategoryProduct.ProductPage">
+             x:Class="PuntoDeventa.UI.CategoryProduct.ProductPage"
+             Title="{Binding TitlePage}">
     
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackButtonCommand}"/>
@@ -119,9 +120,6 @@
                                                                           EventName="TextChanged"
                                                                           EventArgsPropertyPath="NewTextValue"/>
 
-                                                <behaviorsPack:EventToCommandBehavior Command="{Binding PercentageCompletedCommand}"
-                                                                          EventName="Unfocused"
-                                                                          CommandParameter="{Binding Source={x:Reference percentage}, Path=Text}"/>
 
                                             </Entry.Behaviors>
 

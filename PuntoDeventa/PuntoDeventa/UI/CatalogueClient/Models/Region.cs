@@ -1,9 +1,7 @@
-﻿using PuntoDeventa.Domain.Models;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace PuntoDeventa.UI.CatalogueClient.Model
+﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     public class Region
     {
         public string Id { get; set; }
