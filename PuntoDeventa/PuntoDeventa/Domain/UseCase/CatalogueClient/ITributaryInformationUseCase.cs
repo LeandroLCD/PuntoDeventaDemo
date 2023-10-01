@@ -1,10 +1,11 @@
 ﻿namespace PuntoDeventa.Domain.UseCase.CatalogueClient
 {
-    using PuntoDeventa.UI.CatalogueClient.Model;
+    using PuntoDeventa.UI.CatalogueClient.Models;
     using PuntoDeventa.UI.CatalogueClient.States;
     using System.Threading.Tasks;
-    public interface IAddSalesRouteUseCase
+
+    public interface ITributaryInformationUseCase
     {
-        Task<CatalogeState> Insert(SalesRoutes route);
+        Task<CatalogeState> Get(Rut rut);
     }
 }

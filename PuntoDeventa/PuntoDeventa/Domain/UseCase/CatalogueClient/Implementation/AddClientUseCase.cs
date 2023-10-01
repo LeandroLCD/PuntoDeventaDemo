@@ -6,20 +6,22 @@
     using System.Threading.Tasks;
     using Xamarin.Forms;
 
-    internal class AddSalesRouteUseCase : BaseCatalogueClientUseCase, IAddSalesRouteUseCase
+    internal class AddClientUseCase : BaseCatalogueClientUseCase, IAddClientUseCase
     {
         private ICatalogueClienteRepository _repository;
 
-        public AddSalesRouteUseCase()
+        public AddClientUseCase()
         {
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
-        public async Task<CatalogeState> Insert(SalesRoutes route)
+        public async Task<CatalogeState> Insert(Client client)
         {
-            return await MakeCallUseCase(route, async () =>
+
+            return await MakeCallUseCase(client, async () =>
             {
-                return await _repository.InsertRoute(route);
+                return await _repository.InsertClient(client);
             });
+
 
         }
     }

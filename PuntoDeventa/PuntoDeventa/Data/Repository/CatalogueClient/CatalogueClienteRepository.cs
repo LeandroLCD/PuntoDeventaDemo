@@ -1,27 +1,25 @@
-﻿using PuntoDeventa.Core.LocalData.DataBase;
-using PuntoDeventa.Core.LocalData.Preferences;
-using PuntoDeventa.Core.Network;
-using PuntoDeventa.Data.DTO.CatalogueClient;
-using PuntoDeventa.Data.DTO;
-using PuntoDeventa.UI.CatalogueClient.Model;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using PuntoDeventa.UI.CatalogueClient.States;
-using PuntoDeventa.Domain.Helpers;
-using PuntoDeventa.Domain.Models;
-using System.IO;
-using Xamarin.Forms;
-using PuntoDeventa.UI.CatalogueClient.Models;
-using System;
-using PuntoDeventa.UI.CategoryProduct.Models;
-using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
-using PuntoDeventa.Data.Mappers;
-using PuntoDeventa.Data.DTO.CatalogueProduct;
-
-namespace PuntoDeventa.Data.Repository.CatalogueClient
+﻿namespace PuntoDeventa.Data.Repository.CatalogueClient
 {
-    internal class CatalogueClienteRepository: BaseRepository, ICatalogueClienteRepository
+    using PuntoDeventa.Core.LocalData.DataBase;
+    using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+    using PuntoDeventa.Core.LocalData.Preferences;
+    using PuntoDeventa.Core.Network;
+    using PuntoDeventa.Data.DTO;
+    using PuntoDeventa.Data.DTO.CatalogueClient;
+    using PuntoDeventa.Data.Mappers;
+    using PuntoDeventa.Domain.Helpers;
+    using PuntoDeventa.Domain.Models;
+    using PuntoDeventa.UI.CatalogueClient.Model;
+    using PuntoDeventa.UI.CatalogueClient.Models;
+    using PuntoDeventa.UI.CatalogueClient.States;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Xamarin.Forms;
+
+    internal class CatalogueClienteRepository : BaseRepository, ICatalogueClienteRepository
     {
         private IDataStore _dataStore;
         private IDataPreferences _dataPreferences;
@@ -75,24 +73,25 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
 
         public List<SalesRoutes> GetRoutesAll()
         {
-            
-                return _DAO.GetAll<SalesRoutesEntity>()?.Select(routeEntity => new SalesRoutes()
-                {
-                    Id = routeEntity.Id,
-                    Name = routeEntity.Name,
-                    Clients = routeEntity.Clients?.Select(client => client.ToClient()).ToList()
-                }).ToList();
-            
+
+            return _DAO.GetAll<SalesRoutesEntity>()?.Select(routeEntity => new SalesRoutes()
+            {
+                Id = routeEntity.Id,
+                Name = routeEntity.Name,
+                Clients = routeEntity.Clients?.Select(client => client.ToClient()).ToList()
+            }).ToList();
+
         }
-        
+
         public async IAsyncEnumerable<SalesRoutes> GetCatalogueAsync()
         {
             var routeResultTask = _dataStore.GetAsync<SalesRoutesDTO>(GetUri("CatalogueClient/SalesRoutes"));
 
             var clientResultTask = _dataStore.GetAsync<ClientDTO>(GetUri("CatalogueClient/Clients"));
 
-            await Task.Run(async () => { 
-                
+            await Task.Run(async () =>
+            {
+
                 await Task.WhenAll(routeResultTask, clientResultTask);
 
             });
@@ -102,7 +101,7 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
             var clientDeferred = await MakeCallNetwork<Dictionary<string, ClientDTO>>(clientResultTask.Result);
 
 
-            if(routeDeferred.Success && clientDeferred.Success) 
+            if (routeDeferred.Success && clientDeferred.Success)
             {
                 var groupedClient = clientDeferred.Data?.Select(c =>
                 {
@@ -128,47 +127,21 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
                     _DAO.InsertOrUpdate(route.ToSalesRoutesEntity());
                     yield return route;
                 }
-            
+
             }
             else
             {
                 var message = $"Se produjo un error al intentar obtener las rutas de los cliente." +
                                $" \n Detalles: {string.Join(Environment.NewLine, routeDeferred.Errors)} {string.Join(Environment.NewLine, clientDeferred.Errors)}";
-               await App.Current.MainPage.DisplayAlert("Error", message, "Ok");
+                await App.Current.MainPage.DisplayAlert("Error", message, "Ok");
             }
-            
+
 
 
 
         }
 
-        private Uri GetUri(string path)
-        {
-            return new Uri(Path.Combine(Properties.Resources.BaseUrlRealDataBase, $"{path}.json?auth={tokenID}"));
-        }
-
-        private CatalogeState ResultTypeToCatalogeState<T>(OperationDTO method, object item, ResultType<T> resultType)
-        {
-            if (resultType.Success)
-            {
-                item.CopyPropertiesFrom(resultType.Data);
-                switch (method)
-                {
-                    case OperationDTO.Delete:
-                        _DAO.Delete(item);
-                        break;
-                    default:
-                        _DAO.InsertOrUpdate(item);
-                        break;
-                }
-                return new CatalogeState.Success(item);
-            }
-            else
-            {
-                return new CatalogeState.Error(string.Join(Environment.NewLine, resultType.Errors));
-            }
-        }
-
+        
         public async Task<CatalogeState> DeleteRoute(SalesRoutes item)
         {
             var resultType = await MakeCallNetwork<SalesRoutes>(() =>
@@ -201,5 +174,33 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
 
             return ResultTypeToCatalogeState(OperationDTO.InsertOrUpdate, entity, resultType);
         }
+
+        private Uri GetUri(string path)
+        {
+            return new Uri(Path.Combine(Properties.Resources.BaseUrlRealDataBase, $"{path}.json?auth={tokenID}"));
+        }
+
+        private CatalogeState ResultTypeToCatalogeState<T>(OperationDTO method, object item, ResultType<T> resultType)
+        {
+            if (resultType.Success)
+            {
+                item.CopyPropertiesFrom(resultType.Data);
+                switch (method)
+                {
+                    case OperationDTO.Delete:
+                        _DAO.Delete(item);
+                        break;
+                    default:
+                        _DAO.InsertOrUpdate(item);
+                        break;
+                }
+                return new CatalogeState.Success(item);
+            }
+            else
+            {
+                return new CatalogeState.Error(string.Join(Environment.NewLine, resultType.Errors));
+            }
+        }
+
     }
 }

@@ -5,22 +5,21 @@
     using PuntoDeventa.UI.CatalogueClient.States;
     using System.Threading.Tasks;
     using Xamarin.Forms;
-
-    internal class AddSalesRouteUseCase : BaseCatalogueClientUseCase, IAddSalesRouteUseCase
+    internal class UpdateClient : BaseCatalogueClientUseCase, IUpdateClient
     {
         private ICatalogueClienteRepository _repository;
 
-        public AddSalesRouteUseCase()
+        public UpdateClient()
         {
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
-        public async Task<CatalogeState> Insert(SalesRoutes route)
-        {
-            return await MakeCallUseCase(route, async () =>
-            {
-                return await _repository.InsertRoute(route);
-            });
 
+        public async Task<CatalogeState> UpDateClient(Client client)
+        {
+            return await MakeCallUseCase(client, async () =>
+            {
+                return await _repository.UpDateClient(client);
+            });
         }
     }
 }

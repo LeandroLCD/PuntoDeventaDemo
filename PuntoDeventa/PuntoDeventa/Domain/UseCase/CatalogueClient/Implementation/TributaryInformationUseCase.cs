@@ -1,26 +1,24 @@
 ﻿namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
 {
     using PuntoDeventa.Data.Repository.CatalogueClient;
-    using PuntoDeventa.UI.CatalogueClient.Model;
+    using PuntoDeventa.UI.CatalogueClient.Models;
     using PuntoDeventa.UI.CatalogueClient.States;
     using System.Threading.Tasks;
     using Xamarin.Forms;
 
-    internal class AddSalesRouteUseCase : BaseCatalogueClientUseCase, IAddSalesRouteUseCase
+    internal class TributaryInformationUseCase : BaseCatalogueClientUseCase, ITributaryInformationUseCase
     {
         private ICatalogueClienteRepository _repository;
 
-        public AddSalesRouteUseCase()
+        public TributaryInformationUseCase()
         {
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
-        public async Task<CatalogeState> Insert(SalesRoutes route)
+        public async Task<CatalogeState> Get(Rut rut)
         {
-            return await MakeCallUseCase(route, async () =>
-            {
-                return await _repository.InsertRoute(route);
+            return await MakeCallUseCase(rut, async () => { 
+                return await _repository.GetTributaryInformation(rut);
             });
-
         }
     }
 }

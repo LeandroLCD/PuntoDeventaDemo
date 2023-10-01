@@ -1,4 +1,6 @@
 ﻿using PuntoDeventa.Core.DI;
+using PuntoDeventa.Core.LocalData.DataBase;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
 using PuntoDeventa.Data.Repository.CatalogueClient;
 using PuntoDeventa.UI.Auth;
 using System;
@@ -17,7 +19,18 @@ namespace PuntoDeventa
 
             MainPage = new LoginPage();
 
-            TestCatalogueClient();
+            //TestCatalogueClient();
+
+            TestDAO();
+        }
+
+        private void TestDAO()
+        {
+            var DAO = DependencyService.Get<IDataAccessObject>();
+
+            var routes = DAO.GetAll<SalesRoutesEntity>();
+
+            var client = DAO.GetAll<ClientEntity>();
         }
 
         private async void TestCatalogueClient()
@@ -35,7 +48,7 @@ namespace PuntoDeventa
 
             client.Name = "Prueba2";
 
-            var state = await repository.DeleteClient(client);
+            //var state = await repository.DeleteClient(client);
 
             var client2 = list.FirstOrDefault().Clients.FirstOrDefault();
 

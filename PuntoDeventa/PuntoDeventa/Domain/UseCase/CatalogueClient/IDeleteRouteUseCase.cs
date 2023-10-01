@@ -3,8 +3,9 @@
     using PuntoDeventa.UI.CatalogueClient.Model;
     using PuntoDeventa.UI.CatalogueClient.States;
     using System.Threading.Tasks;
-    public interface IAddSalesRouteUseCase
+
+    public interface IDeleteRouteUseCase
     {
-        Task<CatalogeState> Insert(SalesRoutes route);
+        Task<CatalogeState> DeleteRoute(SalesRoutes item);
     }
 }
