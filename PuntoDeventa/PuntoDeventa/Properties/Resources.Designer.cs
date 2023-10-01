@@ -70,6 +70,15 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://dev-api.haulmer.com/v2/dte/.
+        /// </summary>
+        internal static string BaseUrlEelectrinicEmision {
+            get {
+                return ResourceManager.GetString("BaseUrlEelectrinicEmision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/.
         /// </summary>
         internal static string BaseUrlRealDataBase {

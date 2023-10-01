@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct"
+             x:Class="PuntoDeventa.UI.CategoryProduct.CategoryDetailPage"
+             Title="{Binding GetCategory.Name}">
+    <ContentPage.BindingContext>
+        <viewModel:CategoryDetailPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="ADD" 
+                     Command="{Binding NewProductCommand}">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout Margin="15">
+
+                <Frame Padding="0" Margin="3,10" BorderColor="Black">
+                    <StackLayout Orientation="Horizontal">
+                        <SearchBar HorizontalOptions="FillAndExpand" 
+                                   Placeholder="Buscar Category" 
+                                   FontSize="15" 
+                                   x:Name="Searsh"                                   
+                                   SearchCommand="{Binding SearchBarCommand}" 
+                                   SearchCommandParameter="{Binding Source={x:Reference Searsh}, Path=Text}"
+                                   Text="{Binding SearchText}">
+                            <SearchBar.Behaviors>
+                                <behaviorsPack:EventToCommandBehavior Command="{Binding SearchBarCommand}"
+                                                                      EventArgsPropertyPath="NewTextValue"
+                                                                      EventName="TextChanged"/>
+                            </SearchBar.Behaviors>
+                        </SearchBar>
+                    </StackLayout>
+                </Frame>
+
+
+                <CollectionView x:Name="ProducList" SelectionMode="Single" 
+                                ItemsSource="{Binding ProductsList}" 
+                                SelectionChangedCommand="{Binding ProductChangedCommand}" 
+                                SelectionChangedCommandParameter="{Binding Source={x:Reference ProducList}, Path=SelectedItem}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame HorizontalOptions="FillAndExpand" >
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Name}" HorizontalOptions="FillAndExpand"></Label>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Sku, StringFormat='Sku:{0}'}" ></Label>
+                                        <Label TextColor="Black" FontSize="16" Text="{Binding Percentage, StringFormat='{0}%'}" IsVisible="{Binding IsOffer}" HorizontalOptions="CenterAndExpand"></Label>
+                                        <Label TextColor="Black" FontSize="16" FontAttributes="Bold" Text="{Binding PriceNeto, StringFormat='{0:C0}'}" HorizontalOptions="EndAndExpand"></Label>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

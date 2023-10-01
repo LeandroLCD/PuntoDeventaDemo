@@ -1,4 +1,4 @@
-﻿using PuntoDeventa.Data.DTO;
+﻿using PuntoDeventa.Data.DTO.Auth;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -2,11 +2,11 @@
 using SQLiteNetExtensions.Attributes;
 using System.Collections.Generic;
 
-namespace PuntoDeventa.Core.LocalData.DataBase.Entities
+namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
 {
     public class CategoryEntity
     {
-        [PrimaryKey]
+        [PrimaryKey, Unique]
         public string Id { get; set; }
 
         public string Name { get; set; }

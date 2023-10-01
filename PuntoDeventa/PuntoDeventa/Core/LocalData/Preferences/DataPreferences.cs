@@ -2,7 +2,9 @@
 {
     using Xamarin.Essentials;
     using Newtonsoft.Json;
-    using PuntoDeventa.Data.DTO;
+    using System;
+    using PuntoDeventa.Data.DTO.Auth;
+
     internal class DataPreferences : IDataPreferences
     {
         #region fields
@@ -27,6 +29,7 @@
 
         public void SetUserData(UserDataDTO user)
         {
+            user.DateLogin = DateTime.Now;
             _userData = SetDataPreferencesKey(_userKey, user);
         }
 

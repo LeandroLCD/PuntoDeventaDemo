@@ -1,37 +1,38 @@
-﻿using Newtonsoft.Json;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PuntoDeventa.Data.DTO
+namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
 {
-    public class ProductDTO
+    public class ProductEntity
     {
-        [JsonProperty("name")]
+        [PrimaryKey]
         public string Id { get; set; }
 
-        [JsonProperty("Name")]
         public string Name { get; set; }
 
-        [JsonProperty("Description")]
         public string Description { get; set; }
 
-        [JsonProperty("BarCode")]
         public int BarCode { get; set; }
 
-        [JsonProperty("Sku")]
-        public int Sku { get; set; }
+        public int Code { get; set; }
 
-        [JsonProperty("UDM")]
         public string UDM { get; set; }
 
-        [JsonProperty("IsOffer")]
         public bool IsOffer { get; set; }
 
-        [JsonProperty("Percentage")]
+        public bool InReport { get; set; }
+
         public float Percentage { get; set; }
 
-        [JsonProperty("PriceGross")]
         public double PriceGross { get; set; }
+
+        [ForeignKey(typeof(CategoryEntity))]
+        public string CategoryId { get; set; }
+
+        [ManyToOne]
+        public CategoryEntity Category { get; set; }
     }
 }

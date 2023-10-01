@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PuntoDeventa.Data.DTO
+namespace PuntoDeventa.Data.DTO.Auth
 {
     internal class AuthUserDataDTO
     {

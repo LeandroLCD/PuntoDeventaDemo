@@ -1,4 +1,4 @@
-﻿using PuntoDeventa.Core.LocalData.DataBase.Entities;
+﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 using System;
@@ -49,7 +49,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public T Get<T>(object primaryKey) where T : new()
         {
-            return _connection.Get<T>(primaryKey);
+            return _connection.GetWithChildren<T>(primaryKey);
         }
 
         public IEnumerable<T> GetAll<T>() where T : new()
@@ -76,6 +76,11 @@ namespace PuntoDeventa.Core.LocalData.DataBase
         {            
             _connection.CreateTable<CategoryEntity>();
             _connection.CreateTable<ProductEntity>();
+
+            _connection.CreateTable<SalesRoutesEntity>();
+            _connection.CreateTable<ClientEntity>();
+            _connection.CreateTable<EconomicActivitiesEntity>();
+            _connection.CreateTable<BranchOfficesEntity>();
         }
     }
 }

@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuntoDeventa.Android", "Pun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuntoDeventa.iOS", "PuntoDeventa\PuntoDeventa.iOS\PuntoDeventa.iOS.csproj", "{F8EC6FC0-EBC9-4C37-8C64-160E541372F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuntoDeventa", "PuntoDeventa\PuntoDeventa\PuntoDeventa.csproj", "{19299EE7-6C70-41FB-9EFA-39B7D7B83D80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PuntoDeventa", "PuntoDeventa\PuntoDeventa\PuntoDeventa.csproj", "{19299EE7-6C70-41FB-9EFA-39B7D7B83D80}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16B7F77C-EBFA-4C0E-9E3B-2B2A119E3479}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

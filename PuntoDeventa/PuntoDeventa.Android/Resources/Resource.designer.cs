@@ -25102,34 +25102,37 @@ namespace PuntoDeventa.Droid
 			public const int secondary_text_disabled_material_light = 2131034317;
 			
 			// aapt resource value: 0x7F0500CE
-			public const int switch_thumb_disabled_material_dark = 2131034318;
+			public const int splash_background = 2131034318;
 			
 			// aapt resource value: 0x7F0500CF
-			public const int switch_thumb_disabled_material_light = 2131034319;
+			public const int switch_thumb_disabled_material_dark = 2131034319;
 			
 			// aapt resource value: 0x7F0500D0
-			public const int switch_thumb_material_dark = 2131034320;
+			public const int switch_thumb_disabled_material_light = 2131034320;
 			
 			// aapt resource value: 0x7F0500D1
-			public const int switch_thumb_material_light = 2131034321;
+			public const int switch_thumb_material_dark = 2131034321;
 			
 			// aapt resource value: 0x7F0500D2
-			public const int switch_thumb_normal_material_dark = 2131034322;
+			public const int switch_thumb_material_light = 2131034322;
 			
 			// aapt resource value: 0x7F0500D3
-			public const int switch_thumb_normal_material_light = 2131034323;
+			public const int switch_thumb_normal_material_dark = 2131034323;
 			
 			// aapt resource value: 0x7F0500D4
-			public const int test_mtrl_calendar_day = 2131034324;
+			public const int switch_thumb_normal_material_light = 2131034324;
 			
 			// aapt resource value: 0x7F0500D5
-			public const int test_mtrl_calendar_day_selected = 2131034325;
+			public const int test_mtrl_calendar_day = 2131034325;
 			
 			// aapt resource value: 0x7F0500D6
-			public const int tooltip_background_dark = 2131034326;
+			public const int test_mtrl_calendar_day_selected = 2131034326;
 			
 			// aapt resource value: 0x7F0500D7
-			public const int tooltip_background_light = 2131034327;
+			public const int tooltip_background_dark = 2131034327;
+			
+			// aapt resource value: 0x7F0500D8
+			public const int tooltip_background_light = 2131034328;
 			
 			static Color()
 			{
@@ -29392,58 +29395,64 @@ namespace PuntoDeventa.Droid
 			public const int signaturepadlayout = 2131427466;
 			
 			// aapt resource value: 0x7F0B008B
-			public const int support_simple_spinner_dropdown_item = 2131427467;
+			public const int splashscreen = 2131427467;
 			
 			// aapt resource value: 0x7F0B008C
-			public const int Tabbar = 2131427468;
+			public const int support_simple_spinner_dropdown_item = 2131427468;
 			
 			// aapt resource value: 0x7F0B008D
-			public const int test_action_chip = 2131427469;
+			public const int Tabbar = 2131427469;
 			
 			// aapt resource value: 0x7F0B008E
-			public const int test_chip_zero_corner_radius = 2131427470;
+			public const int test_action_chip = 2131427470;
 			
 			// aapt resource value: 0x7F0B008F
-			public const int test_design_checkbox = 2131427471;
+			public const int test_chip_zero_corner_radius = 2131427471;
 			
 			// aapt resource value: 0x7F0B0090
-			public const int test_design_radiobutton = 2131427472;
+			public const int test_design_checkbox = 2131427472;
 			
 			// aapt resource value: 0x7F0B0091
-			public const int test_navigation_bar_item_layout = 2131427473;
+			public const int test_design_radiobutton = 2131427473;
 			
 			// aapt resource value: 0x7F0B0092
-			public const int test_reflow_chipgroup = 2131427474;
+			public const int test_navigation_bar_item_layout = 2131427474;
 			
 			// aapt resource value: 0x7F0B0093
-			public const int test_toolbar = 2131427475;
+			public const int test_reflow_chipgroup = 2131427475;
 			
 			// aapt resource value: 0x7F0B0094
-			public const int test_toolbar_custom_background = 2131427476;
+			public const int test_toolbar = 2131427476;
 			
 			// aapt resource value: 0x7F0B0095
-			public const int test_toolbar_elevation = 2131427477;
+			public const int test_toolbar_custom_background = 2131427477;
 			
 			// aapt resource value: 0x7F0B0096
-			public const int test_toolbar_surface = 2131427478;
-			
-			// aapt resource value: 0x7F0B009B
-			public const int text_view_without_line_height = 2131427483;
+			public const int test_toolbar_elevation = 2131427478;
 			
 			// aapt resource value: 0x7F0B0097
-			public const int text_view_with_line_height_from_appearance = 2131427479;
-			
-			// aapt resource value: 0x7F0B0098
-			public const int text_view_with_line_height_from_layout = 2131427480;
-			
-			// aapt resource value: 0x7F0B0099
-			public const int text_view_with_line_height_from_style = 2131427481;
-			
-			// aapt resource value: 0x7F0B009A
-			public const int text_view_with_theme_line_height = 2131427482;
+			public const int test_toolbar_surface = 2131427479;
 			
 			// aapt resource value: 0x7F0B009C
-			public const int Toolbar = 2131427484;
+			public const int text_view_without_line_height = 2131427484;
+			
+			// aapt resource value: 0x7F0B0098
+			public const int text_view_with_line_height_from_appearance = 2131427480;
+			
+			// aapt resource value: 0x7F0B0099
+			public const int text_view_with_line_height_from_layout = 2131427481;
+			
+			// aapt resource value: 0x7F0B009A
+			public const int text_view_with_line_height_from_style = 2131427482;
+			
+			// aapt resource value: 0x7F0B009B
+			public const int text_view_with_theme_line_height = 2131427483;
+			
+			// aapt resource value: 0x7F0B009D
+			public const int Toolbar = 2131427485;
+			
+			// aapt resource value: 0x7F0B009E
+			public const int windowBackground = 2131427486;
 			
 			static Layout()
 			{
