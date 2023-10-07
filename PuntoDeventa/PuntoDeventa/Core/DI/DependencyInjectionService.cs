@@ -7,6 +7,8 @@ using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Domain.UseCase.CatalogueClient;
+using PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
@@ -93,6 +95,24 @@ namespace PuntoDeventa.Core.DI
 
             DependencyService.Register<IEdictCategoryUseCase, EdictCategoryUseCase>();
             DependencyService.Register<IEditProductUseCase, EditProductUseCase>();
+
+            #endregion
+
+            #region Client
+
+
+            DependencyService.Register<IAddClientUseCase, AddClientUseCase>();
+            DependencyService.Register<IAddSalesRouteUseCase, AddSalesRouteUseCase>();
+
+            DependencyService.Register<IDeleteClientUseCase, DeleteClientUseCase>();
+            DependencyService.Register<IDeleteRouteUseCase, DeleteRouteUseCase>();
+
+            DependencyService.Register<IGetSalesRoutesUseCase, GetSalesRoutesUseCase>();
+            DependencyService.Register<IGetRoutesUseCase, GetRroutesUseCase>();
+            DependencyService.Register<ISyncCatalogueUseCase, SyncCatalogueUseCase>();
+
+            DependencyService.Register<ITributaryInformationUseCase, TributaryInformationUseCase>();
+            DependencyService.Register<IUpdateClient, UpdateClient>();
 
             #endregion
 

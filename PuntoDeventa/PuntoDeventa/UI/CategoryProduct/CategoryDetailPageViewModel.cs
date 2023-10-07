@@ -21,6 +21,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         private IGetCategoryUseCase _getCategoryUseCase;
         private string _searchText;
         private Category _getCategory;
+        private string _title;
 
         #endregion
 
@@ -66,6 +67,12 @@ namespace PuntoDeventa.UI.CategoryProduct
 
                 SetProperty(ref _getCategory, value);
             }
+        }
+
+        public string TitlePage
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);  
         }
 
         private CancellationTokenSource TokenSource { set; get; }
@@ -129,6 +136,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             {
                 case CategoryStates.Success success:
                     GetCategory = (Category)success.Data;
+                    _title = GetCategory == null ? "S/Ruta" : GetCategory.Name;
                     break;
                 case CategoryStates.Error error:
                     await Shell.Current.DisplayAlert("Error", error.Message, "Ok");

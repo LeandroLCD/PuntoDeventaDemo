@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
-             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct" 
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CatalogueClient" 
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
+             xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger"
              xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls" 
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
-             xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger"
-             x:Class="PuntoDeventa.UI.CategoryProduct.CategoryHome"
-             Title="Rutas de Clientes">
+             x:Class="PuntoDeventa.UI.CatalogueClient.CatalogueClientPage">
+    
+
     <ContentPage.BindingContext>
-        <viewModel:CategoryHomeViewModel/>
+        <viewModel:CatalogueClientViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="ADD" 
-                     Command="{Binding IsVisibleAddCategoryCommand}">
+                     Command="{Binding IsVisibleAddSalesRoutesCommand}">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -26,7 +27,7 @@
                 <Frame Padding="0" Margin="3,10" BorderColor="Gray">
                     <StackLayout Orientation="Horizontal">
                         <SearchBar HorizontalOptions="FillAndExpand" 
-                                   Placeholder="Buscar Category" 
+                                   Placeholder="Buscar Ruta" 
                                    FontSize="15" 
                                    x:Name="Searsh"                                   
                                    SearchCommand="{Binding SearchBarCommand}" 
@@ -42,9 +43,9 @@
                 </Frame>
 
 
-                <CollectionView x:Name="Categories"  SelectionMode="Single" ItemsSource="{Binding CategoryList}" VerticalOptions="EndAndExpand"
-                                SelectionChangedCommand="{Binding CategoryChangedCommand}" 
-                                SelectionChangedCommandParameter="{Binding Source={x:Reference Categories}, Path=SelectedItem}">
+                <CollectionView x:Name="Routes"  SelectionMode="Single" ItemsSource="{Binding SalesRoutesList}" VerticalOptions="EndAndExpand"
+                                SelectionChangedCommand="{Binding SalesRoutesChangedCommand}" 
+                                SelectionChangedCommandParameter="{Binding Source={x:Reference Routes}, Path=SelectedItem}">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
                     </CollectionView.ItemsLayout>
@@ -56,12 +57,12 @@
                                     <Label TextColor="Black" 
                                            FontSize="Medium" 
                                            FontAttributes="Bold" 
-                                           Text="{Binding ProductCount, StringFormat='#  {0}'}"
+                                           Text="{Binding ClientCount, StringFormat='#  {0}'}"
                                            Margin="10,0"/>
 
                                     <ImageButton Source="delete.png" 
                                                  x:Name="Delete" 
-                                                 Command="{Binding Source={x:Reference Categories}, Path=BindingContext.DeleteCategoryCommand}" 
+                                                 Command="{Binding Source={x:Reference Routes}, Path=BindingContext.DeleteSalesRoutesCommand}" 
                                                  CommandParameter="{Binding Source={x:Reference Delete}, Path=BindingContext}"
                                                  BackgroundColor="Transparent"/>
 
@@ -75,9 +76,9 @@
             </StackLayout>
 
 
-            <ContentView BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleAddCategory}" AbsoluteLayout.LayoutBounds="0,0,1,1" Opacity="0">
+            <ContentView BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleAddSalesRoute}" AbsoluteLayout.LayoutBounds="0,0,1,1" Opacity="0">
                 <ContentView.Triggers>
-                    <DataTrigger TargetType="ContentView" Binding="{Binding IsVisibleAddCategory}" Value="True">
+                    <DataTrigger TargetType="ContentView" Binding="{Binding IsVisibleAddSalesRoute}" Value="True">
                         <DataTrigger.EnterActions>
                             <trigger:FadeToTrigger To="1" Duration="500"/>
                         </DataTrigger.EnterActions>
@@ -102,37 +103,35 @@
                                      Hint="Nombre"
                                     HelperText="Ej. Barquillos.">
                                 <Entry HeightRequest="60" 
-                                       Text="{Binding NewCategory.Name}"
+                                       Text="{Binding NewSalesRoute.Name}"
+                                      
                                        HorizontalTextAlignment="Center" 
                                        HorizontalOptions="FillAndExpand" 
-                                       VerticalOptions="CenterAndExpand"/>
+                                       VerticalOptions="CenterAndExpand">
+                                    <Entry.Behaviors>
+                                        <behaviorsPack:EventToCommandBehavior Command="{Binding RouteChangedCommand}"
+                                                                      EventArgsPropertyPath="NewTextValue"
+                                                                      EventName="TextChanged"/>
+                                    </Entry.Behaviors>
+                                    
+                                </Entry>
 
                             </inputLayout:SfTextInputLayout>
 
-                            <inputLayout:SfTextInputLayout
-                                     ContainerType="Outlined" HorizontalOptions="FillAndExpand" 
-                                     Hint="Marca"
-                                    HelperText="Ej. Bresler o San Francisco.">
-                                <Entry HeightRequest="60" 
-                                       Text="{Binding NewCategory.Brand}"
-                                       HorizontalTextAlignment="Center" 
-                                       HorizontalOptions="FillAndExpand" 
-                                       VerticalOptions="CenterAndExpand"/>
 
-                            </inputLayout:SfTextInputLayout>
                             <Button Text="Aceptar" 
                                     BackgroundColor="White" 
                                     TextColor="Red" 
                                     HorizontalOptions="CenterAndExpand"
-                                    Command="{Binding NewCategoryCommand}"
-                                    CommandParameter="{Binding NewCategory}"/>
+                                    Command="{Binding NewSalesRoutesCommand}"
+                                    CommandParameter="{Binding NewSalesRoute}"/>
 
                         </StackLayout>
                     </Frame>
                     <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" 
                                      HorizontalOptions="End" VerticalOptions="Start"  
                                      BackgroundColor="Transparent"
-                                     Margin="3,0" Command="{Binding IsVisibleAddCategoryCommand}"/>
+                                     Margin="3,0" Command="{Binding IsVisibleAddSalesRoutesCommand}"/>
 
 
 

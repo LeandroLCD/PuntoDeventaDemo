@@ -19,9 +19,10 @@ namespace PuntoDeventa
 
             MainPage = new LoginPage();
 
+            
             //TestCatalogueClient();
 
-            TestDAO();
+            //TestDAO();
         }
 
         private void TestDAO()
@@ -30,7 +31,7 @@ namespace PuntoDeventa
 
             var routes = DAO.GetAll<SalesRoutesEntity>();
 
-            var client = DAO.GetAll<ClientEntity>();
+            //var client = DAO.GetAll<ClientEntity>();
         }
 
         private async void TestCatalogueClient()
@@ -46,9 +47,9 @@ namespace PuntoDeventa
 
             var client = list.FirstOrDefault().Clients.FirstOrDefault();
 
-            client.Name = "Prueba2";
+            client.Name = "Prueba3";
 
-            //var state = await repository.DeleteClient(client);
+           // var state = await repository.UpDateClient(client);
 
             var client2 = list.FirstOrDefault().Clients.FirstOrDefault();
 

@@ -21,5 +21,6 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
         List<SalesRoutes> GetRoutesAll();
 
         IAsyncEnumerable<SalesRoutes> GetCatalogueAsync();
+        CatalogeState GetSalesRoutes(string id);
     }
 }

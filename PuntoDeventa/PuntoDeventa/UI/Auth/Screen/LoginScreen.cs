@@ -59,7 +59,7 @@ namespace PuntoDeventa.IU.Auth.Screen
 
             gridLayout.Children.Add(PasswordInput(dataUser), 0, 1);
 
-            gridLayout.Children.Add(Rememberme(isRemembermeCommand), 0, 2);
+            gridLayout.Children.Add(Rememberme(isRemembermeCommand, string.IsNullOrEmpty(dataUser.Email) ? false : true), 0, 2);
 
             gridLayout.Children.Add(LoginButton(loginCommand), 0, 3);
 
@@ -105,9 +105,9 @@ namespace PuntoDeventa.IU.Auth.Screen
             };
         }
 
-        private StackLayout Rememberme(Command<bool> IsRemembermeCommand)
+        private StackLayout Rememberme(Command<bool> IsRemembermeCommand, bool isRemember)
         {
-            var rememberme = new CheckBox();
+            var rememberme = new CheckBox() { IsChecked = isRemember };
             rememberme.CheckedChanged += (s, e) => {
                 IsRemembermeCommand.Execute(e.Value);
             };

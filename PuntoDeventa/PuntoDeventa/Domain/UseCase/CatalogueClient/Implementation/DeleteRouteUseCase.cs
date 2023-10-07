@@ -8,7 +8,7 @@
 
     internal class DeleteRouteUseCase : BaseCatalogueClientUseCase, IDeleteRouteUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClienteRepository _repository;
 
         public DeleteRouteUseCase()
         {

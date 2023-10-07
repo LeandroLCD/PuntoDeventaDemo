@@ -5,16 +5,16 @@ using Xamarin.Forms;
 
 namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
 {
-    internal class GetCatalogueUseCase: IGetCatalogueUseCase
+    internal class SyncCatalogueUseCase : ISyncCatalogueUseCase
     {
         private ICatalogueClienteRepository _repository;
 
-        public GetCatalogueUseCase()
+        public SyncCatalogueUseCase()
         {
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
 
-        public IAsyncEnumerable<SalesRoutes> Get()
+        public IAsyncEnumerable<SalesRoutes> Sync()
         {
             return _repository.GetCatalogueAsync();
         }

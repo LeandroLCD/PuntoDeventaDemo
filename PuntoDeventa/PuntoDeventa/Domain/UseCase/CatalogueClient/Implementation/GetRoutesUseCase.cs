@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
     using Xamarin.Forms;
 
-    internal class GetRroutesUseCase : IGetRroutesUseCase
+    internal class GetRroutesUseCase : IGetRoutesUseCase
     {
         private ICatalogueClienteRepository _repository;
 

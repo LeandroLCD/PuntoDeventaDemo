@@ -260,6 +260,7 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
+
         public static ClientDTO ToClientDTO(this Client model)
         {
             if (model.IsNotNull())
@@ -272,6 +273,7 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
+
         public static SalesRoutesEntity ToSalesRoutesEntity(this SalesRoutes model)
         {
             if (model.IsNotNull())

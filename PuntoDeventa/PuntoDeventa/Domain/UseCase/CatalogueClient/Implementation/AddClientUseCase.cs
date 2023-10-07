@@ -8,7 +8,7 @@
 
     internal class AddClientUseCase : BaseCatalogueClientUseCase, IAddClientUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClienteRepository _repository;
 
         public AddClientUseCase()
         {

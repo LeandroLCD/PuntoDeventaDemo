@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    public interface IGetRroutesUseCase
+    public interface IGetRoutesUseCase
     {
         IAsyncEnumerable<List<SalesRoutes>> Emit(CancellationToken token, int inMilliseconds = 500);
     }

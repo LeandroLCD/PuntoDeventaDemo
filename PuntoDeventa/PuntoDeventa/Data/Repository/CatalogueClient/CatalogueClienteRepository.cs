@@ -149,7 +149,7 @@
                 return _dataStore.DeleteAsync<SalesRoutes>(GetUri($"CatalogueClient/SalesRoutes/{item.Id}"));
             });
 
-            return ResultTypeToCatalogeState(OperationDTO.Delete, item.ToSalesRoutesEntity(), resultType);
+            return ResultTypeToCatalogeState(OperationDTO.Delete, item, resultType);
         }
 
         public async Task<CatalogeState> DeleteClient(Client item)
@@ -164,13 +164,15 @@
 
         public async Task<CatalogeState> UpDateClient(Client item)
         {
+            var dto = item.ToClientDTO();
             var resultType = await MakeCallNetwork<ClientDTO>(() =>
             {
-                return _dataStore.PutAsync(item.ToClientDTO(), GetUri($"CatalogueClient/Clients/{item.Id}"));
+                return _dataStore.PutAsync(dto, GetUri($"CatalogueClient/Clients/{item.Id}"));
             });
 
             var entity = item.ToClientEntity();
             entity.SalesRoutes = _DAO.Get<SalesRoutesEntity>(item.RouteId);
+            
 
             return ResultTypeToCatalogeState(OperationDTO.InsertOrUpdate, entity, resultType);
         }
@@ -185,13 +187,14 @@
             if (resultType.Success)
             {
                 item.CopyPropertiesFrom(resultType.Data);
+               var entity =  ((SalesRoutes)item).ToSalesRoutesEntity();
                 switch (method)
                 {
                     case OperationDTO.Delete:
-                        _DAO.Delete(item);
+                        _DAO.Delete(entity);
                         break;
                     default:
-                        _DAO.InsertOrUpdate(item);
+                        _DAO.InsertOrUpdate(entity);
                         break;
                 }
                 return new CatalogeState.Success(item);
@@ -202,5 +205,20 @@
             }
         }
 
+        public CatalogeState GetSalesRoutes(string id)
+        {
+            var routeEntity = _DAO.Get<SalesRoutesEntity>(id);
+            if (routeEntity.IsNotNull())
+            {
+                var route = new SalesRoutes()
+                {
+                    Id = routeEntity.Id,
+                    Name = routeEntity.Name,
+                    Clients = routeEntity.Clients?.Select(c => c.ToClient()).ToList()
+                };
+                return new CatalogeState.Success(route);
+            }
+            return new CatalogeState.Error("Ruta no encontrada");
+        }
     }
 }

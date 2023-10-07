@@ -7,7 +7,7 @@
     using Xamarin.Forms;
     internal class DeleteClientUseCase: BaseCatalogueClientUseCase, IDeleteClientUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClienteRepository _repository;
 
         public DeleteClientUseCase()
         {
