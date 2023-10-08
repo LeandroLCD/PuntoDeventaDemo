@@ -1,6 +1,7 @@
 ﻿using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.UI.CatalogueClient;
 using PuntoDeventa.UI.CategoryProduct;
+using PuntoDeventa.UI.Sales;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Menu
@@ -21,7 +22,11 @@ namespace PuntoDeventa.UI.Menu
 
         private void RegisterRoutes()
         {
+            #region Sales
+            Routing.RegisterRoute(nameof(SalesPage), typeof(SalesPage));
 
+            //Routing.RegisterRoute(nameof(PaymentPage), typeof(PaimentPage));
+            #endregion
             #region Categories
             Routing.RegisterRoute(nameof(CategoryHome), typeof(CategoryHome));
             Routing.RegisterRoute(nameof(CategoryDetailPage), typeof(CategoryDetailPage));

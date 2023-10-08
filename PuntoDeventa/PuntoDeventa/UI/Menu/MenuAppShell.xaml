@@ -4,6 +4,7 @@
              x:Class="PuntoDeventa.UI.Menu.MenuAppShell"
              xmlns:categories="clr-namespace:PuntoDeventa.UI.CategoryProduct" 
             xmlns:catalogue="clr-namespace:PuntoDeventa.UI.CatalogueClient" 
+        xmlns:sales="clr-namespace:PuntoDeventa.UI.Sales"
        xmlns:converter="clr-namespace:PuntoDeventa.UI.Controls.Converters">
     <Shell.Resources>
         <ResourceDictionary>
@@ -71,7 +72,11 @@
 
         </ResourceDictionary>
     </Shell.Resources>
-    
+
+    <FlyoutItem Title="Ventas" Icon="ic_venta.png">
+        <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate sales:SalesPage}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Catalgo Productos" Icon="ic_product.png">
         <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate categories:CategoryHome}" />
     </FlyoutItem>
