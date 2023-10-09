@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:converter="clr-namespace:PuntoDeventa.UI.Controls.Converters"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PuntoDeventa.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#E43901</Color>
-            <Color x:Key="Secondary">#F35E06</Color>
+            <Color x:Key="Primary">#FE0202</Color>
+            <Color x:Key="Secondary">#F37171</Color>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="Black"></Setter>
                 <Setter Property="TextColor" Value="Black" />
@@ -35,7 +34,6 @@
                 <Setter Property="CornerRadius" Value="10"/>
                 <Setter Property="BorderColor" Value="{StaticResource Primary}" />
                 <Setter Property="BackgroundColor" Value="WhiteSmoke" />
-                <Setter Property="Padding" Value="10,7"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -43,16 +41,18 @@
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor"
-                                        Value="{StaticResource Secondary}" />
+                                  Value="{StaticResource Secondary}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
             </Style>
+            
             <Style TargetType="Entry">
                 <Setter Property="TextColor" Value="Black"/>
             </Style>
+            
             <Style TargetType="StackLayout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
@@ -61,16 +61,13 @@
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor"
-                                        Value="{StaticResource Secondary}" />
+                                  Value="{StaticResource Secondary}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
             </Style>
-
-            <converter:InverseBoolConverter x:Key="InverseBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
-
 </Application>
