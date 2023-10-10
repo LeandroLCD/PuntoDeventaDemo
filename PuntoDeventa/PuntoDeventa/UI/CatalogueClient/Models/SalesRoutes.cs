@@ -1,5 +1,6 @@
 ﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     public class SalesRoutes
@@ -18,5 +19,10 @@
         public string Name { get; set; }
 
         public List<Client> Clients { get; set; }
+
+        public static implicit operator LinkedListNode<object>(SalesRoutes v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

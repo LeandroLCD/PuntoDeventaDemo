@@ -121,7 +121,7 @@ namespace PuntoDeventa.UI.CatalogueClient
             Task.Run(async () =>
             {
 
-                await foreach (var list in _getRoutesUseCase.Emit(TokenSource.Token))
+                await foreach (var list in _getRoutesUseCase.Emit(TokenSource.Token, 500))
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {

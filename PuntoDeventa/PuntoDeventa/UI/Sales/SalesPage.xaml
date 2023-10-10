@@ -19,7 +19,8 @@
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{Binding DateDte, StringFormat='{0:dd/MM/yyyy}'}"
-                     Command="{Binding DateDteCommand}">
+                     Command="{Binding DateDteCommand}"
+                     CommandParameter="{Binding Source={x:Reference dateDte} }">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     
@@ -30,7 +31,7 @@
                     <StackLayout Padding="0">
                         <StackLayout Orientation="Horizontal" Padding="0,10,0,0">
                             <ImageButton x:Name="MostrarActEco" Source="eye.png" WidthRequest="20" HeightRequest="20" 
-                                     BackgroundColor="Transparent" />
+                                     BackgroundColor="Transparent" Command="{Binding IsVisibleTributaryDataCommand}" />
 
                             <Label Text="{Binding ClientName}" 
                                    Margin="10,0" 
@@ -46,19 +47,19 @@
 
 
                         </StackLayout>
-                        <StackLayout IsVisible="{Binding IsVisibleActEco}" x:Name="GrupActEco">
+                        <StackLayout IsVisible="{Binding IsVisibleTributaryData}" x:Name="GrupActEco">
 
-                            <Picker IsEnabled="{Binding IsVisibleActEco}"
-                                Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.DatosTributarios.actividades}"
-                                TitleColor="Black" HorizontalTextAlignment="Center" SelectedItem="{Binding ClientActividades}"
+                            <Picker IsEnabled="{Binding IsVisibleTributaryData}"
+                                Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.EconomicActivities}"
+                                TitleColor="Black" HorizontalTextAlignment="Center" SelectedItem="{Binding ClientSelect.EconomicActivities}"
                                 x:Name="Actividades" FontSize="Medium" HeightRequest="45"
-                                ItemDisplayBinding="{Binding actividadEconomica}" IsTabStop ="False"
+                                ItemDisplayBinding="{Binding Name}" IsTabStop ="False"
                                 HorizontalOptions="FillAndExpand"/>
-                            <Picker IsEnabled="{Binding IsVisibleActEco}"
-                                Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.DatosTributarios.sucursales}"
-                                TitleColor="Black" HorizontalTextAlignment="Center"  SelectedItem="{Binding ClientSucursales}"
+                            <Picker IsEnabled="{Binding IsVisibleTributaryData}"
+                                Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.BranchOffices}"
+                                TitleColor="Black" HorizontalTextAlignment="Center"  
                                 x:Name="Sucursales" FontSize="Medium" HeightRequest="45"
-                                ItemDisplayBinding="{Binding direccion}" IsTabStop ="False"
+                                ItemDisplayBinding="{Binding Address}" IsTabStop ="False"
                                 HorizontalOptions="FillAndExpand"/>
                         </StackLayout>
                     </StackLayout>
@@ -88,7 +89,7 @@
                             <Switch IsToggled="{Binding IsVisibleTeclado}" HorizontalOptions="Start"/>
                         </Grid>
                     </StackLayout>
-                    <ImageButton x:Name="Agregar" WidthRequest="55" Source="ic_helado1.png" BackgroundColor="White" Padding="3" />
+                    <ImageButton  WidthRequest="55" Source="ic_helado1.png" BackgroundColor="White" Padding="3" Command="{Binding IsVisibleProductCommand}" />
 
                 </StackLayout>
                 <CollectionView x:Name="productsSales" SelectionMode="Single" HorizontalOptions="StartAndExpand" ItemsSource="{Binding ProductsSales}" 
@@ -132,7 +133,7 @@
 
                 <StackLayout Orientation="Horizontal">
 
-                    <DatePicker x:Name="dateDte" FontSize="15"  Format="dd/MM/yy" IsVisible="False"/>
+                    <DatePicker x:Name="dateDte" FontSize="15"  Format="dd/MM/yy" Date="{Binding DateDte}" IsVisible="False"/>
                     <StackLayout HorizontalOptions="FillAndExpand">
                         <Grid >
                             <Frame HorizontalOptions="FillAndExpand" BorderColor="Black"></Frame>
@@ -157,7 +158,7 @@
             </StackLayout>
 
 
-            <ContentView x:Name="ModalProductList" Padding="10,0" BackgroundColor="#C0808080" IsVisible="false"  AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <ContentView x:Name="ModalProductList" Padding="10,0" BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleProduct}"  AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <Grid HorizontalOptions="Center" VerticalOptions="Center">
                     <Frame BorderColor="Black" BackgroundColor="White">
 
@@ -187,7 +188,7 @@
                                     <combobox:SfComboBox 
                                          HeightRequest="52"
                                     HorizontalOptions="FillAndExpand"
-                                    DataSource="{Binding CategoryProduct}"
+                                    DataSource="{Binding CategoryProductList}"
                                              DisplayMemberPath="Name"
                                              ShowClearButton="False"
                                              IsEditableMode="false"
@@ -203,8 +204,8 @@
                                 </inputLayout:SfTextInputLayout>
 
                             </StackLayout>
-                            <CollectionView x:Name="ProductList" Margin="0,10,0,0" SelectionMode="Multiple" ItemsSource="{Binding CategorySelect.Products}" 
-                                        SelectionChangedCommand="{Binding ChangeProductCommand}" SelectionChangedCommandParameter="{Binding Source={x:Reference ProductList}}">
+                            <CollectionView Margin="0,10,0,0" SelectionMode="Multiple" ItemsSource="{Binding CategorySelect.Products}" 
+                                        SelectionChangedCommand="{Binding ChangeProductCommand}" SelectionChangedCommandParameter="{Binding Source={x:Reference ProductList}, Path='SelectedItems'}">
                                 <CollectionView.ItemsLayout>
                                     <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
                                 </CollectionView.ItemsLayout>
@@ -232,16 +233,15 @@
 
                             </CollectionView>
                             <StackLayout Orientation="Horizontal" BackgroundColor="White" >
-                                <Label Text="Productos:" FontSize="15" VerticalTextAlignment="Center" TextColor="Black" HorizontalOptions="Start"/>
-                                <Label Text="{Binding ProductCount, StringFormat='{0}/22.'}" x:Name="Count" FontSize="15" VerticalTextAlignment="Center" TextColor="Black" HorizontalOptions="StartAndExpand"/>
-                                <Button x:Name="Cancelar" Text="Cancelar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" WidthRequest="120" />
-                                <Button x:Name="Aceptar" Text="Aceptar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" WidthRequest="120" Command="{Binding AddProducsCommand}" CommandParameter="{x:Reference ProductList}" />
+                                <Label Text="{Binding ProductCount, StringFormat='Prod #{0}/22.'}" FontSize="15" VerticalTextAlignment="Center" TextColor="Black" HorizontalOptions="StartAndExpand"/>
+                                <Button x:Name="Cancelar" Text="Cancelar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" Command="{Binding IsVisibleProductCommand}" />
+                                <Button x:Name="Aceptar" Text="Aceptar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" Command="{Binding AddProductsCommand}" CommandParameter="{x:Reference ProductList}" />
                             </StackLayout>
 
                         </StackLayout>
                     </Frame>
                     <StackLayout Padding="3,0" HorizontalOptions="End" VerticalOptions="Start">
-                        <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" CornerRadius="50" />
+                        <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" CornerRadius="50" Command="{Binding IsVisibleProductCommand}" />
                     </StackLayout>
                 </Grid>
             </ContentView>

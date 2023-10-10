@@ -69,6 +69,7 @@
 
   <ItemGroup>
     <Folder Include="UI\Sales\Models\" />
+    <Folder Include="UI\Sales\Models\" />
     <Folder Include="UI\Sales\State\" />
   </ItemGroup>
 </Project>

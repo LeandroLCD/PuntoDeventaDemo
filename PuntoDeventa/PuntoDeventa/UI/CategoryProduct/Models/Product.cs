@@ -28,6 +28,8 @@
         public double PriceNeto => Math.Round(PriceOffer + (PriceOffer * (IVA/ 100)));
         public float IVA { get; set; }
 
+        public int Stock { get; set; }
+
         [Required(ErrorMessage = "El Precio es requerido.")]
         public double PriceGross { get; set; }
 

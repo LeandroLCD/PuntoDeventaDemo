@@ -23,6 +23,18 @@
         /// <param name="token"></param>
         /// <param name="inMilisegunds"></param>
         /// <returns></returns>
+        public IEnumerable<SalesRoutes> Emit(CancellationToken token)
+        {
+            while (token.IsCancellationRequested.Equals(false))
+            {
+                //await Task.Delay(inMilliseconds);
+                var list = _repository.GetRoutesAll();
+                foreach (var route in list)
+                {
+                    yield return route;
+                }
+            }
+        }
         public async IAsyncEnumerable<List<SalesRoutes>> Emit([EnumeratorCancellation] CancellationToken token, int inMilliseconds = 500)
         {
             while (token.IsCancellationRequested.Equals(false))
