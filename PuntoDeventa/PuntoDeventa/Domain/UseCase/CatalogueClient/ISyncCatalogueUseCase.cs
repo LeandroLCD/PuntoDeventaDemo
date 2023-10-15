@@ -9,6 +9,6 @@
         /// Retorna el catalogo ordenado en las rutas, desde firebase, y actualiza la información SQLite, en un flow data.
         /// </summary>
         /// <returns></returns>
-        IAsyncEnumerable<SalesRoutes> Sync();
+        void Sync();
     }
 }

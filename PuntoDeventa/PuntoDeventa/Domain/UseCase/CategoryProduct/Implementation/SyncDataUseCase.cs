@@ -19,8 +19,8 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
 
         public void Sync(int reStarInMinutes = 10)
         {
-            // _useCase.Sync();
             _repository.SyncData();
+            _useCase.Sync();
             Device.StartTimer(TimeSpan.FromMinutes(reStarInMinutes), ()=> {
 
                 _repository.SyncData();

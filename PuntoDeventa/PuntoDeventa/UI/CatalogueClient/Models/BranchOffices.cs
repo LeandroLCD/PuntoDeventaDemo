@@ -12,5 +12,20 @@
 
         public string Phone { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is int other)
+            {
+                return Code == other;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
+    
 }

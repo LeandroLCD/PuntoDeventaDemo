@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PuntoDeventa.UI.CatalogueClient.Model
 {
@@ -21,5 +22,20 @@ namespace PuntoDeventa.UI.CatalogueClient.Model
         public List<BranchOffices> BranchOffices { get; set; }
 
         public List<EconomicActivities> EconomicActivities { get; set;}
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Client other)
+            {
+                return Rut == other.Rut && Name == other.Name &&
+                    BranchOffices.Count().Equals(other.BranchOffices.Count) &&
+                    EconomicActivities.Count().Equals(other.EconomicActivities.Count);
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return Rut.GetHashCode() ^ BranchOffices.GetHashCode();
+        }
     }
 }

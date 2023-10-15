@@ -19,6 +19,7 @@
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="22.2.11" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="22.2.11" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2612" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
     <PackageReference Include="Xamarin.Forms.BehaviorsPack" Version="3.0.0" />

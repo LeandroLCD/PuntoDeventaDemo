@@ -10,9 +10,9 @@ namespace PuntoDeventa.UI.Menu
     {
         public MenuAppShell()
         {
-            InitializeComponent();
             RegisterRoutes();
             Sync();
+            InitializeComponent();
         }
         private void Sync()
         {

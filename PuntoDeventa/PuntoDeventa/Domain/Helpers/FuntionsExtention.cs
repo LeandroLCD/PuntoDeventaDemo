@@ -6,6 +6,7 @@ using System.Reflection;
 using PuntoDeventa.Domain.Models;
 using Xamarin.Forms.Internals;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace PuntoDeventa.Domain.Helpers
 {
@@ -100,6 +101,23 @@ namespace PuntoDeventa.Domain.Helpers
             });
         }
 
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> list)
+        {
+            return new ObservableCollection<T>(list);
+        }
+
+        public static T Clone<T>(this T source) where T : class, new()
+        {
+            if (source == null)
+                return null;
+
+            // Creamos una nueva instancia del tipo T
+            T clone = new T();
+
+            clone.CopyPropertiesFrom(source);
+
+            return clone;
+        }
     }
 
 }

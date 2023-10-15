@@ -14,9 +14,9 @@ namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
 
-        public IAsyncEnumerable<SalesRoutes> Sync()
+        public async void Sync()
         {
-            return _repository.GetCatalogueAsync();
+            await _repository.Sync();
         }
     }
 }

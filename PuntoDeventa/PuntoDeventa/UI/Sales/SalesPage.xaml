@@ -6,6 +6,7 @@
              xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
              xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Sales"
+             xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
              x:Class="PuntoDeventa.UI.Sales.SalesPage">
 
     <ContentPage.BindingContext>
@@ -25,7 +26,7 @@
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
-        <Grid>
+        <Grid >
             <StackLayout Margin="20,20,20,10" >
                 <Frame Padding="20,1" BorderColor="Black">
                     <StackLayout Padding="0">
@@ -92,38 +93,78 @@
                     <ImageButton  WidthRequest="55" Source="ic_helado1.png" BackgroundColor="White" Padding="3" Command="{Binding IsVisibleProductCommand}" />
 
                 </StackLayout>
-                <CollectionView x:Name="productsSales" SelectionMode="Single" HorizontalOptions="StartAndExpand" ItemsSource="{Binding ProductsSales}" 
-                             >
+                <CollectionView x:Name="productsSales" 
+                                SelectionMode="Single"
+                                HorizontalOptions="StartAndExpand" 
+                                ItemsSource="{Binding ProductsSales}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Padding="3,3">
-                                <Frame >
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label TextColor="Black" FontSize="Medium" FontAttributes="Bold" 
-                                                                               Text="{Binding Uds}" VerticalOptions="Center" WidthRequest="35" />
-                                        <StackLayout HorizontalOptions="FillAndExpand">
-                                            <Label TextColor="Black" FontSize="13" Text="{Binding Name}"  Grid.Column="0"/>
-                                            <StackLayout  Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                                                <Label TextColor="Black" FontSize="Small" 
-                                                                               Text="{Binding Price, StringFormat='{0:C0}/Uds'}" ></Label>
-                                                <Label TextColor="Black" FontSize="Small"  IsVisible="{Binding Path=IsToggled, 
-                                                                Source={x:Reference Offer}}" HorizontalOptions="CenterAndExpand"
-                                                                               Text="{Binding Percentage, StringFormat='Oft: {0}%'}" ></Label>
-                                                <Switch x:Name="Offer" HorizontalOptions="EndAndExpand" IsToggled="{Binding Offer}" >
+                            <Frame BorderColor="Transparent" x:Name="productS"
+                                   
+                                   Padding="10">
+                                <StackLayout Orientation="Horizontal">
+                                    <inputLayout:SfTextInputLayout
+                                            FocusedColor="Transparent"
+                                            UnfocusedColor="Transparent"
+                                          ContainerType="Outlined">
+                                        <Entry TextColor="Black" 
+                                               FontSize="Medium" 
+                                               HorizontalTextAlignment="Start"
+                                               HorizontalOptions="CenterAndExpand"
+                                               Keyboard="Numeric" WidthRequest="40"
+                                               MaxLength="2"
+                                               FontAttributes="Bold"
+                                               Text="{Binding Quantity}" 
+                                               VerticalOptions="Center">
+                                            <Entry.Behaviors>
+                                                <behaviorsPack:EventToCommandBehavior Command="{Binding Source={x:Reference productsSales}, Path=BindingContext.EditProductCommand}"
+                                                   CommandParameter="{Binding Source={x:Reference productS}, Path=BindingContext}"
+                                                   EventName="TextChanged"/>
+                                            </Entry.Behaviors>
 
-                                                </Switch>
+                                        </Entry>
 
-                                                <Label TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="End"
-                                                   IsVisible="{Binding Path=IsToggled, Source={x:Reference Offer}, Converter={StaticResource InverseBoolConverter}}"
-                                                                                                   Text="{Binding SubTotalNeto, StringFormat='{0:C0}'}"/>
-                                                <Label TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="End"
-                                                   IsVisible="{Binding Path=IsToggled, Source={x:Reference Offer}}" Text="{Binding SubTotalOffert, StringFormat='{0:C0}'}"/>
-                                            </StackLayout>
+                                    </inputLayout:SfTextInputLayout>
+                                    <StackLayout
+                                            HorizontalOptions="FillAndExpand">
+                                        <Label TextColor="Black" FontSize="13" Text="{Binding Name}" />
+                                        <StackLayout  Orientation="Horizontal" 
+                                            HorizontalOptions="FillAndExpand">
+
+                                            <Label TextColor="Black" 
+                                                       FontSize="Small" 
+                                                       HorizontalOptions="StartAndExpand"
+                                                       Text="{Binding PriceNeto, StringFormat='{0:N0}/Uds'}" />
+
+                                            <Label TextColor="Black" 
+                                                       FontSize="Small"  
+                                                       IsVisible="{Binding Path=IsToggled, 
+                                                                Source={x:Reference offer}}" 
+                                                       HorizontalOptions="CenterAndExpand"
+                                                       Text="{Binding Percentage, StringFormat='Oft: {0}%'}" ></Label>
+
+                                            <Label TextColor="Black" 
+                                                       FontSize="Small"  
+                                                       FontAttributes="Bold" 
+                                                       HorizontalOptions="End"
+                                                       Text="{Binding SubTotal, StringFormat='{0:C0}'}"/>
                                         </StackLayout>
+                                        <Switch  HorizontalOptions="StartAndExpand" 
+                                                     x:Name="offer" 
+                                                     IsToggled="{Binding IsOffer}" >
+                                            <Switch.Behaviors>
+                                                <behaviorsPack:EventToCommandBehavior Command="{Binding Source={x:Reference productsSales}, Path=BindingContext.EditProductCommand}"
+                                                   CommandParameter="{Binding Source={x:Reference offer}, Path=BindingContext}"
+                                                   EventName="Toggled"/>
+                                            </Switch.Behaviors>
+
+                                        </Switch>
 
                                     </StackLayout>
-                                </Frame>
-                            </StackLayout>
+
+                                </StackLayout>
+                            </Frame>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
 
@@ -172,7 +213,7 @@
                                          HeightRequest="52"
                                          ShowClearButton="False"
                                          IsEditableMode="false"
-                                    ComboBoxSource="{Binding Brands}">
+                                            DataSource="{Binding Brands}">
                                         <combobox:SfComboBox.Behaviors>
                                             <behaviorsPack:EventToCommandBehavior Command="{Binding SelectBrandCommand}"
                                                                       EventArgsPropertyPath="Value"
@@ -191,8 +232,7 @@
                                     DataSource="{Binding CategoryProductList}"
                                              DisplayMemberPath="Name"
                                              ShowClearButton="False"
-                                             IsEditableMode="false"
-                                             SelectedItem="{Binding CategorySelect}">
+                                             IsEditableMode="false">
                                         <combobox:SfComboBox.Behaviors>
                                             <behaviorsPack:EventToCommandBehavior Command="{Binding CategorySelectCommand}"
                                                                       EventArgsPropertyPath="Value"
@@ -204,22 +244,26 @@
                                 </inputLayout:SfTextInputLayout>
 
                             </StackLayout>
-                            <CollectionView Margin="0,10,0,0" SelectionMode="Multiple" ItemsSource="{Binding CategorySelect.Products}" 
-                                        SelectionChangedCommand="{Binding ChangeProductCommand}" SelectionChangedCommandParameter="{Binding Source={x:Reference ProductList}, Path='SelectedItems'}">
+                            <CollectionView x:Name="collectionProduct"
+                                            Margin="0,10,0,0" 
+                                            SelectionMode="Multiple" 
+                                            ItemsSource="{Binding GetProducts}" 
+                                            SelectionChangedCommand="{Binding ProductChangedCommand}" 
+                                            SelectionChangedCommandParameter="{Binding Source={x:Reference collectionProduct}}">
                                 <CollectionView.ItemsLayout>
                                     <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
                                 </CollectionView.ItemsLayout>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
 
-                                        <Frame CornerRadius="5" Padding="10" BorderColor="Transparent" VerticalOptions="CenterAndExpand">
+                                        <Frame CornerRadius="5" Padding="0" BorderColor="Transparent" VerticalOptions="CenterAndExpand">
                                             <StackLayout>
                                                 <Label TextColor="Black" FontSize="13" Text="{Binding Name}" />
                                                 <StackLayout Orientation="Horizontal">
-                                                    <Label TextColor="Black" FontSize="13" Text="{Binding Price, StringFormat='Neto: {0:C2}'}" HorizontalOptions="StartAndExpand"/>
-                                                    <Label TextColor="Black" FontSize="Small"  IsVisible="{Binding Offer}"
+                                                    <Label TextColor="Black" FontSize="13" Text="{Binding PriceGross, StringFormat='Neto: {0:C2}'}" HorizontalOptions="StartAndExpand"/>
+                                                    <Label TextColor="Black" FontSize="Small"  IsVisible="{Binding IsOffer}"
                                                                                Text="{Binding Percentage, StringFormat='Oft: {0}%'}" HorizontalOptions="CenterAndExpand" ></Label>
-                                                    <Label TextColor="Black" FontSize="13" Text="{Binding PriceIva, StringFormat='+ Iva: {0:C2}'}" HorizontalOptions="EndAndExpand"/>
+                                                    <Label TextColor="Black" FontSize="13" Text="{Binding PriceNeto, StringFormat='+ Iva: {0:C2}'}" HorizontalOptions="EndAndExpand"/>
                                                 </StackLayout>
                                                 <Label TextColor="Black" FontSize="13" Text="{Binding Stock, StringFormat='{0} En Stock'}" HorizontalOptions="EndAndExpand"/>
 
@@ -233,15 +277,33 @@
 
                             </CollectionView>
                             <StackLayout Orientation="Horizontal" BackgroundColor="White" >
-                                <Label Text="{Binding ProductCount, StringFormat='Prod #{0}/22.'}" FontSize="15" VerticalTextAlignment="Center" TextColor="Black" HorizontalOptions="StartAndExpand"/>
-                                <Button x:Name="Cancelar" Text="Cancelar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" Command="{Binding IsVisibleProductCommand}" />
-                                <Button x:Name="Aceptar" Text="Aceptar" TextColor="Red" BackgroundColor="White" FontAttributes="Bold" Command="{Binding AddProductsCommand}" CommandParameter="{x:Reference ProductList}" />
+                                <Label Text="{Binding ProductCount, StringFormat='Prod #{0}/22.'}" 
+                                       FontSize="15" 
+                                       VerticalTextAlignment="Center" 
+                                       TextColor="Black" 
+                                       HorizontalOptions="StartAndExpand"/>
+                                <Button 
+                                    Text="Cancelar" 
+                                    TextColor="Red" 
+                                    BackgroundColor="White" 
+                                    FontAttributes="Bold" 
+                                    Command="{Binding IsVisibleProductCommand}" />
+                                <Button Text="Aceptar" 
+                                        TextColor="Red" 
+                                        BackgroundColor="White" 
+                                        FontAttributes="Bold" 
+                                        Command="{Binding AddProductsCommand}" 
+                                        CommandParameter="{x:Reference collectionProduct}" />
                             </StackLayout>
 
                         </StackLayout>
                     </Frame>
                     <StackLayout Padding="3,0" HorizontalOptions="End" VerticalOptions="Start">
-                        <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" CornerRadius="50" Command="{Binding IsVisibleProductCommand}" />
+                        <ImageButton WidthRequest="25" 
+                                     HeightRequest="25" 
+                                     Source="x.png" 
+                                     CornerRadius="50" 
+                                     Command="{Binding IsVisibleProductCommand}" />
                     </StackLayout>
                 </Grid>
             </ContentView>
@@ -278,7 +340,7 @@
                                 </inputLayout:SfTextInputLayout>
 
                             </StackLayout>
-                            <CollectionView x:Name="modalClient" Margin="0,10,0,0" SelectionMode="Single" ItemsSource="{Binding SalesRoutesSelect.Clients}"
+                            <CollectionView x:Name="modalClient" Margin="0,10,0,0" SelectionMode="Single" ItemsSource="{Binding GetClients}"
                                         SelectionChangedCommand="{Binding ClientSelectCommand}" SelectionChangedCommandParameter="{Binding Source={x:Reference modalClient}, Path=SelectedItem}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>

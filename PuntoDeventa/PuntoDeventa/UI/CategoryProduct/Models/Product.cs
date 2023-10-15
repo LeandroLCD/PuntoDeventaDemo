@@ -35,6 +35,22 @@
 
         [Required(ErrorMessage = "El ID de la categoria es requerido.")]
         public string CategoryId { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Product other)
+            {
+                return Id == other.Id &&
+                    PriceNeto == other.PriceNeto &&
+                    Name == other.Name &&
+                    BarCode == other.BarCode;
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode() ^ Sku.GetHashCode();
+        }
     }
 }
 

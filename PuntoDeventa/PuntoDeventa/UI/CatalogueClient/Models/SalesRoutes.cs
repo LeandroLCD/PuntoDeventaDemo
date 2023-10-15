@@ -1,8 +1,11 @@
 ﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
+    using PuntoDeventa.UI.CatalogueClient.Models;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+
     public class SalesRoutes
     {
         public SalesRoutes()
@@ -20,9 +23,17 @@
 
         public List<Client> Clients { get; set; }
 
-        public static implicit operator LinkedListNode<object>(SalesRoutes v)
-        {
-            throw new NotImplementedException();
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj is SalesRoutes other)
+        //    {
+        //        return Id == other.Id && Name == other.Name && Clients.SequenceEqual(other.Clients);
+        //    }
+        //    return false;
+        //}
+        //public override int GetHashCode()
+        //{
+        //    return Name.GetHashCode() ^ Clients.GetHashCode();
+        //}
     }
 }

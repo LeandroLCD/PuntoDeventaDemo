@@ -20,7 +20,7 @@ namespace PuntoDeventa
             MainPage = new LoginPage();
 
             
-            TestCatalogueClient();
+            //TestCatalogueClient();
 
             //TestDAO();
         }

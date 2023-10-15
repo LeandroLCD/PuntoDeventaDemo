@@ -22,5 +22,7 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
 
         IAsyncEnumerable<SalesRoutes> GetCatalogueAsync();
         CatalogeState GetSalesRoutes(string id);
+
+        Task<bool> Sync();
     }
 }

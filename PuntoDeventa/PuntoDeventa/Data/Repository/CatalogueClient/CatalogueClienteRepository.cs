@@ -141,7 +141,63 @@
 
         }
 
-        
+        public async Task<bool> Sync()
+        {
+            var routeResultTask = _dataStore.GetAsync<SalesRoutesDTO>(GetUri("CatalogueClient/SalesRoutes"));
+
+            var clientResultTask = _dataStore.GetAsync<ClientDTO>(GetUri("CatalogueClient/Clients"));
+
+            await Task.Run(async () =>
+            {
+
+                await Task.WhenAll(routeResultTask, clientResultTask);
+
+            });
+
+            var routeDeferred = await MakeCallNetwork<Dictionary<string, SalesRoutesDTO>>(routeResultTask.Result);
+
+            var clientDeferred = await MakeCallNetwork<Dictionary<string, ClientDTO>>(clientResultTask.Result);
+
+
+            if (routeDeferred.Success && clientDeferred.Success)
+            {
+                var groupedClient = clientDeferred.Data?.Select(c =>
+                {
+                    c.Value.Id = c.Key;
+                    return c.Value;
+                }).ToList().GroupBy(g => g.RouteId);
+
+                var clientDictionary = groupedClient?.ToDictionary(group => group.Key, group => group.ToList());
+
+                var routeList = routeDeferred.Data?.Select(c =>
+                {
+                    c.Value.Id = c.Key;
+                    return c.Value;
+                }).ToList();
+
+                foreach (var data in routeList)
+                {
+                    data.Clients = clientDictionary.TryGetValue(data.Id, out var clients) ? clients : new List<ClientDTO>();
+
+                    var route = new SalesRoutes();
+
+                    route.CopyPropertiesFrom(data);
+                    _DAO.InsertOrUpdate(route.ToSalesRoutesEntity());
+                }
+                return await Task.FromResult(true);
+            }
+            else
+            {
+                var message = $"Se produjo un error al intentar obtener las rutas de los cliente." +
+                               $" \n Detalles: {string.Join(Environment.NewLine, routeDeferred.Errors)} {string.Join(Environment.NewLine, clientDeferred.Errors)}";
+                await App.Current.MainPage.DisplayAlert("Error", message, "Ok");
+                return await Task.FromResult(false);
+            }
+
+
+
+
+        }
         public async Task<CatalogeState> DeleteRoute(SalesRoutes item)
         {
             var resultType = await MakeCallNetwork<SalesRoutes>(() =>
