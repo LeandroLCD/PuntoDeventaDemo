@@ -106,17 +106,17 @@ namespace PuntoDeventa.Domain.Helpers
             return new ObservableCollection<T>(list);
         }
 
-        public static T Clone<T>(this T source) where T : class, new()
+        public static T Clone<T>(this object source) where T : class, new()
         {
             if (source == null)
                 return null;
 
-            // Creamos una nueva instancia del tipo T
-            T clone = new T();
+            var destinationType = source.GetType();
+            var clone = Activator.CreateInstance(destinationType) ;
 
             clone.CopyPropertiesFrom(source);
 
-            return clone;
+            return clone as T;
         }
     }
 

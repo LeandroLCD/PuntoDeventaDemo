@@ -7,12 +7,11 @@ using PuntoDeventa.UI.CategoryProduct.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Xamarin.CommunityToolkit.Extensions;
+using PuntoDeventa.UI.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -40,18 +39,17 @@ namespace PuntoDeventa.UI.Sales
         private ObservableCollection<Product> _getProducts;
         private int _productCount;
         private ObservableCollection<ProductSales> _productSales;
+        private bool _isVisibleKeyboard;
 
         #endregion
 
         #region Constructor
         public SalesPageViewModel()
         {
-           _routesUseCase = DependencyService.Get<IGetRoutesUseCase>();
-           _getCategoriesUseCase = DependencyService.Get<IGetCategoryListUseCase>();
-            RoutesIndes = -1;
-            DateDte = DateTime.Now;
+            _routesUseCase = DependencyService.Get<IGetRoutesUseCase>();
+            _getCategoriesUseCase = DependencyService.Get<IGetCategoryListUseCase>();
 
-            InicializeCommand();
+            InitializeProperties();
         }
         #endregion
 
@@ -68,43 +66,42 @@ namespace PuntoDeventa.UI.Sales
             get => _isVisibleProduct;
             private set => SetProperty(ref _isVisibleProduct, value);
         }
+
+        public bool IsVisibleKeyboard
+        {
+            get => _isVisibleKeyboard;
+            set => SetProperty(ref _isVisibleKeyboard, value);
+        }
         public string ClientName
         {
             get => _clientName;
-            private set => SetProperty(ref _clientName, value);     
+            private set => SetProperty(ref _clientName, value);
         }
         public Client ClientSelect
-        { 
+        {
             get => _clientSelect;
-            set => SetProperty(ref _clientSelect, value);        
+            set => SetProperty(ref _clientSelect, value);
         }
 
         public SalesRoutes SalesRoutesSelect
         {
             get => _salesRoutesSelect;
-            private set
-            {
-                SetProperty(ref _salesRoutesSelect, value);
-            } 
+            private set => SetProperty(ref _salesRoutesSelect, value);
         }
 
         private LinkedList<SalesRoutes> GetSalesRoutes { get; set; }
 
         public ObservableCollection<SalesRoutes> SalesRoutesList
         {
-            get 
+            get
             {
-                if(_salesRoutesList.IsNull())
+                if (_salesRoutesList.IsNull())
                 {
                     _salesRoutesList = new ObservableCollection<SalesRoutes>();
                 }
                 return _salesRoutesList;
             }
-            private set
-            {
-
-                SetProperty(ref _salesRoutesList, value);
-            }
+            private set => SetProperty(ref _salesRoutesList, value);
         }
 
         public ObservableCollection<Client> GetClients
@@ -125,7 +122,8 @@ namespace PuntoDeventa.UI.Sales
             get => _isVisibleModelClient;
             private set => SetProperty(ref _isVisibleModelClient, value);
         }
-        public int RoutesIndes
+
+        public int RoutesIndex
         {
             get => _index;
             set => SetProperty(ref _index, value);
@@ -140,9 +138,9 @@ namespace PuntoDeventa.UI.Sales
         private LinkedList<Category> GetCategories { get; set; }
         public ObservableCollection<string> Brands
         {
-            get 
+            get
             {
-                if(_brands.IsNull())
+                if (_brands.IsNull())
                 {
                     _brands = new ObservableCollection<string>();
                 }
@@ -155,7 +153,7 @@ namespace PuntoDeventa.UI.Sales
         {
             get
             {
-                if(_categoryProductList.IsNull())
+                if (_categoryProductList.IsNull())
                 {
                     _categoryProductList = new ObservableCollection<Category>();
                 }
@@ -168,7 +166,7 @@ namespace PuntoDeventa.UI.Sales
         {
             get
             {
-                if(_getProducts.IsNull())
+                if (_getProducts.IsNull())
                 {
                     _getProducts = new ObservableCollection<Product>();
                 }
@@ -177,16 +175,16 @@ namespace PuntoDeventa.UI.Sales
             private set => SetProperty(ref _getProducts, value);
         }
         public int ProductCount
-        { 
-            get => _productCount; 
+        {
+            get => _productCount;
             private set => SetProperty(ref _productCount, value);
         }
         public Category CategorySelect
         {
-            get => _categorySelect; 
+            get => _categorySelect;
             private set => SetProperty(ref _categorySelect, value);
         }
-        
+
         public ObservableCollection<ProductSales> ProductsSales
         {
             get
@@ -197,7 +195,7 @@ namespace PuntoDeventa.UI.Sales
                 }
                 return _productSales;
             }
-            private set => SetProperty(ref _productSales, value);
+            set => SetProperty(ref _productSales, value);
         }
 
         private List<ProductSales> GetProductSales { get; set; }
@@ -205,7 +203,7 @@ namespace PuntoDeventa.UI.Sales
         #endregion
 
         #region Command
-
+        public Command<StandardEntry> BarCodeChangedCommand { get; set; }
         public Command<string> SelectBrandCommand { get; set; }
         public Command<Client> ClientSelectCommand { get; set; }
 
@@ -226,6 +224,8 @@ namespace PuntoDeventa.UI.Sales
 
         public Command<ProductSales> EditProductCommand { get; set; }
 
+        public Command<Entry> QuantityChangedCommand { get; set; }
+
         public Command<CollectionView> ProductChangedCommand { get; set; }
 
         public Command<ProductSales> DeleteProductCommand { get; set; }
@@ -235,10 +235,24 @@ namespace PuntoDeventa.UI.Sales
 
         #region Methods
 
-        private void InicializeCommand()
+        private void InitializeProperties()
         {
+
+            RoutesIndex = -1;
+            DateDte = DateTime.Now;
             ClientName = "Seleccione un Cliente";
-            IsVisibleModalRoutesCommand = new Command(() => {
+
+            GetSalesRoutes = new LinkedList<SalesRoutes>();
+            GetCategories = new LinkedList<Category>();
+            GetProductSales = new List<ProductSales>();
+
+            InitializeCommand();
+        }
+        private void InitializeCommand()
+        {
+
+            IsVisibleModalRoutesCommand = new Command(() =>
+            {
 
                 IsVisibleModalRoutes = !IsVisibleModalRoutes;
             });
@@ -253,14 +267,17 @@ namespace PuntoDeventa.UI.Sales
                 IsVisibleProduct = !IsVisibleProduct;
             });
 
-            SalesRoutesSelectCommand = new Command<SalesRoutes>((route)=>{ 
+            SalesRoutesSelectCommand = new Command<SalesRoutes>((route) =>
+            {
                 SalesRoutesSelect = route;
                 GetClients = new ObservableCollection<Client>(route.Clients);
-                
+
             });
 
-            ClientSelectCommand = new Command<Client>((client) => {
-                client?.Apply(() => {
+            ClientSelectCommand = new Command<Client>((client) =>
+            {
+                client?.Apply(() =>
+                {
 
                     ClientSelect = client;
                     ClientName = client?.Name;
@@ -268,23 +285,25 @@ namespace PuntoDeventa.UI.Sales
                 IsVisibleModalRoutes = false;
             });
 
-            DateDteCommand = new Command<DatePicker>((dateDte) => {
+            DateDteCommand = new Command<DatePicker>((dateDte) =>
+            {
 
                 dateDte.Focus();
             });
 
-            SelectBrandCommand = new Command<string>((bran) => {
+            SelectBrandCommand = new Command<string>((bran) =>
+            {
                 if (bran.Contains("Todo"))
                 {
                     GetProducts = new ObservableCollection<Product>(GetCategories.SelectMany(p => p.Products));
                 }
                 else
                 {
-                    CategoryProductList = GetCategories.Where( c => c.Brand.Contains(bran) ).ToObservableCollection();
+                    CategoryProductList = GetCategories.Where(c => c.Brand.Contains(bran)).ToObservableCollection();
                     GetProducts = new ObservableCollection<Product>(CategoryProductList.SelectMany(c => c.Products));
-              
+
                 }
-                
+
             });
 
             CategorySelectCommand = new Command<Category>((category) =>
@@ -297,10 +316,10 @@ namespace PuntoDeventa.UI.Sales
 
                 collection?.Apply(() =>
                 {
-                    if(ProductCount + 1 <= 22)
-                    { 
+                    if (ProductCount + 1 <= 22)
+                    {
                         ProductCount = ProductsSales.Count() + collection.SelectedItems.Count();
-                   
+
                     }
                     else
                     {
@@ -310,7 +329,7 @@ namespace PuntoDeventa.UI.Sales
                         //    collection.SelectedItems.Remove(ultProd);
                         //    ProductCount = ProductsSales.Count() + collection.SelectedItems.Count();
                         //});
-                        
+
                     }
                 });
             });
@@ -323,31 +342,86 @@ namespace PuntoDeventa.UI.Sales
                 GetProductSales.Remove(products);
             });
 
-            EditProductCommand = new Command<ProductSales>((product) => {
-                if (product.IsNotNull())
+            QuantityChangedCommand = new Command<Entry>((quantity) =>
+            {
+
+                if (quantity.IsNotNull())
                 {
-                    var productTarge = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
+                    var product = (ProductSales)quantity.BindingContext;
+                    var q = string.IsNullOrEmpty(quantity.Text) ? 0 : int.Parse(quantity.Text);
+
+                    ProductSales productTarge = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
                     productTarge?.Apply(() =>
                     {
-                       
-                        if(productTarge != product)
+
+                        if (!productTarge.Equals(product))
                         {
+                            productTarge.Quantity = q;
+                            var index = _productSales.IndexOf(product);
+                            //ProductsSales.RemoveAt(index);
+                            //ProductsSales.Insert(index, productTarge.Clone<ProductSales>());  
+                            ProductsSales[index] = product;
+
                             NotifyPropertyChanged(nameof(ProductsSales));
+                            quantity.Unfocus();
+
+
+
                         }
-                        
+
                     });
                 }
+            });
 
+            EditProductCommand = new Command<ProductSales>((product) =>
+            {
+                if (!product.IsNotNull()) return;
+                var productSales = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
+                productSales?.Apply(() =>
+                {
+                    if (productSales.Equals(product)) return;
+                    productSales.Quantity = product.Quantity;
+                    productSales.IsOffer = product.IsOffer;
+                    var index = _productSales.IndexOf(product);
+                    //ProductsSales.RemoveAt(index);
+                    //ProductsSales.Insert(index, productSales.Clone<ProductSales>());  
+                    ProductsSales[index] = product;
+                    NotifyPropertyChanged(nameof(ProductsSales));
+
+                });
+
+            });
+
+            BarCodeChangedCommand = new Command<StandardEntry>((barCode) =>
+            {
+                barCode?.Apply(() =>
+                {
+                     if(barCode.Text.Length < 4)  return;
+
+                     var productList = GetCategories.SelectMany(c => c.Products);
+                     var product =  productList.FirstOrDefault(p =>
+                         p.BarCode.ToString().Contains(barCode.Text) || 
+                         p.SkuCode.Contains(barCode.Text.ToUpper()) ||
+                         p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
+                     if(product.IsNull())
+                         return;
+                     GetProductSales.Add(new ProductSales(product));
+                     ProductsSales.Add(new ProductSales(product));
+                     barCode.Text = string.Empty;
+                     barCode.Unfocus();
+                });
             });
         }
 
         private void AddProducts(CollectionView view)
         {
-            var produts = view.SelectedItems.OfType<Product>().ToList();
-            produts?.ForEach(p => {
-                var product = GetProductSales.FirstOrDefault(s=> s .Id == p.Id);
+            var products = view.SelectedItems.OfType<Product>().ToList();
+            products?.ForEach(p =>
+            {
+                var product = GetProductSales.FirstOrDefault(s => s.Id == p.Id);
                 if (product.IsNotNull())
                 {
+                    
                     product.Quantity += 1;
                     var pc = ProductsSales.FirstOrDefault(s => s.Id == p.Id);
                     pc.Quantity += 1;
@@ -357,115 +431,74 @@ namespace PuntoDeventa.UI.Sales
                     GetProductSales.Add(new ProductSales(p));
                     ProductsSales.Add(new ProductSales(p));
                 }
-                               
+
                 view.SelectedItems.Remove(p);
             });
-           // ProductsSales = new ObservableCollection<ProductSales>(GetProductSales.Clone());
+            // ProductsSales = new ObservableCollection<ProductSales>(GetProductSales.Clone());
             IsVisibleProductCommand.Execute(null);
         }
 
-        public void OnStar()
-        { 
-         TokenSource = new CancellationTokenSource();
-            GetSalesRoutes = new LinkedList<SalesRoutes>();
-            GetCategories = new LinkedList<Category>();
-            GetProductSales = new List<ProductSales>();
-            //Todo sacar for y unificar los dos Task.Run
-            _ = Task.Run(async () =>
+        public void OnStart()
+        {
+            TokenSource = new CancellationTokenSource();
+
+            var taskCategories = Task.Run(async () =>
             {
-
-                await foreach (var routes in _routesUseCase.Emit(TokenSource.Token, 2000))
+                await foreach (var categories in _getCategoriesUseCase.Emit(TokenSource.Token, 2000))
                 {
-                    routes.ForEach(route =>
-                     {
+                    if (GetCategories.SequenceEqual(categories)) continue;
+                    var brands = new LinkedList<string>(categories.Select(c => c.Brand).Distinct());
+                    brands.AddFirst("Todo");
 
-                         //var obb = GetSalesRoutes.SequenceEqual(routes);
+                    Brands = new ObservableCollection<string>(brands);
+                    GetCategories = new LinkedList<Category>(categories);
+                    if (CategorySelect.IsNull())
+                    {
+                        GetProducts = new ObservableCollection<Product>(categories.SelectMany(p => p.Products));
+                    }
+                    else
+                    {
+                        CategorySelect = categories.FirstOrDefault(c => c.Id == CategorySelect.Id);
+                        CategorySelect?.Apply(() =>
+                        {
+                            GetProducts = new ObservableCollection<Product>(CategorySelect.Products);
+                   
+                        });
 
-                         //routes.SelectMany(route => route.Clients).ToList();
-
-                         var obj = GetSalesRoutes.FirstOrDefault(r => r.Name.Equals(route.Name));
-                         if (obj.IsNotNull())
-                         {
-                             obj = route;
-                         }
-                         else
-                         {
-                             GetSalesRoutes.AddLast(route);
-                         }
-                         SalesRoutesList = new ObservableCollection<SalesRoutes>(GetSalesRoutes);
-
-
-
-                         if (SalesRoutesSelect.IsNull())
-                         {
-                             SetClients(route.Clients);
-                         }
-                         else if (SalesRoutesSelect.Equals(route))
-                         {
-                             SalesRoutesSelect = route;
-                             SetClients(route.Clients);
-                         }
-                     });
-
-
+                    }
                 }
-
-
             }, TokenSource.Token);
 
-            _ = Task.Run(async () =>
-             {
-                 await foreach (var categories in _getCategoriesUseCase.Emit(TokenSource.Token, 2000))
-                 {
+            var taskRoutes = Task.Run(async () =>
+            {
+                await foreach (var routes in _routesUseCase.Emit(TokenSource.Token, 2000))
+                {
+                    if (GetSalesRoutes.SequenceEqual(routes)) continue;
+                    GetSalesRoutes = new LinkedList<SalesRoutes>(routes);
+                    if (SalesRoutesSelect.IsNull())
+                    {
+                        GetClients = new ObservableCollection<Client>(routes.SelectMany(route => route.Clients).ToList());
+                    }
+                    else
+                    {
+                        SalesRoutesSelect = GetSalesRoutes.FirstOrDefault(r => r.Id.Equals(SalesRoutesSelect.Id));
+                        SalesRoutesSelect?.Apply(() =>
+                        {
+                            GetClients = new ObservableCollection<Client>(SalesRoutesSelect.Clients);
 
-                     var equal = GetCategories.SequenceEqual(categories);
-                     if (!GetCategories.SequenceEqual(categories))
-                     {
-                         LinkedList<string> brans = new LinkedList<string>(categories.Select(c=> c.Brand).Distinct());
-                         brans.AddFirst("Todo");
-                         
-                         Brands = new ObservableCollection<string>(brans);
-                         GetCategories = new LinkedList<Category>(categories);
-                         if (CategorySelect.IsNull())
-                         {
-                             GetProducts = new ObservableCollection<Product>(categories.SelectMany(p => p.Products));
-                         }
-                         else
-                         {
-                             CategorySelect = categories.FirstOrDefault(c => c.Id == CategorySelect.Id);
-                             GetProducts = new ObservableCollection<Product>(CategorySelect.Products);
-                         }
-                     }
-                 }
+                        });
+                    }
+                }
+            }, TokenSource.Token);
 
-
-
-                 
-             }, TokenSource.Token);
-
+            Task.WhenAll(taskRoutes, taskCategories);
         }
 
-        
+
 
         public void OnStop()
         {
             TokenSource?.Cancel();
-        }
-
-        private void SetClients(List<Client> clients)
-        {
-            foreach (Client c in clients)
-            {
-                if (GetClients.Contains(c))
-                {
-                    int index = GetClients.IndexOf(c);
-                    GetClients[index] = c;
-                }
-                else
-                {
-                    GetClients.Add(c);
-                }
-            }
         }
 
         #endregion

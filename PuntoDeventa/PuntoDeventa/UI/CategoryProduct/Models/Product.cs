@@ -18,6 +18,8 @@
         public int Sku { get; set; }
         [Required(ErrorMessage = "La unidad de medida es requerido.")]
         public string UDM { get; set; }
+
+        public string SkuCode => $"{Sku}_{UDM}";
         public bool IsOffer { get; set; }
         public bool InReport { get; set; }
 

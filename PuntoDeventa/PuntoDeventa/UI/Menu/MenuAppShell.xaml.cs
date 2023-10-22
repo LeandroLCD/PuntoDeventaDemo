@@ -14,13 +14,13 @@ namespace PuntoDeventa.UI.Menu
             Sync();
             InitializeComponent();
         }
-        private void Sync()
+        private static void Sync()
         {
             var useCase = DependencyService.Get<ISyncDataUseCase>();
             useCase.Sync();
         }
 
-        private void RegisterRoutes()
+        private static void RegisterRoutes()
         {
             #region Sales
             Routing.RegisterRoute(nameof(SalesPage), typeof(SalesPage));

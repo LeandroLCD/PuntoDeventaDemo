@@ -12,7 +12,7 @@ namespace PuntoDeventa.UI.Sales
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SalesPage : ContentPage
     {
-        private SalesPageViewModel _viewModel;
+        private readonly SalesPageViewModel _viewModel;
 
         public SalesPage()
         {
@@ -22,7 +22,7 @@ namespace PuntoDeventa.UI.Sales
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _viewModel.OnStar();
+            _viewModel.OnStart();
 
         }
 

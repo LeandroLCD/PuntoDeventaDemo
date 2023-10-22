@@ -4,8 +4,7 @@
              xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CatalogueClient" 
              xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
              xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger"
-             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls" 
-             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls"
              x:Class="PuntoDeventa.UI.CatalogueClient.CatalogueClientPage">
     
 

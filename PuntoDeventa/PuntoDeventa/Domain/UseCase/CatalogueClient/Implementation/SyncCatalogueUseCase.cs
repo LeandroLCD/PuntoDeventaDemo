@@ -16,7 +16,7 @@ namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
 
         public async void Sync()
         {
-            await _repository.Sync();
+           // await _repository.Sync();
         }
     }
 }
