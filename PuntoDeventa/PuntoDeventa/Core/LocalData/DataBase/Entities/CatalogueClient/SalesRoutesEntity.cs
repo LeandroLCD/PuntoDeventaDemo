@@ -1,5 +1,4 @@
-﻿using PuntoDeventa.UI.CatalogueClient.Model;
-using SQLite;
+﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System.Collections.Generic;
 

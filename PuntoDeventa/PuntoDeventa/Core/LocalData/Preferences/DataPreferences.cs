@@ -1,9 +1,9 @@
 ﻿namespace PuntoDeventa.Core.LocalData.Preferences
 {
-    using Xamarin.Essentials;
     using Newtonsoft.Json;
-    using System;
     using PuntoDeventa.Data.DTO.Auth;
+    using System;
+    using Xamarin.Essentials;
 
     internal class DataPreferences : IDataPreferences
     {

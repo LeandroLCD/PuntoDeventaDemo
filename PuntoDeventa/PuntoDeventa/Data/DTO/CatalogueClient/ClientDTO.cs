@@ -12,7 +12,7 @@ namespace PuntoDeventa.Data.DTO.CatalogueClient
         [JsonProperty("rut")]
         public string Rut { get; set; }
 
-        [JsonProperty("razonSocial")]        
+        [JsonProperty("razonSocial")]
         public string Name { get; set; }
 
         [JsonProperty("direccion")]

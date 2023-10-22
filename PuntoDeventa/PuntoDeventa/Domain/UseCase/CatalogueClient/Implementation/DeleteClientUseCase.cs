@@ -5,7 +5,7 @@
     using PuntoDeventa.UI.CatalogueClient.States;
     using System.Threading.Tasks;
     using Xamarin.Forms;
-    internal class DeleteClientUseCase: BaseCatalogueClientUseCase, IDeleteClientUseCase
+    internal class DeleteClientUseCase : BaseCatalogueClientUseCase, IDeleteClientUseCase
     {
         private readonly ICatalogueClienteRepository _repository;
 
@@ -16,7 +16,8 @@
 
         public async Task<CatalogeState> DeleteClient(Client item)
         {
-            return await MakeCallUseCase(item, () => { 
+            return await MakeCallUseCase(item, () =>
+            {
                 return _repository.DeleteClient(item);
             });
         }

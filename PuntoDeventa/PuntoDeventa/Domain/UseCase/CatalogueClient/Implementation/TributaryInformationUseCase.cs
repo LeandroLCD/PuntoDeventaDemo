@@ -16,7 +16,8 @@
         }
         public async Task<CatalogeState> Get(Rut rut)
         {
-            return await MakeCallUseCase(rut, async () => { 
+            return await MakeCallUseCase(rut, async () =>
+            {
                 return await _repository.GetTributaryInformation(rut);
             });
         }

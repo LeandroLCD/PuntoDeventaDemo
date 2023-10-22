@@ -19,7 +19,7 @@ namespace PuntoDeventa
 
             MainPage = new LoginPage();
 
-            
+
             //TestCatalogueClient();
 
             //TestDAO();
@@ -36,11 +36,11 @@ namespace PuntoDeventa
 
         private async void TestCatalogueClient()
         {
-            var repository = DependencyService.Get<ICatalogueClienteRepository>();  
+            var repository = DependencyService.Get<ICatalogueClienteRepository>();
 
-            await foreach( var catalogue in repository.GetCatalogueAsync()) 
+            await foreach (var catalogue in repository.GetCatalogueAsync())
             {
-                    Console.WriteLine(catalogue.Name);
+                Console.WriteLine(catalogue.Name);
             }
 
             var list = repository.GetRoutesAll();
@@ -49,7 +49,7 @@ namespace PuntoDeventa
 
             client.Name = "Prueba3";
 
-           // var state = await repository.UpDateClient(client);
+            // var state = await repository.UpDateClient(client);
 
             var client2 = list.FirstOrDefault().Clients.FirstOrDefault();
 

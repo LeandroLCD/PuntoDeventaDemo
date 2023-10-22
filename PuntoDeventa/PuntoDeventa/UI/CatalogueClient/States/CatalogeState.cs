@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PuntoDeventa.UI.CatalogueClient.States
+﻿namespace PuntoDeventa.UI.CatalogueClient.States
 {
     public abstract class CatalogeState
     {

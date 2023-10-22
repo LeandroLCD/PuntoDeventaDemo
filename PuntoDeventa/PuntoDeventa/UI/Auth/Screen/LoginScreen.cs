@@ -108,7 +108,8 @@ namespace PuntoDeventa.IU.Auth.Screen
         private StackLayout Rememberme(Command<bool> IsRemembermeCommand, bool isRemember)
         {
             var rememberme = new CheckBox() { IsChecked = isRemember };
-            rememberme.CheckedChanged += (s, e) => {
+            rememberme.CheckedChanged += (s, e) =>
+            {
                 IsRemembermeCommand.Execute(e.Value);
             };
 

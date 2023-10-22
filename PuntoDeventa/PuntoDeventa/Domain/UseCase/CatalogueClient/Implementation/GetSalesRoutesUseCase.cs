@@ -1,10 +1,5 @@
 ﻿using PuntoDeventa.Data.Repository.CatalogueClient;
-using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.UI.CatalogueClient.States;
-using PuntoDeventa.UI.CategoryProduct.States;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation

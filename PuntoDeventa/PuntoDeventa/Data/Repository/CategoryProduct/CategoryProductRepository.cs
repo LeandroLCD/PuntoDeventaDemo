@@ -17,12 +17,11 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Xamarin.Forms;
-    using Xamarin.Forms.Internals;
     internal class CategoryProductRepository : BaseRepository, ICategoryProductRepository
     {
-        private IDataStore _dataStore;
-        private IDataPreferences _dataPreferences;
-        private IDataAccessObject _DAO;
+        private readonly IDataStore _dataStore;
+        private readonly IDataPreferences _dataPreferences;
+        private readonly IDataAccessObject _DAO;
         private string tokenID;
 
         public CategoryProductRepository()
@@ -35,21 +34,15 @@
 
         public async Task<CategoryStates> DeleteAsync(Category item)
         {
-            var resultType = await MakeCallNetwork<Category>(() =>
-            {
-                return _dataStore.DeleteAsync<Category>(GetUri($"CategoryProduct/{item.Id}"));
-            });
+            var resultType = await MakeCallNetwork<Category>(() => _dataStore.DeleteAsync<Category>(GetUri($"CategoryProduct/{item.Id}")));
 
             return ResultTypeToCategoryStates(OperationDTO.Delete, item.ToCategoryEntity(), resultType);
 
         }
 
-        public async Task<CategoryStates> DeleteProdctAsync(Product item)
+        public async Task<CategoryStates> DeleteProductAsync(Product item)
         {
-            var resultType = await MakeCallNetwork<Product>(() =>
-            {
-                return _dataStore.DeleteAsync<Product>(GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}"));
-            });
+            var resultType = await MakeCallNetwork<Product>(() => _dataStore.DeleteAsync<Product>(GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}")));
 
             return ResultTypeToCategoryStates(OperationDTO.Delete, item.ToProductDTO(), resultType);
         }
@@ -58,12 +51,9 @@
 
         public async IAsyncEnumerable<Category> GetAllAsync()
         {
-            var resulType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() =>
-            {
-                return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
-            });
+            var resultType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() => _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct")));
 
-            foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+            foreach (KeyValuePair<string, CategoryDTO> item in resultType.Data)
             {
                 var category = new Category()
                 {
@@ -177,7 +167,7 @@
                 {
                     return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
                 });
-                if(resulType.Success)
+                if (resulType.Success)
                 {
                     foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
                     {
@@ -192,7 +182,7 @@
                     }
 
                 }
-                
+
 
             });
 

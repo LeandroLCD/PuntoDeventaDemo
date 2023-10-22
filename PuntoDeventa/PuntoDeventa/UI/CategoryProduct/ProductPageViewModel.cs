@@ -77,10 +77,10 @@ namespace PuntoDeventa.UI.CategoryProduct
                 return _percentaje;
             }
 
-            private set 
+            private set
             {
-               
-                SetProperty(ref _percentaje, value); 
+
+                SetProperty(ref _percentaje, value);
             }
 
         }
@@ -161,12 +161,12 @@ namespace PuntoDeventa.UI.CategoryProduct
             {
 
             };
-            BackButtonCommand = new Command( () =>
+            BackButtonCommand = new Command(() =>
             {
                 NavigationBack(typeof(ProductPage), $"CategoryId={GetProduct.CategoryId}");
             });
 
-           
+
 
             PercentageChangedCommand = new Command<string>((value) =>
             {
@@ -186,7 +186,7 @@ namespace PuntoDeventa.UI.CategoryProduct
                 NotifyPropertyChanged(nameof(GetProduct));
             });
 
-        }       
+        }
 
         private async void HandlerStates(CategoryStates categoryStates)
         {
@@ -207,14 +207,14 @@ namespace PuntoDeventa.UI.CategoryProduct
             try
             {
                 var id = HttpUtility.UrlDecode(query["ProductId"]);
-                 id.Apply(() =>
-                    {
-                        HandlerStates(_getProductUseCase.Get(id));
-                        IsEdit = true;
-                    });
+                id.Apply(() =>
+                   {
+                       HandlerStates(_getProductUseCase.Get(id));
+                       IsEdit = true;
+                   });
                 TitlePage = $"Editar Producto.";
-                    return; 
-                
+                return;
+
             }
             catch (Exception)
             {

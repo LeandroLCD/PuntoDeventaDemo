@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PuntoDeventa.Domain.Models
+﻿namespace PuntoDeventa.Domain.Models
 {
     public class ErrorMessage
     {

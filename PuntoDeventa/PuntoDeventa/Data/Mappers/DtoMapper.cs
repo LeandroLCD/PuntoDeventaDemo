@@ -6,7 +6,6 @@ using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
-using System;
 using System.Collections.Generic;
 using Xamarin.Forms.Internals;
 
@@ -152,7 +151,7 @@ namespace PuntoDeventa.Data.Mappers
                     Description = model.Description,
                     UDM = model.UDM,
                     Percentage = model.Percentage,
-                    PriceGross= model.PriceGross,
+                    PriceGross = model.PriceGross,
                     Sku = model.Code,
                     CategoryId = model.CategoryId,
                     InReport = model.InReport,

@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace PuntoDeventa.UI.CategoryProduct.Models
 {
-    
-    public class ProductSales 
+
+    public class ProductSales
     {
         public ProductSales()
         {
-                
+
         }
-        public ProductSales(Product product, int quantity = 1 )
+        public ProductSales(Product product, int quantity = 1)
         {
             Id = product.Id;
             Name = product.Name;
@@ -58,7 +56,7 @@ namespace PuntoDeventa.UI.CategoryProduct.Models
 
         [Required(ErrorMessage = "El ID de la categoria es requerido.")]
         public string CategoryId { get; set; }
-        public int Quantity {  get; set; }
+        public int Quantity { get; set; }
         public double SubTotal => PriceNeto * Quantity;
 
         public override bool Equals(object obj)

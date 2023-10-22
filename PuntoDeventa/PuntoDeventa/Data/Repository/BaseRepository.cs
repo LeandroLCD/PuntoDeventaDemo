@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
-using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;

@@ -1,6 +1,4 @@
 ﻿using PuntoDeventa.Data.Repository.CatalogueClient;
-using PuntoDeventa.UI.CatalogueClient.Model;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
@@ -14,9 +12,9 @@ namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
             _repository = DependencyService.Get<ICatalogueClienteRepository>();
         }
 
-        public async void Sync()
+        public virtual async void Sync()
         {
-           // await _repository.Sync();
+             await _repository.Sync();
         }
     }
 }

@@ -1,17 +1,12 @@
 ﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CatalogueClient;
-using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.IU;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CatalogueClient.States;
-using PuntoDeventa.UI.CategoryProduct.Models;
-using PuntoDeventa.UI.CategoryProduct.States;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Web;
 using Xamarin.Forms;
 
@@ -120,7 +115,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             switch (state)
             {
                 case CatalogeState.Success success:
-                    
+
                     GetSalesRoutes = (SalesRoutes)success.Data;
                     TitlePage = GetSalesRoutes.Name;
                     break;

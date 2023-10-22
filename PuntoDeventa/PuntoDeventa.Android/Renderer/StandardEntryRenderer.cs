@@ -137,5 +137,5 @@ namespace PuntoDeventa.Droid.Renderer
 
     }
 
-    
+
 }

@@ -1,7 +1,6 @@
 ﻿using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using PuntoDeventa.UI.CategoryProduct.States;
-using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 

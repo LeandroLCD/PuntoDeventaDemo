@@ -228,7 +228,7 @@
 
             var entity = item.ToClientEntity();
             entity.SalesRoutes = _DAO.Get<SalesRoutesEntity>(item.RouteId);
-            
+
 
             return ResultTypeToCatalogeState(OperationDTO.InsertOrUpdate, entity, resultType);
         }
@@ -243,7 +243,7 @@
             if (resultType.Success)
             {
                 item.CopyPropertiesFrom(resultType.Data);
-               var entity =  ((SalesRoutes)item).ToSalesRoutesEntity();
+                var entity = ((SalesRoutes)item).ToSalesRoutesEntity();
                 switch (method)
                 {
                     case OperationDTO.Delete:

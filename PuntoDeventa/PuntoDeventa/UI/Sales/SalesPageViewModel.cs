@@ -4,6 +4,7 @@ using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.IU;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
+using PuntoDeventa.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,9 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PuntoDeventa.UI.Controls;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace PuntoDeventa.UI.Sales
 {
@@ -396,19 +395,18 @@ namespace PuntoDeventa.UI.Sales
             {
                 barCode?.Apply(() =>
                 {
-                     if(barCode.Text.Length < 4)  return;
+                    if (barCode.Text.Length < 4) return;
 
-                     var productList = GetCategories.SelectMany(c => c.Products);
-                     var product =  productList.FirstOrDefault(p =>
-                         p.BarCode.ToString().Contains(barCode.Text) || 
-                         p.SkuCode.Contains(barCode.Text.ToUpper()) ||
-                         p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
-                     if(product.IsNull())
-                         return;
-                     GetProductSales.Add(new ProductSales(product));
-                     ProductsSales.Add(new ProductSales(product));
-                     barCode.Text = string.Empty;
-                     barCode.Unfocus();
+                    var productList = GetCategories.SelectMany(c => c.Products);
+                    var product = productList.FirstOrDefault(p =>
+                        p.BarCode.ToString().Contains(barCode.Text) ||
+                        p.SkuCode.Contains(barCode.Text.ToUpper()) ||
+                        p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
+                    if (product.IsNull())
+                        return;
+                    AddProduct(product);
+                    barCode.Text = string.Empty;
+                    barCode.Unfocus();
                 });
             });
         }
@@ -418,19 +416,7 @@ namespace PuntoDeventa.UI.Sales
             var products = view.SelectedItems.OfType<Product>().ToList();
             products?.ForEach(p =>
             {
-                var product = GetProductSales.FirstOrDefault(s => s.Id == p.Id);
-                if (product.IsNotNull())
-                {
-                    
-                    product.Quantity += 1;
-                    var pc = ProductsSales.FirstOrDefault(s => s.Id == p.Id);
-                    pc.Quantity += 1;
-                }
-                else
-                {
-                    GetProductSales.Add(new ProductSales(p));
-                    ProductsSales.Add(new ProductSales(p));
-                }
+                AddProduct(p);
 
                 view.SelectedItems.Remove(p);
             });
@@ -438,6 +424,23 @@ namespace PuntoDeventa.UI.Sales
             IsVisibleProductCommand.Execute(null);
         }
 
+        private void AddProduct(Product productSource)
+        {
+            var product = GetProductSales.FirstOrDefault(s => s.Id == productSource.Id);
+            if (product.IsNotNull())
+            {
+                Debug.Assert(product != null, nameof(product) + " != null");
+                product.Quantity += 1;
+                var productTarget = ProductsSales.FirstOrDefault(s => s.Id == productSource.Id);
+                Debug.Assert(productTarget != null, nameof(productTarget) + " != null");
+                productTarget.Quantity += 1;
+            }
+            else
+            {
+                GetProductSales.Add(new ProductSales(productSource));
+                ProductsSales.Add(new ProductSales(productSource));
+            }
+        }
         public void OnStart()
         {
             TokenSource = new CancellationTokenSource();
@@ -462,7 +465,7 @@ namespace PuntoDeventa.UI.Sales
                         CategorySelect?.Apply(() =>
                         {
                             GetProducts = new ObservableCollection<Product>(CategorySelect.Products);
-                   
+
                         });
 
                     }

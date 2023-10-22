@@ -1,16 +1,13 @@
 ﻿namespace PuntoDeventa.UI.CatalogueClient.Model
 {
-    using PuntoDeventa.UI.CatalogueClient.Models;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
     public class SalesRoutes
     {
         public SalesRoutes()
         {
-            
+
         }
         public SalesRoutes(string name)
         {

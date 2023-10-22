@@ -10,7 +10,7 @@ using Xamarin.Essentials;
 
 namespace PuntoDeventa.Core.LocalData.DataBase
 {
-    internal class DataAccessObject : IDisposable,  IDataAccessObject
+    internal class DataAccessObject : IDisposable, IDataAccessObject
     {
         private readonly SQLiteConnection _connection;
 
@@ -18,7 +18,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
         {
             _connection = new SQLiteConnection(Path.Combine(FileSystem.AppDataDirectory, "DataBase.db3"));
             CreateTables();
-        }       
+        }
 
         public void Delete<T>(T moldel)
         {
@@ -41,7 +41,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
                 transactionScope.Complete();
             }
-        }       
+        }
 
         public T Get<T>(object primaryKey) where T : new()
         {
@@ -55,7 +55,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public void InsertOrUpdate<T>(T moldel)
         {
-             _connection.InsertOrReplaceWithChildren(moldel, true);
+            _connection.InsertOrReplaceWithChildren(moldel, true);
         }
 
         public void InsertOrUpdate<T>(IEnumerable<T> moldelList)
@@ -69,7 +69,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
         }
 
         private void CreateTables()
-        {            
+        {
             _connection.CreateTable<CategoryEntity>();
             _connection.CreateTable<ProductEntity>();
 

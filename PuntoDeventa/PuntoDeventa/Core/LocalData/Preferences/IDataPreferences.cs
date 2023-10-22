@@ -1,7 +1,4 @@
 ﻿using PuntoDeventa.Data.DTO.Auth;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PuntoDeventa.Core.LocalData.Preferences
 {

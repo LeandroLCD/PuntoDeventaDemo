@@ -72,7 +72,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         public string TitlePage
         {
             get => _title;
-            set => SetProperty(ref _title, value);  
+            set => SetProperty(ref _title, value);
         }
 
         private CancellationTokenSource TokenSource { set; get; }
@@ -122,11 +122,11 @@ namespace PuntoDeventa.UI.CategoryProduct
                 }
             });
 
-            NewProductCommand = new Command( async() =>
+            NewProductCommand = new Command(async () =>
             {
-                
-                    await Shell.Current.GoToAsync($"{nameof(ProductPage)}?CategoryId={GetCategory.Id}", true);
-                
+
+                await Shell.Current.GoToAsync($"{nameof(ProductPage)}?CategoryId={GetCategory.Id}", true);
+
             });
         }
 

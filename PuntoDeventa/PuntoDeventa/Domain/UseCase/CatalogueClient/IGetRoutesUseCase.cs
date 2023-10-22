@@ -2,7 +2,6 @@
 {
     using PuntoDeventa.UI.CatalogueClient.Model;
     using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
     using System.Threading;
 
     public interface IGetRoutesUseCase

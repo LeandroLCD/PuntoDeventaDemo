@@ -113,7 +113,7 @@ namespace PuntoDeventa.Core.DI
 
             DependencyService.Register<ITributaryInformationUseCase, TributaryInformationUseCase>();
             DependencyService.Register<IUpdateClient, UpdateClient>();
-            
+
             #endregion
 
         }

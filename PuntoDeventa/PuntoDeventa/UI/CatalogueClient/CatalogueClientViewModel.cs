@@ -1,11 +1,8 @@
 ﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CatalogueClient;
-using PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation;
 using PuntoDeventa.IU;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CatalogueClient.States;
-using PuntoDeventa.UI.CategoryProduct.Models;
-using PuntoDeventa.UI.CategoryProduct.States;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -33,7 +30,7 @@ namespace PuntoDeventa.UI.CatalogueClient
         {
             InicilizeCommand();
 
-           _getRoutesUseCase = DependencyService.Get<IGetRoutesUseCase>();
+            _getRoutesUseCase = DependencyService.Get<IGetRoutesUseCase>();
 
             _addRouteUseCase = DependencyService.Get<IAddSalesRouteUseCase>();
 
@@ -98,7 +95,7 @@ namespace PuntoDeventa.UI.CatalogueClient
 
         public Command<SalesRoutes> DeleteSalesRoutesCommand { get; set; }
 
-        public Command<string> RouteChangedCommand {get; set;}
+        public Command<string> RouteChangedCommand { get; set; }
 
         #endregion
 
@@ -160,7 +157,7 @@ namespace PuntoDeventa.UI.CatalogueClient
                 if (route.IsNotNull())
                 {
                     var state = Shell.Current.Navigation.NavigationStack;
-                   await Shell.Current.GoToAsync($"{nameof(CatalogueDetailPage)}?RouteId={route.Id}");
+                    await Shell.Current.GoToAsync($"{nameof(CatalogueDetailPage)}?RouteId={route.Id}");
                 }
 
             });
@@ -169,7 +166,7 @@ namespace PuntoDeventa.UI.CatalogueClient
             {
                 if (routes.IsNotNull() && routes.Clients.Count.Equals(0))
                 {
-                    
+
                     if (await Shell.Current.DisplayAlert("Advertencia", $"Estas seguro que deseas eliminar la la ruta {routes.Name}.", "Aceptar", "Cancelar"))
                     {
                         var state = await _deleteRouteUserCase.DeleteRoute(routes);
@@ -187,7 +184,8 @@ namespace PuntoDeventa.UI.CatalogueClient
 
             });
 
-            RouteChangedCommand = new Command<string>((value) => {
+            RouteChangedCommand = new Command<string>((value) =>
+            {
                 NewSalesRoute.Name = value;
             });
 

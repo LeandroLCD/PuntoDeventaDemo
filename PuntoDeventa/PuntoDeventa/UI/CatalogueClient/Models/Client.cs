@@ -15,13 +15,13 @@ namespace PuntoDeventa.UI.CatalogueClient.Model
 
         public string CommuneName { get; set; }
 
-        public string RouteId { get; set;}
+        public string RouteId { get; set; }
 
         public string Phone { get; set; }
 
         public List<BranchOffices> BranchOffices { get; set; }
 
-        public List<EconomicActivities> EconomicActivities { get; set;}
+        public List<EconomicActivities> EconomicActivities { get; set; }
 
         public override bool Equals(object obj)
         {

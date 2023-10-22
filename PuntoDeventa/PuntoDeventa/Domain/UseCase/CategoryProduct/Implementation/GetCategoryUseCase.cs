@@ -14,7 +14,7 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
         }
         public CategoryStates Get(string id)
         {
-           return _repository.GetCategory(id);
+            return _repository.GetCategory(id);
         }
     }
 }
