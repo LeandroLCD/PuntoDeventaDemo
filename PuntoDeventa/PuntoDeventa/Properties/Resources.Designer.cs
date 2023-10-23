@@ -79,7 +79,7 @@ namespace PuntoDeventa.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a https://puntodeventademo-4332d-default-rtdb.firebaseio.com/.
+        ///   Busca una cadena traducida similar a https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/.
         /// </summary>
         internal static string BaseUrlRealDataBase {
             get {

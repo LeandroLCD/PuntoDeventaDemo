@@ -163,24 +163,18 @@
         {
             _dataPreferences.GetUserData()?.Apply(async () =>
             {
-                var resulType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() =>
+                var resultType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() => _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct")));
+                if (!resultType.Success) return;
+                foreach (KeyValuePair<string, CategoryDTO> item in resultType.Data)
                 {
-                    return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
-                });
-                if (resulType.Success)
-                {
-                    foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+                    var entity = new CategoryEntity()
                     {
-                        var entity = new CategoryEntity()
-                        {
-                            Id = item.Key,
-                            Name = item.Value.Name,
-                            Brand = item.Value.Brand,
-                            Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
-                        };
-                        _DAO.InsertOrUpdate(entity);
-                    }
-
+                        Id = item.Key,
+                        Name = item.Value.Name,
+                        Brand = item.Value.Brand,
+                        Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
+                    };
+                    _DAO.InsertOrUpdate(entity);
                 }
 
 

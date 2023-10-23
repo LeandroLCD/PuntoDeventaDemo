@@ -15,6 +15,7 @@ namespace PuntoDeventa.Data.Repository
 {
     internal class BaseRepository
     {
+        //TODO Revisar errores de deserealización.
         public async Task<ResultType<T>> MakeCallNetwork<T>(Func<Task<HttpResponseMessage>> apiCallFunction)
         {
             ResultType<T> resultType = new ResultType<T>();
@@ -53,6 +54,7 @@ namespace PuntoDeventa.Data.Repository
             }
             catch (Exception e)
             {
+                resultType.Success = false;
                 resultType.Errors.Add(new ErrorMessage(e.GetHashCode().ToString(), e.Message));
             }
 

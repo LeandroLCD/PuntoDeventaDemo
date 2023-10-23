@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using PuntoDeventa.UI.Controls;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace PuntoDeventa.UI.Sales
@@ -25,5 +27,7 @@ namespace PuntoDeventa.UI.Sales
             base.OnDisappearing();
             _viewModel.OnStop();
         }
+
+       
     }
 }

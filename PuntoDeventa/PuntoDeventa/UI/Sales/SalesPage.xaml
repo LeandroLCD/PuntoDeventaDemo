@@ -5,8 +5,7 @@
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
              xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Sales"
-             xmlns:controls="clr-namespace:PuntoDeventa.UI.Controls;assembly=PuntoDeventa"
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Sales" xmlns:controls="clr-namespace:PuntoDeventa.UI.Controls"
              x:Class="PuntoDeventa.UI.Sales.SalesPage">
 
     <ContentPage.BindingContext>
@@ -68,24 +67,24 @@
                 <StackLayout Orientation="Horizontal">
                     <StackLayout HorizontalOptions="FillAndExpand">
                         <Grid >
-                            <controls:StandardEntry x:Name="BarCode"
-                  FontSize="16" HorizontalTextAlignment="Center"
-                  VerticalOptions="Center" MaxLength="13"
-                  Padding="13"  HeightRequest="50"
-                  IsVisibleKeyboard="{Binding IsVisibleKeyboard}"
-                  BorderColor="Black" 
-                  BorderColorFocus="Red"
-                  BorderThickness="1"
-                  CornerRadius="5"
-                  Placeholder="BarCode">
+                            <controls:StandardEntry x:Name="BarCode" 
+                              FontSize="16" HorizontalTextAlignment="Center"
+                              VerticalOptions="Center" MaxLength="13"
+                              Padding="13"  HeightRequest="50"
+                              IsVisibleKeyboard="{Binding Source={x:Reference isVisible}, Path=IsToggled}"
+                              BorderColor="Black" 
+                              BorderColorFocus="Red"
+                              BorderThickness="1"
+                              CornerRadius="5"
+                              Placeholder="BarCode">
                                 <controls:StandardEntry.Behaviors>
-                                    <behaviorsPack:EventToCommandBehavior EventName="Completed"
+                                    <behaviorsPack:EventToCommandBehavior EventName="TextChanged"
                                                           Command="{Binding BarCodeChangedCommand}"
                                                           CommandParameter="{Binding Source={x:Reference BarCode}}"/>
                                 </controls:StandardEntry.Behaviors>
 
                             </controls:StandardEntry>
-                            <Switch IsToggled="{Binding IsVisibleKeyboard}" HorizontalOptions="Start"/>
+                            <Switch x:Name="isVisible" IsToggled="{Binding IsVisibleKeyboard}" HorizontalOptions="Start"/>
                         </Grid>
                     </StackLayout>
                     <ImageButton  WidthRequest="55" Source="ic_helado1.png" BackgroundColor="White" Padding="3" Command="{Binding IsVisibleProductCommand}" />
@@ -178,17 +177,17 @@
                             <StackLayout Margin="10,0" >
                                 <StackLayout Orientation="Horizontal" VerticalOptions="Center" Margin="0,3,0,0" Spacing="0">
                                     <Label Text="Total:" TextColor="Black" FontSize="15" FontAttributes="Bold"></Label>
-                                    <Label x:Name="Total" Text="{Binding Total, StringFormat='{0:C2}'}"  TextColor="Black" FontSize="15" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"></Label>
+                                    <Label x:Name="Total" Text="{Binding TotalSale, StringFormat='{0:C2}'}"  TextColor="Black" FontSize="15" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"></Label>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" VerticalOptions="Start" Margin="0,-8,0,10" Spacing="0">
                                     <Label Text="Neto:" TextColor="Black" FontSize="Micro"></Label>
-                                    <Label x:Name="Neto" Text="{Binding Neto, StringFormat='{0:C2}'}" TextColor="Black" FontSize="Micro"  HorizontalOptions="CenterAndExpand"></Label>
+                                    <Label x:Name="Neto" Text="{Binding TotalNeto, StringFormat='{0:C2}'}" TextColor="Black" FontSize="Micro"  HorizontalOptions="CenterAndExpand"></Label>
                                 </StackLayout>
                             </StackLayout>
                         </Grid>
 
                     </StackLayout>
-                    <Button Text="Ingresar" FontSize="14" Command="{Binding NewSaleCommand}"  ></Button>
+                    <Button Text="Ingresar" FontSize="14" Command="{Binding InsertSaleCommand}"  ></Button>
 
 
                 </StackLayout>

@@ -12,7 +12,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
 
         public string Description { get; set; }
 
-        public int BarCode { get; set; }
+        public long BarCode { get; set; }
 
         public int Code { get; set; }
 

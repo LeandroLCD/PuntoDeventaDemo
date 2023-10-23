@@ -14,7 +14,7 @@ namespace PuntoDeventa.Data.DTO.CatalogueProduct
         public string Description { get; set; }
 
         [JsonProperty("BarCode")]
-        public int BarCode { get; set; }
+        public long BarCode { get; set; }
 
         [JsonProperty("Sku")]
         public int Sku { get; set; }

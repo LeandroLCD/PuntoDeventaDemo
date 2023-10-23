@@ -4,6 +4,7 @@ using Android.Graphics.Drawables;
 using Android.Views.InputMethods;
 using PuntoDeventa.Droid.Renderer;
 using PuntoDeventa.UI.Controls;
+using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -50,7 +51,6 @@ namespace PuntoDeventa.Droid.Renderer
 
             }
 
-
             base.OnElementPropertyChanged(sender, e);
         }
 
@@ -78,9 +78,11 @@ namespace PuntoDeventa.Droid.Renderer
         }
         protected void UpdateKeyboard(FormsEditText control)
         {
+
+
             if (control == null) return;
 
-            InputMethodManager inputMethodManager = (InputMethodManager)_context.GetSystemService(Context.InputMethodService);
+            var inputMethodManager = (InputMethodManager)_context.GetSystemService(Context.InputMethodService);
             if (inputMethodManager != null && _context is Activity)
             {
 
@@ -91,12 +93,12 @@ namespace PuntoDeventa.Droid.Renderer
                     var token = activity.CurrentFocus?.WindowToken;
                     inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
 
-                    control.InputType = Android.Text.InputTypes.Null;
+                    this.EditText.InputType = Android.Text.InputTypes.Null;
                 }
                 else
                 {
 
-                    control.InputType = ElementV2.Keyboard.ToInputType();
+                    this.EditText.InputType = ElementV2.Keyboard.ToInputType();
                 }
             }
         }
@@ -106,12 +108,18 @@ namespace PuntoDeventa.Droid.Renderer
         {
             base.OnElementChanged(e);
 
-            // this.EditText.TextChanged += EditText_TextChanged;
+            this.EditText.TextChanged += EditText_TextChanged;
             this.EditText.FocusChange += EditText_FocusChange;
             //this.EditText.Touch += EditText_Touch;
             //this.EditText.Click += EditText_Click;
 
 
+
+        }
+
+        private void EditText_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+        {
+            UpdateKeyboard(Control);
 
         }
 

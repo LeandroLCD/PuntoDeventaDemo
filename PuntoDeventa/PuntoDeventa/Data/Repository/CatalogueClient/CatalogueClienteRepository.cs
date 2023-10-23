@@ -143,6 +143,8 @@
 
         public async Task<bool> Sync()
         {
+            
+            
             var routeResultTask = _dataStore.GetAsync<SalesRoutesDTO>(GetUri("CatalogueClient/SalesRoutes"));
 
             var clientResultTask = _dataStore.GetAsync<ClientDTO>(GetUri("CatalogueClient/Clients"));
@@ -194,7 +196,7 @@
                 return await Task.FromResult(false);
             }
 
-
+            
 
 
         }

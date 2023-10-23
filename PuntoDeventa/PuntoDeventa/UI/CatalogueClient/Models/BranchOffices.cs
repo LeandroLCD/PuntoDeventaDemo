@@ -12,6 +12,8 @@
 
         public string Phone { get; set; }
 
+        public bool IsMatrixHouse { get; set; }
+
         public override bool Equals(object obj)
         {
             if (obj is int other)

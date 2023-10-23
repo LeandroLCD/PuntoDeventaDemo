@@ -11,7 +11,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public int BarCode { get; set; }
+        public long BarCode { get; set; }
 
         [Required(ErrorMessage = "El Sku es requerido.")]
         public int Sku { get; set; }

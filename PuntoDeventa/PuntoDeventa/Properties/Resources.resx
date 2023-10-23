@@ -126,7 +126,7 @@
     <comment>Url Base del Backend del sistema de Emisión Elect</comment>
   </data>
   <data name="BaseUrlRealDataBase" xml:space="preserve">
-    <value>https://puntodeventademo-4332d-default-rtdb.firebaseio.com/</value>
+    <value>https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/</value>
     <comment>Url de Firebase</comment>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

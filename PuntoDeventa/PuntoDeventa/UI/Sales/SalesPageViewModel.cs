@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PuntoDeventa.UI.Sales.Models;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Sales
@@ -39,6 +41,8 @@ namespace PuntoDeventa.UI.Sales
         private int _productCount;
         private ObservableCollection<ProductSales> _productSales;
         private bool _isVisibleKeyboard;
+        private double _totalSale;
+        private double _totalNeto;
 
         #endregion
 
@@ -53,6 +57,8 @@ namespace PuntoDeventa.UI.Sales
         #endregion
 
         #region Properties
+
+        private Sale NewSale { get; set; }
 
         public bool IsVisibleTributaryData
         {
@@ -71,15 +77,29 @@ namespace PuntoDeventa.UI.Sales
             get => _isVisibleKeyboard;
             set => SetProperty(ref _isVisibleKeyboard, value);
         }
+
         public string ClientName
         {
             get => _clientName;
             private set => SetProperty(ref _clientName, value);
         }
+
         public Client ClientSelect
         {
             get => _clientSelect;
             set => SetProperty(ref _clientSelect, value);
+        }
+
+        public double TotalSale
+        {
+            get => _totalSale;
+            private set => SetProperty(ref _totalSale, value);
+        }
+
+        public double TotalNeto
+        {
+            get => _totalNeto;
+            private set => SetProperty(ref _totalNeto, value);
         }
 
         public SalesRoutes SalesRoutesSelect
@@ -202,6 +222,7 @@ namespace PuntoDeventa.UI.Sales
         #endregion
 
         #region Command
+        public Command InsertSale { get; set; }
         public Command<StandardEntry> BarCodeChangedCommand { get; set; }
         public Command<string> SelectBrandCommand { get; set; }
         public Command<Client> ClientSelectCommand { get; set; }
@@ -339,37 +360,33 @@ namespace PuntoDeventa.UI.Sales
             {
                 ProductsSales.Remove(products);
                 GetProductSales.Remove(products);
+                CalculateSale();
             });
 
             QuantityChangedCommand = new Command<Entry>((quantity) =>
             {
+                if (quantity.IsNull()) return;
 
-                if (quantity.IsNotNull())
+                var product = (ProductSales)quantity.BindingContext;
+
+                var q = string.IsNullOrEmpty(quantity.Text) ? 0 : int.Parse(quantity.Text);
+                
+                var productTarget = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
+                
+                productTarget?.Apply(() =>
                 {
-                    var product = (ProductSales)quantity.BindingContext;
-                    var q = string.IsNullOrEmpty(quantity.Text) ? 0 : int.Parse(quantity.Text);
+                    if (productTarget.Equals(product)) return;
 
-                    ProductSales productTarge = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
-                    productTarge?.Apply(() =>
-                    {
+                    productTarget.Quantity = q;
+                    var index = _productSales.IndexOf(product);
+                    //ProductsSales.RemoveAt(index);
+                    //ProductsSales.Insert(index, productTarget.Clone<ProductSales>());  
+                    ProductsSales[index] = product.Clone<ProductSales>();
 
-                        if (!productTarge.Equals(product))
-                        {
-                            productTarge.Quantity = q;
-                            var index = _productSales.IndexOf(product);
-                            //ProductsSales.RemoveAt(index);
-                            //ProductsSales.Insert(index, productTarge.Clone<ProductSales>());  
-                            ProductsSales[index] = product;
+                    NotifyPropertyChanged(nameof(ProductsSales));
 
-                            NotifyPropertyChanged(nameof(ProductsSales));
-                            quantity.Unfocus();
-
-
-
-                        }
-
-                    });
-                }
+                });
+                CalculateSale();
             });
 
             EditProductCommand = new Command<ProductSales>((product) =>
@@ -384,10 +401,11 @@ namespace PuntoDeventa.UI.Sales
                     var index = _productSales.IndexOf(product);
                     //ProductsSales.RemoveAt(index);
                     //ProductsSales.Insert(index, productSales.Clone<ProductSales>());  
-                    ProductsSales[index] = product;
+                    ProductsSales[index] = product.Clone<ProductSales>();
                     NotifyPropertyChanged(nameof(ProductsSales));
 
                 });
+                CalculateSale();
 
             });
 
@@ -395,20 +413,51 @@ namespace PuntoDeventa.UI.Sales
             {
                 barCode?.Apply(() =>
                 {
-                    if (barCode.Text.Length < 4) return;
+                  var length =  barCode.Text.Length;
 
-                    var productList = GetCategories.SelectMany(c => c.Products);
-                    var product = productList.FirstOrDefault(p =>
-                        p.BarCode.ToString().Contains(barCode.Text) ||
-                        p.SkuCode.Contains(barCode.Text.ToUpper()) ||
-                        p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
-                    if (product.IsNull())
-                        return;
-                    AddProduct(product);
-                    barCode.Text = string.Empty;
-                    barCode.Unfocus();
+                  if ((length <= 12 && !barCode.IsVisibleKeyboard) ||
+                      (length < 6 && barCode.IsVisibleKeyboard)) return;
+
+                  var productList = GetCategories.SelectMany(c => c.Products);
+                  var product = productList.FirstOrDefault(p =>
+                      p.BarCode.ToString().Contains(barCode.Text) ||
+                      p.SkuCode.Contains(barCode.Text.ToUpper()) ||
+                      p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
+                  if (product.IsNull())
+                      return;
+                  AddProduct(product);
+                  barCode.Text = string.Empty;
+
+
+
                 });
             });
+
+            InsertSale = new Command(InsertMethods);
+
+        }
+
+        private void InsertMethods(object obj)
+        {
+            NewSale = new Sale()
+            {
+                Client = ClientSelect,
+                SelectBranchOffices = ClientSelect.BranchOffices
+                    .FirstOrDefault(b=> b.IsMatrixHouse.Equals(true)),
+                SelectEconomicActivities = ClientSelect.EconomicActivities.FirstOrDefault(
+                    a=> a.IsMain.Equals(true)),
+                DateSale = DateDte,
+                Products = GetProductSales
+            };
+
+            //TODO Construir useCase
+            /*
+             _caseUse.Inset(NewSale, async () =>
+            {
+                var json = JsonConvert.SerializeObject(NewSale);
+                await Shell.Current.GoToAsync($"{nameof(PaymentSale)}?Sale={json}");
+            });
+            */
         }
 
         private void AddProducts(CollectionView view)
@@ -420,7 +469,7 @@ namespace PuntoDeventa.UI.Sales
 
                 view.SelectedItems.Remove(p);
             });
-            // ProductsSales = new ObservableCollection<ProductSales>(GetProductSales.Clone());
+
             IsVisibleProductCommand.Execute(null);
         }
 
@@ -429,18 +478,41 @@ namespace PuntoDeventa.UI.Sales
             var product = GetProductSales.FirstOrDefault(s => s.Id == productSource.Id);
             if (product.IsNotNull())
             {
+
                 Debug.Assert(product != null, nameof(product) + " != null");
+
                 product.Quantity += 1;
+                
                 var productTarget = ProductsSales.FirstOrDefault(s => s.Id == productSource.Id);
+                
                 Debug.Assert(productTarget != null, nameof(productTarget) + " != null");
+                
+                var index = _productSales.IndexOf(productTarget);
+
                 productTarget.Quantity += 1;
+                //Ojito relativamente super importante!!!
+                _productSales[index] = productTarget.Clone<ProductSales>();
+
+                NotifyPropertyChanged(nameof(ProductsSales));
+                
             }
             else
             {
                 GetProductSales.Add(new ProductSales(productSource));
                 ProductsSales.Add(new ProductSales(productSource));
             }
+            CalculateSale();
         }
+
+        private void CalculateSale()
+        {
+            //TODO Consumir iva desde FireBase
+            var iva = 0.19;
+            var neto = Math.Floor(ProductsSales.Sum(p => p.SubTotal));
+            TotalSale = neto * (1 + iva);
+            TotalNeto = neto;
+        }
+
         public void OnStart()
         {
             TokenSource = new CancellationTokenSource();
@@ -496,8 +568,6 @@ namespace PuntoDeventa.UI.Sales
 
             Task.WhenAll(taskRoutes, taskCategories);
         }
-
-
 
         public void OnStop()
         {
