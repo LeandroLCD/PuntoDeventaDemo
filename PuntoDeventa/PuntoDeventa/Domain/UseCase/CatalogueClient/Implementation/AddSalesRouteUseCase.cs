@@ -8,11 +8,11 @@
 
     internal class AddSalesRouteUseCase : BaseCatalogueClientUseCase, IAddSalesRouteUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private ICatalogueClientRepository _repository;
 
         public AddSalesRouteUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         public async Task<CatalogeState> Insert(SalesRoutes route)
         {

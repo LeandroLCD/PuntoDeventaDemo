@@ -23,7 +23,7 @@ namespace PuntoDeventa.Data.Repository
             {
                 var resp = await Task.Run(() => apiCallFunction());
 
-                string jsonResult = await resp.Content.ReadAsStringAsync();
+                var jsonResult = await resp.Content.ReadAsStringAsync();
 
                 resultType.Success = resp.StatusCode.Equals(HttpStatusCode.OK);
 
@@ -41,7 +41,8 @@ namespace PuntoDeventa.Data.Repository
                         var token = await Task.Run(() => TokenRefresf());
                         if (token.IsCompleted)
                         {
-                            await MakeCallNetwork<T>(apiCallFunction);
+                            //TODO mejorar logica de reflexion 
+                            //await MakeCallNetwork<T>(apiCallFunction);
                         }
                         break;
 

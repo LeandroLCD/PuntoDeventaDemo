@@ -1,12 +1,15 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Data.DTO.CatalogueClient;
 using PuntoDeventa.Data.DTO.CatalogueProduct;
+using PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms.Internals;
 
 namespace PuntoDeventa.Data.Mappers
@@ -42,8 +45,6 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
-
-
 
         public static CategoryDTO ToCategoryDTO(this Category model)
         {
@@ -284,6 +285,22 @@ namespace PuntoDeventa.Data.Mappers
 
             else
                 return null;
+        }
+
+        public static IssuingCompany ToIssuingCompany(this EcommerceDTO dto)
+        {
+            var activityEconomic = dto.EconomicActivities.FirstOrDefault(p => p.IsMain.Equals(true));
+            return new IssuingCompany()
+            {
+                Address = dto.Address,
+                AddressCode = dto.CdgSIISucur,
+                Commune = dto.Commune,
+                EconomicActivityCode = activityEconomic!.Code,
+                Name = dto.Name,
+                Phone = dto.Phone,
+                Rut = dto.Rut,
+                Turn = activityEconomic!.Turn
+            };
         }
 
     }

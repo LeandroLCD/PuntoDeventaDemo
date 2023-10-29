@@ -187,7 +187,7 @@
                         </Grid>
 
                     </StackLayout>
-                    <Button Text="Ingresar" FontSize="14" Command="{Binding InsertSaleCommand}"  ></Button>
+                    <Button Text="Ingresar" FontSize="14" Command="{Binding InsertSale}"  ></Button>
 
 
                 </StackLayout>

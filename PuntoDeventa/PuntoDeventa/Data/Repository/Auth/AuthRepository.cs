@@ -122,12 +122,12 @@ namespace PuntoDeventa.Data.Repository.Auth
 
         public RemembermeUser GetIsRememberme()
         {
-            return _dataPreferences.GetRemembermeUser().ToRemembermeUser();
+            return _dataPreferences.GetRememberMeUser().ToRemembermeUser();
         }
 
         public void SetIsRememberme(RemembermeUser user)
         {
-            _dataPreferences.SetRemembermeUser(user.ToRemembermeUserDTO());
+            _dataPreferences.SetRememberMeUser(user.ToRemembermeUserDTO());
         }
 
 

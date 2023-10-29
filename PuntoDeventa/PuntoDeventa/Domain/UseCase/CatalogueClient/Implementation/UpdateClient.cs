@@ -7,11 +7,11 @@
     using Xamarin.Forms;
     internal class UpdateClient : BaseCatalogueClientUseCase, IUpdateClient
     {
-        private ICatalogueClienteRepository _repository;
+        private ICatalogueClientRepository _repository;
 
         public UpdateClient()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
 
         public async Task<CatalogeState> UpDateClient(Client client)

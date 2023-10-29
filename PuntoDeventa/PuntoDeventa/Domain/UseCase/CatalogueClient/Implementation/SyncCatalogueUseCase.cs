@@ -5,16 +5,16 @@ namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
 {
     internal class SyncCatalogueUseCase : ISyncCatalogueUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private ICatalogueClientRepository _repository;
 
         public SyncCatalogueUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
 
         public virtual async void Sync()
         {
-             await _repository.Sync();
+            await _repository.Sync();
         }
     }
 }

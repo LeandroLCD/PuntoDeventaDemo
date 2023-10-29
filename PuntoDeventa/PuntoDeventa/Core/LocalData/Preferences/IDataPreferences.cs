@@ -1,4 +1,5 @@
-﻿using PuntoDeventa.Data.DTO.Auth;
+﻿using PuntoDeventa.Data.DTO;
+using PuntoDeventa.Data.DTO.Auth;
 
 namespace PuntoDeventa.Core.LocalData.Preferences
 {
@@ -6,10 +7,13 @@ namespace PuntoDeventa.Core.LocalData.Preferences
     {
         UserDataDTO GetUserData();
 
-        RemembermeUserDTO GetRemembermeUser();
+        RemembermeUserDTO GetRememberMeUser();
+
+        EcommerceDTO GetEcommerceData();
+        void SetEcommerceData(EcommerceDTO ecommerce);
 
         void SetUserData(UserDataDTO user);
 
-        void SetRemembermeUser(RemembermeUserDTO user);
+        void SetRememberMeUser(RemembermeUserDTO user);
     }
 }

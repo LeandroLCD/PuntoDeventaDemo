@@ -8,7 +8,12 @@ namespace PuntoDeventa.Core.Network
 {
     internal class DataStore : IDataStore
     {
-        readonly HttpClient _httpClient = new HttpClient();
+        private static HttpClient _httpClient;
+
+        public DataStore()
+        {
+            _httpClient = new HttpClient();
+        }
 
         public async Task<HttpResponseMessage> GetAsync<T>(Uri url)
         {
@@ -24,8 +29,8 @@ namespace PuntoDeventa.Core.Network
             {
                 NullValueHandling = NullValueHandling.Ignore
             };
-            string body = JsonConvert.SerializeObject(DTO, Settings);
-            StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+            var body = JsonConvert.SerializeObject(DTO, Settings);
+            var content = new StringContent(body, Encoding.UTF8, "application/json");
             return await _httpClient.PostAsync(url, content);
 
         }
@@ -36,8 +41,8 @@ namespace PuntoDeventa.Core.Network
             {
                 NullValueHandling = NullValueHandling.Ignore
             };
-            string body = JsonConvert.SerializeObject(DTO, Settings);
-            StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+            var body = JsonConvert.SerializeObject(DTO, Settings);
+            var content = new StringContent(body, Encoding.UTF8, "application/json");
             return await _httpClient.PutAsync(url, content);
 
         }

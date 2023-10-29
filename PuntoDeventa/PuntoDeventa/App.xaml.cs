@@ -36,7 +36,7 @@ namespace PuntoDeventa
 
         private async void TestCatalogueClient()
         {
-            var repository = DependencyService.Get<ICatalogueClienteRepository>();
+            var repository = DependencyService.Get<ICatalogueClientRepository>();
 
             await foreach (var catalogue in repository.GetCatalogueAsync())
             {

@@ -4,7 +4,6 @@ using Android.Graphics.Drawables;
 using Android.Views.InputMethods;
 using PuntoDeventa.Droid.Renderer;
 using PuntoDeventa.UI.Controls;
-using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;

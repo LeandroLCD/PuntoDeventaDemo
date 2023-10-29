@@ -8,11 +8,11 @@
 
     internal class AddClientUseCase : BaseCatalogueClientUseCase, IAddClientUseCase
     {
-        private readonly ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClientRepository _repository;
 
         public AddClientUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         public async Task<CatalogeState> Insert(Client client)
         {

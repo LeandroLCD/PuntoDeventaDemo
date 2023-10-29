@@ -7,7 +7,7 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
 {
     internal class SyncDataUseCase : ISyncDataUseCase
     {
-        private ICategoryProductRepository _repository;
+        private readonly ICategoryProductRepository _repository;
         private readonly ISyncCatalogueUseCase _useCase;
 
         public SyncDataUseCase()
@@ -18,12 +18,12 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
 
         public void Sync(int reStarInMinutes = 10)
         {
-            _repository.SyncData();
-            _useCase.Sync();
+            _repository?.SyncData();
+            _useCase?.Sync();
             Device.StartTimer(TimeSpan.FromMinutes(reStarInMinutes), () =>
             {
 
-                _repository.SyncData();
+                _repository?.SyncData();
                 return true;
             });
         }

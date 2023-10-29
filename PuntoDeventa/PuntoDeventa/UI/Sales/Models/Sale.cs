@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PuntoDeventa.UI.CatalogueClient.Model;
+﻿using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace PuntoDeventa.UI.Sales.Models
 {
-    internal class Sale
+    public class Sale
     {
-        public DateTime DateSale{ get; set; }
+        [Required(ErrorMessage = "La Fecha es requerida")]
+        public DateTime DateSale { get; set; }
 
-        public Client Client{ get; set; }
+        [Required(ErrorMessage = "Debes seleccionar un cliente")]
+        public Client Client { get; set; }
 
         public EconomicActivities SelectEconomicActivities { get; set; }
 
@@ -21,8 +22,25 @@ namespace PuntoDeventa.UI.Sales.Models
         public double TotalNeto => Products.Sum(p => p.SubTotal);
 
         //TODO iva from Firebase
-        public double TotalSale => Products.Sum(p => p.SubTotal) * 1.19;
 
+
+        [CustomValidation(typeof(Sale), "ValidateProducts")]
         public IEnumerable<ProductSales> Products { get; set; }
+
+        private static ValidationResult ValidateProducts(IEnumerable<ProductSales> products, ValidationContext validationContext)
+        {
+            if (products == null || !products.Any())
+            {
+                return new ValidationResult("Debes agregar al menos un producto a la venta.");
+            }
+
+            return ValidationResult.Success;
+        }
+
+        public int TotalSale(float iva)
+        {
+            return (int)Math.Floor(d: TotalNeto * (1 + iva));
+        }
+
     }
 }

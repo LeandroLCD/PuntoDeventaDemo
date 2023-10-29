@@ -10,11 +10,11 @@
 
     internal class GetRroutesUseCase : IGetRoutesUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private ICatalogueClientRepository _repository;
 
         public GetRroutesUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         /// <summary>
         /// Retorna un Data Flow de Rutas con sus clientes, requiere un CancellationToken y un tiempo en 

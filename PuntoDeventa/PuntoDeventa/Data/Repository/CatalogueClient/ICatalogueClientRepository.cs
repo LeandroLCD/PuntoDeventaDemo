@@ -3,10 +3,11 @@ using PuntoDeventa.UI.CatalogueClient.Models;
 using PuntoDeventa.UI.CatalogueClient.States;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PuntoDeventa.Data.DTO;
 
 namespace PuntoDeventa.Data.Repository.CatalogueClient
 {
-    public interface ICatalogueClienteRepository
+    public interface ICatalogueClientRepository
     {
         Task<CatalogeState> InsertRoute(SalesRoutes item);
         Task<CatalogeState> InsertClient(Client item);

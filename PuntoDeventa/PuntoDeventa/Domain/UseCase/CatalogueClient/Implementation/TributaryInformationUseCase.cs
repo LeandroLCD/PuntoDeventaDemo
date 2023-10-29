@@ -8,11 +8,11 @@
 
     internal class TributaryInformationUseCase : BaseCatalogueClientUseCase, ITributaryInformationUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClientRepository _repository;
 
         public TributaryInformationUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         public async Task<CatalogeState> Get(Rut rut)
         {

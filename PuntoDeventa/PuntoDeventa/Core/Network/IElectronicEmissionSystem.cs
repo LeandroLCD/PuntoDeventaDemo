@@ -7,5 +7,6 @@ namespace PuntoDeventa.Core.Network
     public interface IElectronicEmissionSystem
     {
         Task<HttpResponseMessage> GetAsync(string ApiKey, Uri url);
+        Task<HttpResponseMessage> PostAsync<T>(T model, string ApiKey, Uri url);
     }
 }

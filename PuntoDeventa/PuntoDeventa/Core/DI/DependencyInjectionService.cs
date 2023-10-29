@@ -4,6 +4,7 @@ using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Data.Repository.CatalogueClient;
 using PuntoDeventa.Data.Repository.CategoryProduct;
+using PuntoDeventa.Data.Repository.EmissionSystem;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
@@ -60,12 +61,13 @@ namespace PuntoDeventa.Core.DI
         /// </summary>
         private void RegisterDataDependencies()
         {
+            
             _authRepository = new AuthRepository(DependencyService.Get<IDataPreferences>());
             DependencyService.RegisterSingleton<IAuthRepository>(_authRepository);
             DependencyService.RegisterSingleton<IUserRepository>(_authRepository);
             DependencyService.Register<ICategoryProductRepository, CategoryProductRepository>();
-
-            DependencyService.Register<ICatalogueClienteRepository, CatalogueClienteRepository>();
+            DependencyService.Register<IOpenFacturaRepository, OpenFacturaRepository>();
+            DependencyService.Register<ICatalogueClientRepository, CatalogueClientRepository>();
         }
         /// <summary>
         /// Registra las dependencias de la capa Domain utilizando DependencyService.

@@ -33,6 +33,7 @@ namespace PuntoDeventa.UI.CategoryProduct.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public string SkuCode => $"{Sku}_{UDM}";
         public long BarCode { get; set; }
 
         [Required(ErrorMessage = "El Sku es requerido.")]

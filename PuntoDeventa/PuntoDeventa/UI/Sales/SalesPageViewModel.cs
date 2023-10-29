@@ -1,10 +1,12 @@
-﻿using PuntoDeventa.Domain.Helpers;
+﻿using PuntoDeventa.Data.Repository.EmissionSystem;
+using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CatalogueClient;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.IU;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using PuntoDeventa.UI.Controls;
+using PuntoDeventa.UI.Sales.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,8 +14,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using PuntoDeventa.UI.Sales.Models;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Sales
@@ -370,9 +370,9 @@ namespace PuntoDeventa.UI.Sales
                 var product = (ProductSales)quantity.BindingContext;
 
                 var q = string.IsNullOrEmpty(quantity.Text) ? 0 : int.Parse(quantity.Text);
-                
+
                 var productTarget = GetProductSales.FirstOrDefault(p => p.Id == product.Id);
-                
+
                 productTarget?.Apply(() =>
                 {
                     if (productTarget.Equals(product)) return;
@@ -413,20 +413,20 @@ namespace PuntoDeventa.UI.Sales
             {
                 barCode?.Apply(() =>
                 {
-                  var length =  barCode.Text.Length;
+                    var length = barCode.Text.Length;
 
-                  if ((length <= 12 && !barCode.IsVisibleKeyboard) ||
-                      (length < 6 && barCode.IsVisibleKeyboard)) return;
+                    if ((length <= 12 && !barCode.IsVisibleKeyboard) ||
+                        (length < 6 && barCode.IsVisibleKeyboard)) return;
 
-                  var productList = GetCategories.SelectMany(c => c.Products);
-                  var product = productList.FirstOrDefault(p =>
-                      p.BarCode.ToString().Contains(barCode.Text) ||
-                      p.SkuCode.Contains(barCode.Text.ToUpper()) ||
-                      p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
-                  if (product.IsNull())
-                      return;
-                  AddProduct(product);
-                  barCode.Text = string.Empty;
+                    var productList = GetCategories.SelectMany(c => c.Products);
+                    var product = productList.FirstOrDefault(p =>
+                        p.BarCode.ToString().Contains(barCode.Text) ||
+                        p.SkuCode.Contains(barCode.Text.ToUpper()) ||
+                        p.Name.ToUpper().Contains(barCode.Text.ToUpper()));
+                    if (product.IsNull())
+                        return;
+                    AddProduct(product);
+                    barCode.Text = string.Empty;
 
 
 
@@ -437,19 +437,29 @@ namespace PuntoDeventa.UI.Sales
 
         }
 
-        private void InsertMethods(object obj)
+        private async void InsertMethods(object obj)
         {
+            var branch = ClientSelect.BranchOffices[0];
+            var acti = ClientSelect.EconomicActivities[0];
             NewSale = new Sale()
             {
                 Client = ClientSelect,
-                SelectBranchOffices = ClientSelect.BranchOffices
-                    .FirstOrDefault(b=> b.IsMatrixHouse.Equals(true)),
-                SelectEconomicActivities = ClientSelect.EconomicActivities.FirstOrDefault(
-                    a=> a.IsMain.Equals(true)),
+                SelectBranchOffices = branch,
+                SelectEconomicActivities = acti ,
                 DateSale = DateDte,
                 Products = GetProductSales
             };
 
+            var repository = new OpenFacturaRepository();
+
+             var state = await repository.ToEmitDte(new PaymentSales()
+            {
+                Sale = NewSale,
+                DocumentType = DocumentType.Factura,
+                PaymentMethod = PaymentMethod.Credit
+
+            });
+            Console.WriteLine(state);
             //TODO Construir useCase
             /*
              _caseUse.Inset(NewSale, async () =>
@@ -482,11 +492,11 @@ namespace PuntoDeventa.UI.Sales
                 Debug.Assert(product != null, nameof(product) + " != null");
 
                 product.Quantity += 1;
-                
+
                 var productTarget = ProductsSales.FirstOrDefault(s => s.Id == productSource.Id);
-                
+
                 Debug.Assert(productTarget != null, nameof(productTarget) + " != null");
-                
+
                 var index = _productSales.IndexOf(productTarget);
 
                 productTarget.Quantity += 1;
@@ -494,7 +504,7 @@ namespace PuntoDeventa.UI.Sales
                 _productSales[index] = productTarget.Clone<ProductSales>();
 
                 NotifyPropertyChanged(nameof(ProductsSales));
-                
+
             }
             else
             {

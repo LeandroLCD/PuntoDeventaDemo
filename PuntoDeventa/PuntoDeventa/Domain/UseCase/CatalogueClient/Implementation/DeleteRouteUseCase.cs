@@ -8,11 +8,11 @@
 
     internal class DeleteRouteUseCase : BaseCatalogueClientUseCase, IDeleteRouteUseCase
     {
-        private readonly ICatalogueClienteRepository _repository;
+        private readonly ICatalogueClientRepository _repository;
 
         public DeleteRouteUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         public async Task<CatalogeState> DeleteRoute(SalesRoutes route)
         {

@@ -1,4 +1,6 @@
-﻿namespace PuntoDeventa.Data.Repository.CatalogueClient
+﻿using System.Net.Http;
+
+namespace PuntoDeventa.Data.Repository.CatalogueClient
 {
     using PuntoDeventa.Core.LocalData.DataBase;
     using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
@@ -19,21 +21,21 @@
     using System.Threading.Tasks;
     using Xamarin.Forms;
 
-    internal class CatalogueClienteRepository : BaseRepository, ICatalogueClienteRepository
+    internal class CatalogueClientRepository : BaseRepository, ICatalogueClientRepository
     {
-        private IDataStore _dataStore;
+        private readonly IDataStore _dataStore;
         private IDataPreferences _dataPreferences;
         private IDataAccessObject _DAO;
         private string tokenID;
-        private IElectronicEmissionSystem _emisionSystem;
+        private readonly IElectronicEmissionSystem _emissionSystem;
 
-        public CatalogueClienteRepository()
+        public CatalogueClientRepository()
         {
             _dataStore = DependencyService.Get<IDataStore>();
             _dataPreferences = DependencyService.Get<IDataPreferences>();
             _DAO = DependencyService.Get<IDataAccessObject>();
             tokenID = _dataPreferences.GetUserData().IdToken;
-            _emisionSystem = DependencyService.Get<IElectronicEmissionSystem>();
+            _emissionSystem = DependencyService.Get<IElectronicEmissionSystem>();
         }
 
         public async Task<CatalogeState> InsertRoute(SalesRoutes item)
@@ -65,7 +67,7 @@
             var resultType = await MakeCallNetwork<ClientDTO>(() =>
             {
                 //TODO falta cargar apikey desde EcommerceData
-                return _emisionSystem.GetAsync("928e15a2d14d4a6292345f04960f4bd3", new Uri(Path.Combine(Properties.Resources.BaseUrlEelectrinicEmision, $"taxpayer", rut.NumberDv)));
+                return _emissionSystem.GetAsync("928e15a2d14d4a6292345f04960f4bd3", new Uri(Path.Combine(Properties.Resources.BaseUrlEelectrinicEmision, $"taxpayer", rut.NumberDv)));
             });
 
             return ResultTypeToCatalogeState(OperationDTO.InsertOrUpdate, new Client(), resultType);
@@ -143,8 +145,8 @@
 
         public async Task<bool> Sync()
         {
-            
-            
+
+
             var routeResultTask = _dataStore.GetAsync<SalesRoutesDTO>(GetUri("CatalogueClient/SalesRoutes"));
 
             var clientResultTask = _dataStore.GetAsync<ClientDTO>(GetUri("CatalogueClient/Clients"));
@@ -196,7 +198,7 @@
                 return await Task.FromResult(false);
             }
 
-            
+
 
 
         }
@@ -278,5 +280,7 @@
             }
             return new CatalogeState.Error("Ruta no encontrada");
         }
+
+       
     }
 }

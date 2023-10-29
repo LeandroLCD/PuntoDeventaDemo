@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PuntoDeventa.Core.Network
@@ -17,6 +19,22 @@ namespace PuntoDeventa.Core.Network
             _httpClient.DefaultRequestHeaders.Add("apikey", ApiKey);
 
             return await _httpClient.GetAsync(url);
+
+        }
+
+        public Task<HttpResponseMessage> PostAsync<T>(T model, string ApiKey, Uri url)
+        {
+            if (string.IsNullOrEmpty(ApiKey))
+            {
+                throw new Exception("No se logro obtener el Api Key del contribuyente.");
+            }
+            _httpClient.DefaultRequestHeaders.Add("apikey", ApiKey);
+
+            var body = JsonConvert.SerializeObject(model);
+
+            var content = new StringContent(body, Encoding.UTF8, "application/json");
+
+            return _httpClient.PostAsync(url, content);
 
         }
     }
