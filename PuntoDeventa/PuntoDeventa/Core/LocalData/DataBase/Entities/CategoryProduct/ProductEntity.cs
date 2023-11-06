@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
 
-namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
+namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct
 {
     public class ProductEntity
     {

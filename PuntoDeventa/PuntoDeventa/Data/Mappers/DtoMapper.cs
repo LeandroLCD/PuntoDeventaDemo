@@ -1,4 +1,5 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
 using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Data.DTO.CatalogueClient;
@@ -9,7 +10,6 @@ using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using System.Collections.Generic;
-using System.Linq;
 using Xamarin.Forms.Internals;
 
 namespace PuntoDeventa.Data.Mappers
@@ -287,9 +287,9 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
-        public static IssuingCompany ToIssuingCompany(this EcommerceDTO dto)
+        public static IssuingCompany ToIssuingCompany(this EcommerceDTO dto, int ecoActIndex = 0)
         {
-            var activityEconomic = dto.EconomicActivities.FirstOrDefault(p => p.IsMain.Equals(true));
+            var activityEconomic = dto.EconomicActivities[ecoActIndex];
             return new IssuingCompany()
             {
                 Address = dto.Address,
@@ -299,7 +299,7 @@ namespace PuntoDeventa.Data.Mappers
                 Name = dto.Name,
                 Phone = dto.Phone,
                 Rut = dto.Rut,
-                Turn = activityEconomic!.Turn
+                Turn = activityEconomic!.Turn,
             };
         }
 

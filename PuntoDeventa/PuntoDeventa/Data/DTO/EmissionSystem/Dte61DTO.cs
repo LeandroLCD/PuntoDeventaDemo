@@ -6,7 +6,7 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem
 {
     internal class Dte61DTO : DteDTO
     {
-        
+
 
         [JsonProperty("Referencia")]
         public Reference[] References { get; set; }

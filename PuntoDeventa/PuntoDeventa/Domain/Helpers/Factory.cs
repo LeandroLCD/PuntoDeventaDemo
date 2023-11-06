@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace PuntoDeventa.Domain.Helpers
@@ -30,6 +31,14 @@ namespace PuntoDeventa.Domain.Helpers
             var base64String = Convert.ToBase64String(bytes);
 
             return base64String;
+        }
+
+        public static byte[] ToBytes(this Stream stream)
+        {
+            stream.Position = 0L;
+            byte[] array = new byte[stream.Length];
+            stream.Read(array, 0, array.Length);
+            return array;
         }
     }
 }

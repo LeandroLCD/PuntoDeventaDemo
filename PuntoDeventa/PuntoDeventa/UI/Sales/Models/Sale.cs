@@ -19,7 +19,7 @@ namespace PuntoDeventa.UI.Sales.Models
 
         public BranchOffices SelectBranchOffices { get; set; }
 
-        public double TotalNeto => Products.Sum(p => p.SubTotal);
+        public int TotalNeto => (int)Math.Floor(Products.Sum(p => p.SubTotal));
 
         //TODO iva from Firebase
 
@@ -37,7 +37,7 @@ namespace PuntoDeventa.UI.Sales.Models
             return ValidationResult.Success;
         }
 
-        public int TotalSale(float iva)
+        public int TotalSale(double iva)
         {
             return (int)Math.Floor(d: TotalNeto * (1 + iva));
         }

@@ -2,7 +2,7 @@
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header
 {
-    internal class Totals
+    public class Totals
     {
         [JsonProperty("MntNeto")]
         public int Net { get; set; }

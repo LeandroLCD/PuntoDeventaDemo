@@ -11,13 +11,10 @@ namespace PuntoDeventa.UI.Menu
         public MenuAppShell()
         {
             RegisterRoutes();
-            Sync();
             InitializeComponent();
-        }
-        private static void Sync()
-        {
             var useCase = DependencyService.Get<ISyncDataUseCase>();
             useCase.Sync();
+
         }
 
         private static void RegisterRoutes()
@@ -25,7 +22,7 @@ namespace PuntoDeventa.UI.Menu
             #region Sale
             Routing.RegisterRoute(nameof(SalesPage), typeof(SalesPage));
 
-            //Routing.RegisterRoute(nameof(PaymentPage), typeof(PaimentPage));
+            //Routing.RegisterRoute(nameof(PaymentPage), typeof(PaymentPage));
             #endregion
             #region Categories
             Routing.RegisterRoute(nameof(CategoryHome), typeof(CategoryHome));

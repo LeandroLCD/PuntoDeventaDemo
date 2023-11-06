@@ -3,7 +3,7 @@ using PuntoDeventa.Data.DTO.EmissionSystem.Dtes;
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem
 {
-    internal class DocumentElectronicDTO
+    public class DocumentElectronicDTO
     {
         [JsonProperty("response")]
         public string[] ResponseStrings { get; set; }

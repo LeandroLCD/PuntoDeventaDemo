@@ -2,6 +2,7 @@
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.DTO.Auth;
+using PuntoDeventa.Data.DTO.EmissionSystem.Error;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using System;
@@ -44,6 +45,18 @@ namespace PuntoDeventa.Data.Repository
                             //TODO mejorar logica de reflexion 
                             //await MakeCallNetwork<T>(apiCallFunction);
                         }
+                        break;
+                    case HttpStatusCode.BadRequest:
+                        if (jsonResult.Contains("OF-"))
+                        {
+                            var error = JsonConvert.DeserializeObject<CatchErrorDTO>(jsonResult);
+                            resultType.Errors.Add(error.IsNotNull()
+                                ? new ErrorMessage("Error del Facturador de Mercado", error.Error.ToString())
+                                : new ErrorMessage("Error No Controlado", jsonResult));
+                        }
+                        break;
+
+                    case HttpStatusCode.ServiceUnavailable:
                         break;
 
                     default:

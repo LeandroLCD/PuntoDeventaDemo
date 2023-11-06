@@ -1,7 +1,8 @@
-﻿namespace PuntoDeventa.Data.Repository.CategoryProduct
+﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
+
+namespace PuntoDeventa.Data.Repository.CategoryProduct
 {
     using PuntoDeventa.Core.LocalData.DataBase;
-    using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
     using PuntoDeventa.Core.LocalData.Preferences;
     using PuntoDeventa.Core.Network;
     using PuntoDeventa.Data.DTO;

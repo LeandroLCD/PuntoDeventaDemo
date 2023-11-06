@@ -1,4 +1,6 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.Sales;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 using System;
@@ -65,7 +67,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _connection.Close();
         }
 
         private void CreateTables()
@@ -77,6 +79,8 @@ namespace PuntoDeventa.Core.LocalData.DataBase
             _connection.CreateTable<ClientEntity>();
             _connection.CreateTable<EconomicActivitiesEntity>();
             _connection.CreateTable<BranchOfficesEntity>();
+
+            _connection.CreateTable<PendingDocumentEntity>();
         }
     }
 }

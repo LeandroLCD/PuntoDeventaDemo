@@ -2,7 +2,7 @@
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes
 {
-    internal class Receiver
+    public class Receiver
     {
         [JsonProperty("RUTRecep")]
         public string Rut { get; set; }
@@ -10,7 +10,7 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes
         [JsonProperty("RznSocRecep")]
         public string Name { get; set; }
 
-        [JsonProperty("RUTRecep")]
+        [JsonProperty("GiroRecep")]
         public string Turn { get; set; }
 
         [JsonProperty("DirRecep")]

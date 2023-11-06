@@ -25,7 +25,7 @@ namespace PuntoDeventa.Droid
             LoadApplication(new App());
 
 
-            Window?.SetSoftInputMode(SoftInput.StateAlwaysHidden);
+            // Window?.SetSoftInputMode(SoftInput.StateAlwaysHidden);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

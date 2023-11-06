@@ -9,10 +9,10 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Detail
         [JsonProperty("NroLinDet")]
         public int Id { get; set; }
 
-        [JsonProperty("NroLinDet")]
+        [JsonProperty("CdgItem")]
         public List<ItemCode> CdgItem { get; set; }
 
-        [JsonProperty("NroLinDet")]
+        [JsonProperty("NmbItem")]
         public string NmbItem { get; set; }
 
         [JsonProperty("QtyItem")]

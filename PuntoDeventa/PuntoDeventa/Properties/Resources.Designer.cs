@@ -72,9 +72,9 @@ namespace PuntoDeventa.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a https://dev-api.haulmer.com/v2/dte/.
         /// </summary>
-        internal static string BaseUrlEelectrinicEmision {
+        internal static string BaseUrlEelectronicEmission {
             get {
-                return ResourceManager.GetString("BaseUrlEelectrinicEmision", resourceCulture);
+                return ResourceManager.GetString("BaseUrlEelectronicEmission", resourceCulture);
             }
         }
         

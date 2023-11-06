@@ -2,7 +2,7 @@
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes
 {
-    internal class Resolution
+    public class Resolution
     {
         [JsonProperty("fecha")]
         public string Date { get; set; }

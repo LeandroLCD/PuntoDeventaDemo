@@ -12,25 +12,28 @@
 
         public sealed class Loading : SalesState
         {
+
             private Loading() { }
             public static Loading Instance { get; } = new Loading();
         }
 
         public sealed class Success : SalesState
         {
+            private Success(object data) { Data = data; }
             public object Data { get; }
-            public Success(object data)
+            public static Success Instance(object data)
             {
-                Data = data;
+                return new Success(data);
             }
         }
 
         public sealed class Error : SalesState
         {
             public string Message { get; }
-            public Error(string message)
+            private Error(string message) { Message = message; }
+            public static Error Instance(string message)
             {
-                Message = message;
+                return new Error(message);
             }
         }
     }

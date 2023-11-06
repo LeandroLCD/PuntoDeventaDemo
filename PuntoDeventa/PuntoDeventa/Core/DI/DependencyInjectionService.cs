@@ -1,4 +1,5 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase;
+using PuntoDeventa.Core.LocalData.Files;
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.Repository.Auth;
@@ -12,6 +13,8 @@ using PuntoDeventa.Domain.UseCase.CatalogueClient;
 using PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
+using PuntoDeventa.Domain.UseCase.Sales;
+using PuntoDeventa.Domain.UseCase.Sales.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
 using Syncfusion.Licensing;
@@ -48,6 +51,7 @@ namespace PuntoDeventa.Core.DI
         private void RegisterCoreDependencies()
         {
             //Registro de dependencia DataPreferences
+            DependencyService.Register<IFileManager, FileManager>();
             DependencyService.Register<IDataPreferences, DataPreferences>();
             DependencyService.Register<IDataAccessObject, DataAccessObject>();
             DependencyService.Register<IDataStore, DataStore>();
@@ -61,13 +65,13 @@ namespace PuntoDeventa.Core.DI
         /// </summary>
         private void RegisterDataDependencies()
         {
-            
+
             _authRepository = new AuthRepository(DependencyService.Get<IDataPreferences>());
             DependencyService.RegisterSingleton<IAuthRepository>(_authRepository);
             DependencyService.RegisterSingleton<IUserRepository>(_authRepository);
             DependencyService.Register<ICategoryProductRepository, CategoryProductRepository>();
-            DependencyService.Register<IOpenFacturaRepository, OpenFacturaRepository>();
             DependencyService.Register<ICatalogueClientRepository, CatalogueClientRepository>();
+            DependencyService.Register<IOpenFacturaRepository, OpenFacturaRepository>();
         }
         /// <summary>
         /// Registra las dependencias de la capa Domain utilizando DependencyService.
@@ -115,6 +119,13 @@ namespace PuntoDeventa.Core.DI
 
             DependencyService.Register<ITributaryInformationUseCase, TributaryInformationUseCase>();
             DependencyService.Register<IUpdateClient, UpdateClient>();
+
+            #endregion
+
+            #region Sales
+            DependencyService.Register<IEmitFacturaUseCase, EmitFacturaUseCase>();
+            DependencyService.Register<IEmitNotaDePedidoUseCase, InsertNotaDePedidoUseCase>();
+            DependencyService.Register<ISyncInformationTributaryUseCase, SyncInformationTributaryUseCase>();
 
             #endregion
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes
 {
-    internal abstract class DteDTO
+    public abstract class DteDTO
     {
         [JsonIgnore]
         public string Id { get; set; }

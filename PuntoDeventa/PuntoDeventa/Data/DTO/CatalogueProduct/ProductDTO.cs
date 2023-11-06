@@ -33,5 +33,8 @@ namespace PuntoDeventa.Data.DTO.CatalogueProduct
 
         [JsonProperty("PriceGross")]
         public double PriceGross { get; set; }
+
+        [JsonProperty("Stock")]
+        public int Stock { get; set; }
     }
 }

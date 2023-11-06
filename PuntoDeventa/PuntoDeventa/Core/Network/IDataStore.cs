@@ -11,6 +11,8 @@ namespace PuntoDeventa.Core.Network
         Task<HttpResponseMessage> PostAsync<T>(T dto, Uri url);
         Task<HttpResponseMessage> PutAsync<T>(T dto, Uri url);
 
+        Task<HttpResponseMessage> PatchAsync<T>(T dto, Uri url);
+
         Task<HttpResponseMessage> DeleteAsync<T>(Uri url);
     }
 }

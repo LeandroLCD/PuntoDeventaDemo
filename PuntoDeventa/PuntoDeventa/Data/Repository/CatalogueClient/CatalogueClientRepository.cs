@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace PuntoDeventa.Data.Repository.CatalogueClient
+﻿namespace PuntoDeventa.Data.Repository.CatalogueClient
 {
     using PuntoDeventa.Core.LocalData.DataBase;
     using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
@@ -67,7 +65,7 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
             var resultType = await MakeCallNetwork<ClientDTO>(() =>
             {
                 //TODO falta cargar apikey desde EcommerceData
-                return _emissionSystem.GetAsync("928e15a2d14d4a6292345f04960f4bd3", new Uri(Path.Combine(Properties.Resources.BaseUrlEelectrinicEmision, $"taxpayer", rut.NumberDv)));
+                return _emissionSystem.GetAsync(new Uri(Path.Combine(Properties.Resources.BaseUrlEelectronicEmission, $"taxpayer", rut.NumberDv)));
             });
 
             return ResultTypeToCatalogeState(OperationDTO.InsertOrUpdate, new Client(), resultType);
@@ -281,6 +279,6 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
             return new CatalogeState.Error("Ruta no encontrada");
         }
 
-       
+
     }
 }

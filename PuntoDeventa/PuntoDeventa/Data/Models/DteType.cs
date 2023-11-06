@@ -4,6 +4,7 @@
     {
         Factura = 33,
         NotaDeCredito = 61,
-        NotaDeDebito = 56
+        NotaDeDebito = 56,
+        NotaDePedido = 0
     }
 }

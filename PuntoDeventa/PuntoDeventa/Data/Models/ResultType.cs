@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using PuntoDeventa.Data.DTO;
 
 namespace PuntoDeventa.Domain.Models
 {

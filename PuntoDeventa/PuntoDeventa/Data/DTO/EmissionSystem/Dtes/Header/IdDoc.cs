@@ -9,7 +9,7 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header
         public IdDoc(DteType type, DateTime date, int frmPago, int tpoTranCompra = 1, int tpoTranVenta = 1)
         {
             DteNumber = (int)type;
-            FchEmis = $"{date.Year}-{date.Month}-{date.Day}";
+            FchEmis = $"{date.Year}-{date.Month:D2}-{date.Day:D2}";
             TpoTranCompra = tpoTranCompra;
             TpoTranVenta = tpoTranVenta;
             FmaPago = frmPago;

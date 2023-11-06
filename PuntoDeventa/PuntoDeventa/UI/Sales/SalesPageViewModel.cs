@@ -1,4 +1,5 @@
-﻿using PuntoDeventa.Data.Repository.EmissionSystem;
+﻿using PuntoDeventa.Data.Models;
+using PuntoDeventa.Data.Repository.EmissionSystem;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CatalogueClient;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
@@ -23,6 +24,7 @@ namespace PuntoDeventa.UI.Sales
         #region Fields
         private readonly IGetRoutesUseCase _routesUseCase;
         private readonly IGetCategoryListUseCase _getCategoriesUseCase;
+        private readonly IOpenFacturaRepository repository;
         private Client _clientSelect;
         private ObservableCollection<SalesRoutes> _salesRoutesList;
         private SalesRoutes _salesRoutesSelect;
@@ -36,7 +38,6 @@ namespace PuntoDeventa.UI.Sales
         private ObservableCollection<string> _brands;
         private ObservableCollection<Category> _categoryProductList;
         private Category _categorySelect;
-        private ObservableCollection<Client> _getClients;
         private ObservableCollection<Product> _getProducts;
         private int _productCount;
         private ObservableCollection<ProductSales> _productSales;
@@ -51,7 +52,7 @@ namespace PuntoDeventa.UI.Sales
         {
             _routesUseCase = DependencyService.Get<IGetRoutesUseCase>();
             _getCategoriesUseCase = DependencyService.Get<IGetCategoryListUseCase>();
-
+            repository = DependencyService.Get<IOpenFacturaRepository>();
             InitializeProperties();
         }
         #endregion
@@ -445,17 +446,15 @@ namespace PuntoDeventa.UI.Sales
             {
                 Client = ClientSelect,
                 SelectBranchOffices = branch,
-                SelectEconomicActivities = acti ,
+                SelectEconomicActivities = acti,
                 DateSale = DateDte,
                 Products = GetProductSales
             };
 
-            var repository = new OpenFacturaRepository();
-
-             var state = await repository.ToEmitDte(new PaymentSales()
+            var state = await repository.EmitFactura(new PaymentSales()
             {
                 Sale = NewSale,
-                DocumentType = DocumentType.Factura,
+                DocumentType = DteType.Factura,
                 PaymentMethod = PaymentMethod.Credit
 
             });

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PuntoDeventa.Data.DTO.EmissionSystem.Dtes;
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem
 {
-    internal class EmissionReposeDTO
+    public class EmissionReposeDTO
     {
         [JsonProperty("TOKEN")] public string Token { get; set; }
 
@@ -18,7 +16,9 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem
         [JsonProperty("TIMBRE")] public string Timbre { get; set; }
 
         [JsonProperty("FOLIO")] public int Folio { get; set; }
-        
+
+        [JsonProperty("RESOLUCION")] public Resolution Resolution { get; set; }
+
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header
 {
-    internal class HeaderDTO
+    public class HeaderDTO
     {
         [JsonProperty("IdDoc")]
         public IdDoc IdDoc { get; set; }

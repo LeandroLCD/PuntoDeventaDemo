@@ -3,7 +3,6 @@ using PuntoDeventa.UI.CatalogueClient.Models;
 using PuntoDeventa.UI.CatalogueClient.States;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PuntoDeventa.Data.DTO;
 
 namespace PuntoDeventa.Data.Repository.CatalogueClient
 {

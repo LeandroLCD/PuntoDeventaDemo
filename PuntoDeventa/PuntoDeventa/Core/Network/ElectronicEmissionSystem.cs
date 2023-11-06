@@ -1,40 +1,67 @@
 ﻿using Newtonsoft.Json;
+using PuntoDeventa.Core.LocalData.Preferences;
+using PuntoDeventa.Data.DTO;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PuntoDeventa.Core.Network
 {
     internal class ElectronicEmissionSystem : IElectronicEmissionSystem
     {
-        private readonly HttpClient _httpClient = new HttpClient();
-        public async Task<HttpResponseMessage> GetAsync(string ApiKey, Uri url)
+        private static HttpClient _httpClient;
+        private readonly EcommerceDTO _ecommerceData;
+
+        public ElectronicEmissionSystem()
         {
-            if (string.IsNullOrEmpty(ApiKey))
-            {
-                throw new Exception("No se logro obtener el Api Key del contribuyente.");
-            }
+            var preferences = DependencyService.Get<IDataPreferences>();
+            _ecommerceData = preferences.GetEcommerceData();
+            _httpClient = new HttpClient();
 
-            _httpClient.DefaultRequestHeaders.Add("apikey", ApiKey);
-
-            return await _httpClient.GetAsync(url);
 
         }
-
-        public Task<HttpResponseMessage> PostAsync<T>(T model, string ApiKey, Uri url)
+        public ElectronicEmissionSystem(HttpClient client, IDataPreferences preferences)
         {
-            if (string.IsNullOrEmpty(ApiKey))
+            _httpClient = client;
+            _ecommerceData = preferences.GetEcommerceData();
+
+        }
+        public async Task<HttpResponseMessage> GetAsync(string apiKey, Uri url)
+        {
+            if (!_httpClient.DefaultRequestHeaders.Contains("apikey"))
             {
-                throw new Exception("No se logro obtener el Api Key del contribuyente.");
-            }
-            _httpClient.DefaultRequestHeaders.Add("apikey", ApiKey);
+                _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
+
+            };
+            return await _httpClient.GetAsync(url);
+        }
+        public async Task<HttpResponseMessage> GetAsync(Uri url)
+        {
+            if (!_httpClient.DefaultRequestHeaders.Contains("apikey"))
+            {
+                _httpClient.DefaultRequestHeaders.Add("apikey", _ecommerceData.ApiKey);
+
+            };
+            return await _httpClient.GetAsync(url);
+        }
+
+        public Task<HttpResponseMessage> PostAsync<T>(T model, Uri url)
+        {
 
             var body = JsonConvert.SerializeObject(model);
 
             var content = new StringContent(body, Encoding.UTF8, "application/json");
 
             return _httpClient.PostAsync(url, content);
+
+        }
+
+        private void AddHeader()
+        {
+            if (_httpClient.DefaultRequestHeaders.Contains("apikey")) return;
+            _httpClient.DefaultRequestHeaders.Add("apikey", _ecommerceData.ApiKey);
 
         }
     }

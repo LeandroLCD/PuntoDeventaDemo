@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
-using PuntoDeventa.Data.Models;
+﻿using PuntoDeventa.Data.Models;
+using System.Collections.Generic;
 
 namespace PuntoDeventa.UI.Sales.Models
 {
@@ -8,7 +7,7 @@ namespace PuntoDeventa.UI.Sales.Models
     {
         public Sale Sale { get; set; }
 
-        public DocumentType DocumentType { get; set; }
+        public DteType DocumentType { get; set; }
 
 
         public PaymentMethod PaymentMethod { get; set; }

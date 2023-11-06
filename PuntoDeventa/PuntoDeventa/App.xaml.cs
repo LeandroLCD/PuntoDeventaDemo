@@ -2,6 +2,7 @@
 using PuntoDeventa.Core.LocalData.DataBase;
 using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
 using PuntoDeventa.Data.Repository.CatalogueClient;
+using PuntoDeventa.Data.Repository.EmissionSystem;
 using PuntoDeventa.UI.Auth;
 using System;
 using System.Linq;
@@ -13,16 +14,23 @@ namespace PuntoDeventa
     {
         public App()
         {
-            new DependencyInjectionService();
+            var unused = new DependencyInjectionService();
 
             InitializeComponent();
 
             MainPage = new LoginPage();
 
+            TestTributaryInformation();
 
             //TestCatalogueClient();
 
             //TestDAO();
+        }
+
+        private async void TestTributaryInformation()
+        {
+            var repo = DependencyService.Get<IOpenFacturaRepository>();
+            var tr = await repo.SyncInformationTributary();
         }
 
         private void TestDAO()
