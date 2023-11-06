@@ -111,7 +111,8 @@ namespace PuntoDeventa.UI.Auth
             {
                 IsPassword = !IsPassword;
             });
-            RecoveryCommand = new Command(async () => {
+            RecoveryCommand = new Command(async () =>
+            {
                 await App.Current.MainPage.DisplayAlert("404", "En construción", "ok");
             });
 
@@ -135,11 +136,12 @@ namespace PuntoDeventa.UI.Auth
             {
                 case AuthStates.Loaded loaded:
                     var userCurren = _getUserCurrent.GetUserData();
-                    userCurren?.Apply(() => {
-                        if (userCurren.IsAuthValid)
-                            App.Current.MainPage = new MenuAppShell();
-                        return;
-                    });
+                    if (userCurren.IsNotNull() && userCurren.IsAuthValid)
+                    {
+                        App.Current.MainPage = new MenuAppShell();
+                        break;
+                    }
+
 
 
                     var rememberme = _isRemembermeUseCase.GetRemembermeUser();

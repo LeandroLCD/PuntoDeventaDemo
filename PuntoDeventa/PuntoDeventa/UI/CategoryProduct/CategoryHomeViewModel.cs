@@ -1,6 +1,5 @@
 ﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
-using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
 using PuntoDeventa.IU;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using PuntoDeventa.UI.CategoryProduct.States;
@@ -37,7 +36,7 @@ namespace PuntoDeventa.UI.CategoryProduct
 
             _deleteCategoryUserCase = DependencyService.Get<IDeleteCategoryUseCase>();
 
-            
+
 
         }
 
@@ -157,30 +156,31 @@ namespace PuntoDeventa.UI.CategoryProduct
                 if (category.IsNotNull())
                 {
                     //CategoryHome/CategoryDetailPage?CategoryId=salknsadlnaslish&name=category
-                    
+
                     await Shell.Current.GoToAsync($"{nameof(CategoryDetailPage)}?CategoryId={category.Id}");
                 }
 
             });
 
-            DeleteCategoryCommand = new Command<Category>( async (category) => { 
-                if(category.IsNotNull() && category.ProductCount.Equals(0))
+            DeleteCategoryCommand = new Command<Category>(async (category) =>
+            {
+                if (category.IsNotNull() && category.ProductCount.Equals(0))
                 {
-                    if(await Shell.Current.DisplayAlert("Advertencia", $"Estas seguro que deseas eliminar la categoria {category.Name}.", "Aceptar", "Cancelar"))
+                    if (await Shell.Current.DisplayAlert("Advertencia", $"Estas seguro que deseas eliminar la categoria {category.Name}.", "Aceptar", "Cancelar"))
                     {
-                      var state = await _deleteCategoryUserCase.Delete(category);
-                        if(state is CategoryStates.Error error)
+                        var state = await _deleteCategoryUserCase.Delete(category);
+                        if (state is CategoryStates.Error error)
                         {
                             await Shell.Current.DisplayAlert("Error", error.Message, "Ok");
                         }
                     }
 
                 }
-                else if(category.ProductCount > 0)
+                else if (category.ProductCount > 0)
                 {
                     await Shell.Current.DisplayAlert("Notificacion", "No se puede eliminar una categoria si contiene productos.", "Ok");
                 }
-            
+
             });
 
         }

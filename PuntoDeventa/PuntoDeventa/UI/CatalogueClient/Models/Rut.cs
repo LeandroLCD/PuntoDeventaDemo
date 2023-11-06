@@ -4,7 +4,7 @@
     public class Rut
     {
         public Rut()
-        {           
+        {
 
         }
         public Rut(string numberDv)

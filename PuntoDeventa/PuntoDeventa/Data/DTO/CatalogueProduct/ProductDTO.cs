@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PuntoDeventa.Data.DTO.CatalogueProduct
 {
@@ -17,7 +14,7 @@ namespace PuntoDeventa.Data.DTO.CatalogueProduct
         public string Description { get; set; }
 
         [JsonProperty("BarCode")]
-        public int BarCode { get; set; }
+        public long BarCode { get; set; }
 
         [JsonProperty("Sku")]
         public int Sku { get; set; }
@@ -36,5 +33,8 @@ namespace PuntoDeventa.Data.DTO.CatalogueProduct
 
         [JsonProperty("PriceGross")]
         public double PriceGross { get; set; }
+
+        [JsonProperty("Stock")]
+        public int Stock { get; set; }
     }
 }

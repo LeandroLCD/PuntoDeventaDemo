@@ -1,4 +1,6 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.Sales;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 using System;
@@ -10,7 +12,7 @@ using Xamarin.Essentials;
 
 namespace PuntoDeventa.Core.LocalData.DataBase
 {
-    internal class DataAccessObject : IDisposable,  IDataAccessObject
+    internal class DataAccessObject : IDisposable, IDataAccessObject
     {
         private readonly SQLiteConnection _connection;
 
@@ -19,8 +21,6 @@ namespace PuntoDeventa.Core.LocalData.DataBase
             _connection = new SQLiteConnection(Path.Combine(FileSystem.AppDataDirectory, "DataBase.db3"));
             CreateTables();
         }
-
-       
 
         public void Delete<T>(T moldel)
         {
@@ -45,8 +45,6 @@ namespace PuntoDeventa.Core.LocalData.DataBase
             }
         }
 
-        
-
         public T Get<T>(object primaryKey) where T : new()
         {
             return _connection.GetWithChildren<T>(primaryKey);
@@ -54,12 +52,12 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public IEnumerable<T> GetAll<T>() where T : new()
         {
-            return _connection.GetAllWithChildren<T>();
+            return _connection.GetAllWithChildren<T>(recursive: true);
         }
 
         public void InsertOrUpdate<T>(T moldel)
         {
-             _connection.InsertOrReplaceWithChildren(moldel, true);
+            _connection.InsertOrReplaceWithChildren(moldel, true);
         }
 
         public void InsertOrUpdate<T>(IEnumerable<T> moldelList)
@@ -69,11 +67,11 @@ namespace PuntoDeventa.Core.LocalData.DataBase
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _connection.Close();
         }
 
         private void CreateTables()
-        {            
+        {
             _connection.CreateTable<CategoryEntity>();
             _connection.CreateTable<ProductEntity>();
 
@@ -81,6 +79,8 @@ namespace PuntoDeventa.Core.LocalData.DataBase
             _connection.CreateTable<ClientEntity>();
             _connection.CreateTable<EconomicActivitiesEntity>();
             _connection.CreateTable<BranchOfficesEntity>();
+
+            _connection.CreateTable<PendingDocumentEntity>();
         }
     }
 }

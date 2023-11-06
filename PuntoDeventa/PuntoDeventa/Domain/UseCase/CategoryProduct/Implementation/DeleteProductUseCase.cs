@@ -1,9 +1,6 @@
 ﻿using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.UI.CategoryProduct.Models;
 using PuntoDeventa.UI.CategoryProduct.States;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -21,7 +18,7 @@ namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation
         {
             return await MakeCallUseCase(product, async () =>
             {
-                return await _repository.DeleteProdctAsync(product);
+                return await _repository.DeleteProductAsync(product);
             });
         }
     }

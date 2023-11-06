@@ -1,8 +1,5 @@
 ﻿using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.UI.CategoryProduct.States;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation

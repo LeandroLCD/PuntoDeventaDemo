@@ -1,7 +1,8 @@
-﻿namespace PuntoDeventa.Data.Repository.CategoryProduct
+﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
+
+namespace PuntoDeventa.Data.Repository.CategoryProduct
 {
     using PuntoDeventa.Core.LocalData.DataBase;
-    using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
     using PuntoDeventa.Core.LocalData.Preferences;
     using PuntoDeventa.Core.Network;
     using PuntoDeventa.Data.DTO;
@@ -17,12 +18,11 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Xamarin.Forms;
-    using Xamarin.Forms.Internals;
     internal class CategoryProductRepository : BaseRepository, ICategoryProductRepository
     {
-        private IDataStore _dataStore;
-        private IDataPreferences _dataPreferences;
-        private IDataAccessObject _DAO;
+        private readonly IDataStore _dataStore;
+        private readonly IDataPreferences _dataPreferences;
+        private readonly IDataAccessObject _DAO;
         private string tokenID;
 
         public CategoryProductRepository()
@@ -35,21 +35,15 @@
 
         public async Task<CategoryStates> DeleteAsync(Category item)
         {
-            var resultType = await MakeCallNetwork<Category>(() =>
-            {
-                return _dataStore.DeleteAsync<Category>(GetUri($"CategoryProduct/{item.Id}"));
-            });
+            var resultType = await MakeCallNetwork<Category>(() => _dataStore.DeleteAsync<Category>(GetUri($"CategoryProduct/{item.Id}")));
 
             return ResultTypeToCategoryStates(OperationDTO.Delete, item.ToCategoryEntity(), resultType);
 
         }
 
-        public async Task<CategoryStates> DeleteProdctAsync(Product item)
+        public async Task<CategoryStates> DeleteProductAsync(Product item)
         {
-            var resultType = await MakeCallNetwork<Product>(() =>
-            {
-                return _dataStore.DeleteAsync<Product>(GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}"));
-            });
+            var resultType = await MakeCallNetwork<Product>(() => _dataStore.DeleteAsync<Product>(GetUri($"CategoryProduct/{item.CategoryId}/Products/{item.Id}")));
 
             return ResultTypeToCategoryStates(OperationDTO.Delete, item.ToProductDTO(), resultType);
         }
@@ -58,12 +52,9 @@
 
         public async IAsyncEnumerable<Category> GetAllAsync()
         {
-            var resulType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() =>
-            {
-                return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
-            });
+            var resultType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() => _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct")));
 
-            foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+            foreach (KeyValuePair<string, CategoryDTO> item in resultType.Data)
             {
                 var category = new Category()
                 {
@@ -173,26 +164,20 @@
         {
             _dataPreferences.GetUserData()?.Apply(async () =>
             {
-                var resulType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() =>
+                var resultType = await MakeCallNetwork<Dictionary<string, CategoryDTO>>(() => _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct")));
+                if (!resultType.Success) return;
+                foreach (KeyValuePair<string, CategoryDTO> item in resultType.Data)
                 {
-                    return _dataStore.GetAsync<Dictionary<string, CategoryDTO>>(GetUri("CategoryProduct"));
-                });
-                if(resulType.Success)
-                {
-                    foreach (KeyValuePair<string, CategoryDTO> item in resulType.Data)
+                    var entity = new CategoryEntity()
                     {
-                        var entity = new CategoryEntity()
-                        {
-                            Id = item.Key,
-                            Name = item.Value.Name,
-                            Brand = item.Value.Brand,
-                            Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
-                        };
-                        _DAO.InsertOrUpdate(entity);
-                    }
-
+                        Id = item.Key,
+                        Name = item.Value.Name,
+                        Brand = item.Value.Brand,
+                        Products = item.Value.Products?.Select(p => p.Value.ToProductEntity(p.Key, item.Key)).ToList(),
+                    };
+                    _DAO.InsertOrUpdate(entity);
                 }
-                
+
 
             });
 

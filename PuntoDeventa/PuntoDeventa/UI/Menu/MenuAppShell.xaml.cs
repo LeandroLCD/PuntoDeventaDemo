@@ -1,5 +1,7 @@
 ﻿using PuntoDeventa.Domain.UseCase.CategoryProduct;
+using PuntoDeventa.UI.CatalogueClient;
 using PuntoDeventa.UI.CategoryProduct;
+using PuntoDeventa.UI.Sales;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Menu
@@ -8,21 +10,31 @@ namespace PuntoDeventa.UI.Menu
     {
         public MenuAppShell()
         {
-            InitializeComponent();
             RegisterRoutes();
-            Sync();
-        }
-        private void Sync()
-        {
+            InitializeComponent();
             var useCase = DependencyService.Get<ISyncDataUseCase>();
             useCase.Sync();
+
         }
 
-        private void RegisterRoutes()
+        private static void RegisterRoutes()
         {
+            #region Sale
+            Routing.RegisterRoute(nameof(SalesPage), typeof(SalesPage));
+
+            //Routing.RegisterRoute(nameof(PaymentPage), typeof(PaymentPage));
+            #endregion
+            #region Categories
             Routing.RegisterRoute(nameof(CategoryHome), typeof(CategoryHome));
-            Routing.RegisterRoute($"//{nameof(CategoryHome)}/{nameof(CategoryDetailPage)}", typeof(CategoryDetailPage));
-            Routing.RegisterRoute($"//{nameof(CategoryHome)}/{nameof(CategoryDetailPage)}/{nameof(ProductPage)}", typeof(ProductPage));
+            Routing.RegisterRoute(nameof(CategoryDetailPage), typeof(CategoryDetailPage));
+            Routing.RegisterRoute(nameof(ProductPage), typeof(ProductPage));
+            #endregion
+
+            #region RoutesClient
+            Routing.RegisterRoute(nameof(CatalogueClientPage), typeof(CatalogueClientPage));
+            Routing.RegisterRoute(nameof(CatalogueDetailPage), typeof(CatalogueDetailPage));
+
+            #endregion
         }
     }
 }

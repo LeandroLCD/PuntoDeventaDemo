@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PuntoDeventa.Data.Repository.CatalogueClient
 {
-    public interface ICatalogueClienteRepository
+    public interface ICatalogueClientRepository
     {
         Task<CatalogeState> InsertRoute(SalesRoutes item);
         Task<CatalogeState> InsertClient(Client item);
@@ -21,5 +21,8 @@ namespace PuntoDeventa.Data.Repository.CatalogueClient
         List<SalesRoutes> GetRoutesAll();
 
         IAsyncEnumerable<SalesRoutes> GetCatalogueAsync();
+        CatalogeState GetSalesRoutes(string id);
+
+        Task<bool> Sync();
     }
 }

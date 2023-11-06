@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using PuntoDeventa.Domain.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using PuntoDeventa.Domain.Models;
 using Xamarin.Forms.Internals;
-using System.Collections;
 
 namespace PuntoDeventa.Domain.Helpers
 {
@@ -26,7 +27,8 @@ namespace PuntoDeventa.Domain.Helpers
 
             Type type = obj.GetType();
 
-            errores.ForEach(e => {
+            errores.ForEach(e =>
+            {
                 PropertyInfo property = type.GetProperty(e.Field);
                 if (property.IsNotNull())
                 {
@@ -100,6 +102,23 @@ namespace PuntoDeventa.Domain.Helpers
             });
         }
 
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> list)
+        {
+            return new ObservableCollection<T>(list);
+        }
+
+        public static T Clone<T>(this object source) where T : class, new()
+        {
+            if (source == null)
+                return null;
+
+            var destinationType = source.GetType();
+            var clone = Activator.CreateInstance(destinationType);
+
+            clone.CopyPropertiesFrom(source);
+
+            return clone as T;
+        }
     }
 
 }

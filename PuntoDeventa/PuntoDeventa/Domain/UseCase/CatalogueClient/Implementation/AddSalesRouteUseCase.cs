@@ -1,21 +1,18 @@
-﻿using PuntoDeventa.Data.Repository.CatalogueClient;
-using PuntoDeventa.Data.Repository.CategoryProduct;
-using PuntoDeventa.UI.CatalogueClient.Model;
-using PuntoDeventa.UI.CatalogueClient.States;
-using PuntoDeventa.UI.CategoryProduct.Models;
-using PuntoDeventa.UI.CategoryProduct.States;
-using System.Threading.Tasks;
-namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
+﻿namespace PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation
 {
+    using PuntoDeventa.Data.Repository.CatalogueClient;
+    using PuntoDeventa.UI.CatalogueClient.Model;
+    using PuntoDeventa.UI.CatalogueClient.States;
+    using System.Threading.Tasks;
     using Xamarin.Forms;
 
     internal class AddSalesRouteUseCase : BaseCatalogueClientUseCase, IAddSalesRouteUseCase
     {
-        private ICatalogueClienteRepository _repository;
+        private ICatalogueClientRepository _repository;
 
         public AddSalesRouteUseCase()
         {
-            _repository = DependencyService.Get<ICatalogueClienteRepository>();
+            _repository = DependencyService.Get<ICatalogueClientRepository>();
         }
         public async Task<CatalogeState> Insert(SalesRoutes route)
         {

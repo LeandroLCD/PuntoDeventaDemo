@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PuntoDeventa.Domain.Models
+﻿namespace PuntoDeventa.Domain.Models
 {
     public class ErrorMessage
     {
@@ -13,5 +9,10 @@ namespace PuntoDeventa.Domain.Models
         }
         public string Message { get; set; }
         public string Field { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Field}: {Message}";
+        }
     }
 }

@@ -121,7 +121,7 @@
     <value>https://identitytoolkit.googleapis.com/v1/</value>
     <comment>Url de autententicacion de Firebase</comment>
   </data>
-  <data name="BaseUrlEelectrinicEmision" xml:space="preserve">
+  <data name="BaseUrlEelectronicEmission" xml:space="preserve">
     <value>https://dev-api.haulmer.com/v2/dte/</value>
     <comment>Url Base del Backend del sistema de Emisión Elect</comment>
   </data>

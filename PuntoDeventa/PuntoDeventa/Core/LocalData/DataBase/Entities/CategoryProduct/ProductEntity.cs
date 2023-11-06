@@ -1,10 +1,7 @@
 ﻿using SQLite;
 using SQLiteNetExtensions.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
+namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct
 {
     public class ProductEntity
     {
@@ -15,7 +12,7 @@ namespace PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient
 
         public string Description { get; set; }
 
-        public int BarCode { get; set; }
+        public long BarCode { get; set; }
 
         public int Code { get; set; }
 

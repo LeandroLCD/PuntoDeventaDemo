@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
-using PuntoDeventa.Data.DTO;
 using PuntoDeventa.Data.DTO.Auth;
+using PuntoDeventa.Data.DTO.EmissionSystem.Error;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using System;
@@ -16,6 +16,7 @@ namespace PuntoDeventa.Data.Repository
 {
     internal class BaseRepository
     {
+        //TODO Revisar errores de deserealización.
         public async Task<ResultType<T>> MakeCallNetwork<T>(Func<Task<HttpResponseMessage>> apiCallFunction)
         {
             ResultType<T> resultType = new ResultType<T>();
@@ -23,7 +24,7 @@ namespace PuntoDeventa.Data.Repository
             {
                 var resp = await Task.Run(() => apiCallFunction());
 
-                string jsonResult = await resp.Content.ReadAsStringAsync();
+                var jsonResult = await resp.Content.ReadAsStringAsync();
 
                 resultType.Success = resp.StatusCode.Equals(HttpStatusCode.OK);
 
@@ -41,8 +42,21 @@ namespace PuntoDeventa.Data.Repository
                         var token = await Task.Run(() => TokenRefresf());
                         if (token.IsCompleted)
                         {
-                            await MakeCallNetwork<T>(apiCallFunction);
+                            //TODO mejorar logica de reflexion 
+                            //await MakeCallNetwork<T>(apiCallFunction);
                         }
+                        break;
+                    case HttpStatusCode.BadRequest:
+                        if (jsonResult.Contains("OF-"))
+                        {
+                            var error = JsonConvert.DeserializeObject<CatchErrorDTO>(jsonResult);
+                            resultType.Errors.Add(error.IsNotNull()
+                                ? new ErrorMessage("Error del Facturador de Mercado", error.Error.ToString())
+                                : new ErrorMessage("Error No Controlado", jsonResult));
+                        }
+                        break;
+
+                    case HttpStatusCode.ServiceUnavailable:
                         break;
 
                     default:
@@ -54,6 +68,7 @@ namespace PuntoDeventa.Data.Repository
             }
             catch (Exception e)
             {
+                resultType.Success = false;
                 resultType.Errors.Add(new ErrorMessage(e.GetHashCode().ToString(), e.Message));
             }
 

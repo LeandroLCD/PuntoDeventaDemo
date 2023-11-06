@@ -14,7 +14,7 @@ namespace PuntoDeventa.UI.Auth.Screen
             HeightRequest = height;
             var content = new Grid
             {
-                HorizontalOptions = LayoutOptions.FillAndExpand, 
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 RowDefinitions = new RowDefinitionCollection()
                 {
@@ -30,7 +30,7 @@ namespace PuntoDeventa.UI.Auth.Screen
 
             content.Children.Add(ErrorAnimation(), 0, 0);
             content.Children.Add(ErrorText(error), 0, 1);
-            content.Children.Add(ErrorButton(action), 0, 2);    
+            content.Children.Add(ErrorButton(action), 0, 2);
 
             Content = content;
         }
@@ -55,7 +55,7 @@ namespace PuntoDeventa.UI.Auth.Screen
         {
             return new Label()
             {
-                Text = error, 
+                Text = error,
                 Margin = new Thickness(20),
                 TextColor = Color.Black,
                 HorizontalTextAlignment = TextAlignment.Start,
@@ -63,7 +63,7 @@ namespace PuntoDeventa.UI.Auth.Screen
                 VerticalOptions = LayoutOptions.Center,
                 FontSize = 20
             };
-             
+
         }
 
         private Button ErrorButton(Action action)

@@ -3,13 +3,12 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using System;
 
 namespace PuntoDeventa.Droid
 {
     [Activity(Label = "PuntoDeVenta",
         WindowSoftInputMode = SoftInput.StateAlwaysHidden,
-        MainLauncher = false,
+        MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Orientation,
         ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
@@ -26,7 +25,7 @@ namespace PuntoDeventa.Droid
             LoadApplication(new App());
 
 
-            Window.SetSoftInputMode(SoftInput.StateAlwaysHidden);
+            // Window?.SetSoftInputMode(SoftInput.StateAlwaysHidden);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

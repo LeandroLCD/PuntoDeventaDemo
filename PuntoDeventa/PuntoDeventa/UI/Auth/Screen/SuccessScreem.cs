@@ -1,13 +1,10 @@
 ﻿using Lottie.Forms;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Auth.Screen
 {
-    public class SuccessScreem: ContentView
+    public class SuccessScreem : ContentView
     {
         public SuccessScreem()
         {

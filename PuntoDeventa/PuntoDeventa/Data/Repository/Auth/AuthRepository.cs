@@ -56,24 +56,22 @@ namespace PuntoDeventa.Data.Repository.Auth
         private async Task<AuthStates> LoginOrRegister(string email, string password, string path)
         {
 
-            ResultType<UserDataDTO> makeCallResult = await MakeCallNetwork<UserDataDTO>(async () =>
+            var makeCallResult = await MakeCallNetwork<UserDataDTO>(async () =>
             {
-                string body = JsonConvert.SerializeObject(new AuthUserDataDTO(email, password));
-                StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+                var body = JsonConvert.SerializeObject(new AuthUserDataDTO(email, password));
+                var content = new StringContent(body, Encoding.UTF8, "application/json");
                 return await _httpClient.PostAsync(GetUri(path), content);
 
             });
 
             if (makeCallResult.Success)
             {
-                //TODO
-                //Save User Task.run{}
                 _dataPreferences.SetUserData(makeCallResult.Data);
                 return new AuthStates.Success(makeCallResult.Data.ToUserData());
             }
             else
             {
-                string message = CatchError(makeCallResult.Errors.FirstOrDefault().Message);
+                var message = CatchError(makeCallResult.Errors.FirstOrDefault()?.Message);
                 return new AuthStates.Error(message);
             }
         }
@@ -124,12 +122,12 @@ namespace PuntoDeventa.Data.Repository.Auth
 
         public RemembermeUser GetIsRememberme()
         {
-            return _dataPreferences.GetRemembermeUser().ToRemembermeUser();
+            return _dataPreferences.GetRememberMeUser().ToRemembermeUser();
         }
 
         public void SetIsRememberme(RemembermeUser user)
         {
-            _dataPreferences.SetRemembermeUser(user.ToRemembermeUserDTO());
+            _dataPreferences.SetRememberMeUser(user.ToRemembermeUserDTO());
         }
 
 

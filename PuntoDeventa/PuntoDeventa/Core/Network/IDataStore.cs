@@ -6,10 +6,12 @@ namespace PuntoDeventa.Core.Network
 {
     public interface IDataStore
     {
-       
+
         Task<HttpResponseMessage> GetAsync<T>(Uri url);
-        Task<HttpResponseMessage> PostAsync<T>(T DTO, Uri url);
-        Task<HttpResponseMessage> PutAsync<T>(T DTO, Uri url);
+        Task<HttpResponseMessage> PostAsync<T>(T dto, Uri url);
+        Task<HttpResponseMessage> PutAsync<T>(T dto, Uri url);
+
+        Task<HttpResponseMessage> PatchAsync<T>(T dto, Uri url);
 
         Task<HttpResponseMessage> DeleteAsync<T>(Uri url);
     }
