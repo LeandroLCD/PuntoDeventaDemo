@@ -1,4 +1,4 @@
-﻿using PuntoDeventa.Data.Models;
+﻿using Newtonsoft.Json;
 using PuntoDeventa.Data.Repository.EmissionSystem;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.CatalogueClient;
@@ -59,7 +59,7 @@ namespace PuntoDeventa.UI.Sales
 
         #region Properties
 
-        private Sale NewSale { get; set; }
+        private Sale NewSale { get; set; } = new Sale();
 
         public bool IsVisibleTributaryData
         {
@@ -440,33 +440,41 @@ namespace PuntoDeventa.UI.Sales
 
         private async void InsertMethods(object obj)
         {
-            var branch = ClientSelect.BranchOffices[0];
-            var acti = ClientSelect.EconomicActivities[0];
-            NewSale = new Sale()
+            try
             {
-                Client = ClientSelect,
-                SelectBranchOffices = branch,
-                SelectEconomicActivities = acti,
-                DateSale = DateDte,
-                Products = GetProductSales
-            };
+                ClientSelect?.Apply(() =>
+                {
+                    var branch = ClientSelect.BranchOffices[0];
+                    var acti = ClientSelect.EconomicActivities[0];
+                    NewSale = new Sale()
+                    {
+                        Client = ClientSelect,
+                        SelectBranchOffices = branch,
+                        SelectEconomicActivities = acti,
+                        Date = DateDte.ToUniversalTime(),
+                        Products = GetProductSales
+                    };
 
-            var state = await repository.EmitFactura(new PaymentSales()
-            {
-                Sale = NewSale,
-                DocumentType = DteType.Factura,
-                PaymentMethod = PaymentMethod.Credit
+                });
 
-            });
-            Console.WriteLine(state);
-            //TODO Construir useCase
-            /*
-             _caseUse.Inset(NewSale, async () =>
-            {
+
+
+                var valid = NewSale.DataAnotationsValid();
+                if (valid.IsNotNull())
+                {
+                    await Shell.Current.DisplayAlert("Punto de Venta",
+                        $"Detalles: {string.Join(Environment.NewLine, valid)}", "Ok");
+                    return;
+                }
                 var json = JsonConvert.SerializeObject(NewSale);
                 await Shell.Current.GoToAsync($"{nameof(PaymentSale)}?Sale={json}");
-            });
-            */
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Punto de Venta", ex.Message, "Ok");
+            }
+
+
         }
 
         private void AddProducts(CollectionView view)

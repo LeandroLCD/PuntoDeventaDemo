@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:PuntoDeventa.UI;assembly=PuntoDeventa"
              x:Class="PuntoDeventa.UI.Sales.PaymentSale">
+    <ContentPage.BindingContext>
+        <ui:PaymentPageViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+        <Grid x:Name="ContentGrid">
+            
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

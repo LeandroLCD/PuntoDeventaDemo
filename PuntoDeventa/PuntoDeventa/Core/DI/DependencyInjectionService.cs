@@ -37,7 +37,7 @@ namespace PuntoDeventa.Core.DI
 
             RegisterUserInterfaceDependencies();
 
-            SyncfusionLicenseProvider.RegisterLicense(LicenseProvider.LicenceKey);
+            SyncfusionLicenseProvider.RegisterLicense(LicenseProvider.LicenseKey);
 
 
         }

@@ -1,0 +1,42 @@
+﻿using System.IO;
+
+namespace PuntoDeventa.UI.Sales.State
+{
+    public abstract class ScreenStates
+    {
+        private ScreenStates() { }
+
+        public sealed class Preview : ScreenStates
+        {
+            private Preview(Stream pdfStream)
+            {
+                PdfStream = pdfStream;
+            }
+
+            public Stream PdfStream { get; }
+            public static Preview Instance(Stream pdfStream = null) => new Preview(pdfStream);
+        }
+
+        public sealed class DocumentSelection : ScreenStates
+        {
+            private DocumentSelection() { }
+            public static DocumentSelection Instance { get; } = new DocumentSelection();
+        }
+        public sealed class PaymentSelection : ScreenStates
+        {
+            private PaymentSelection() { }
+            public static PaymentSelection Instance { get; } = new PaymentSelection();
+        }
+        public sealed class Success : ScreenStates
+        {
+            private Success(Stream pdfStream)
+            {
+                PdfStream = pdfStream;
+            }
+
+            public Stream PdfStream { get; }
+            public static Success Instance(Stream pdfStream = null) => new Success(pdfStream);
+        }
+
+    }
+}
