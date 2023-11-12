@@ -33,7 +33,7 @@ namespace PuntoDeventa.Data.Mappers
                     Id = Factory.GenerateId(),
                     Headers = new HeaderDTO()
                     {
-                        IdDoc = new IdDoc(dteType, payment.Sale.DateSale, (int)payment.PaymentMethod),
+                        IdDoc = new IdDoc(dteType, payment.Sale.Date, (int)payment.PaymentMethod),
                         IssuingCompany = ecommerce.ToIssuingCompany(),
                         Receiver = new Receiver()
                         {

@@ -4,6 +4,11 @@
     {
         private PaymentType() { }
         public double Amount { get; private set; }
+
+        public void SetAmount(double amount)
+        {
+            Amount = amount;
+        }
         public sealed class Cash : PaymentType
         {
             public Cash(double amount)

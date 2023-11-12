@@ -105,7 +105,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
 
         public async Task<SalesState> InsertNotaDePedido(PaymentSales paymentSales)
         {
-            var invoice = int.Parse($"{paymentSales.Sale.DateSale:yyMMddmmss}");
+            var invoice = int.Parse($"{paymentSales.Sale.Date:yyMMddmmss}");
 
             var pathPdf = await _fileManager.CreatePdf(paymentSales.ToDocumentElectronicDto(_ecommerceData, new[] { "" }, DteType.NotaDePedido).Dte, new EmissionReposeDTO(), _ecommerceData.RegionalDirection);
 
@@ -114,15 +114,21 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
 
             InsertReports(Factory.GenerateId(), invoice, base64Stream, paymentSales);
 
-            return SalesState.Success.Instance(null);
+            return SalesState.Success.Instance(pathPdf);
         }
 
+        public async Task<SalesState> CreatePreviewPdf(PaymentSales sales)
+        {
+            var pathPdf = await _fileManager.CreatePdf(sales.ToDocumentElectronicDto(_ecommerceData, new[] { "" }, DteType.NotaDePedido).Dte, new EmissionReposeDTO(), _ecommerceData.RegionalDirection);
+
+            return SalesState.Success.Instance(pathPdf);
+        }
         private async Task<HttpResponseMessage> CreateAccountingReport(string localId, int invoice, PaymentSales paymentSales)
         {
             _accounting = new AccountingDto()
             {
                 Dte = paymentSales.DocumentType,
-                Delivery = paymentSales.Sale.DateSale,
+                Delivery = paymentSales.Sale.Date,
                 Invoice = invoice,
                 Name = paymentSales.Sale.Client.Name,
                 Rut = paymentSales.Sale.Client.Rut,
@@ -171,7 +177,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             });
 
             var uri = paymentSales.PaymentMethod == PaymentMethod.Counted
-                ? FactoryUrlRealDataBase("Accounting", paymentSales.Sale.DateSale, localId)
+                ? FactoryUrlRealDataBase("Accounting", paymentSales.Sale.Date, localId)
                 : FactoryUrlRealDataBase($"Accounting/Pending/{localId}");
             return await _dataStore.PutAsync(_accounting, uri);
 
@@ -182,8 +188,8 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             _reportSale = new ReportSaleDto
             {
                 Dte = paymentSales.DocumentType,
-                Date = paymentSales.Sale.DateSale,
-                Delivery = paymentSales.Sale.DateSale,
+                Date = paymentSales.Sale.Date,
+                Delivery = paymentSales.Sale.Date,
                 Iva = _ecommerceData.Iva,
                 Invoice = invoice,
                 Name = paymentSales.Sale.Client.Name,
@@ -207,7 +213,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
 
             };
             return await _dataStore.PutAsync(_reportSale,
-                FactoryUrlRealDataBase("ReportSales", paymentSales.Sale.DateSale, localId)); //MakeCallNetwork<ReportSaleDto>(() => _dataStore.PutAsync(dto, FactoryUrlRealDataBase("ReportSale", paymentSales.Sale.DateSale, data.Token)));
+                FactoryUrlRealDataBase("ReportSales", paymentSales.Sale.Date, localId)); //MakeCallNetwork<ReportSaleDto>(() => _dataStore.PutAsync(dto, FactoryUrlRealDataBase("ReportSale", paymentSales.Sale.Date, data.Token)));
         }
 
         private void SaveDataBase(PendingDocumentEntity obj)
@@ -319,6 +325,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                 return kvp.Value;
             }).ToList();
         }
+
 
     }
 }

@@ -90,6 +90,26 @@ namespace PuntoDeventa.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Byte[].
         /// </summary>
+        internal static byte[] cash {
+            get {
+                object obj = ResourceManager.GetObject("cash", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
+        internal static byte[] document_type {
+            get {
+                object obj = ResourceManager.GetObject("document_type", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
         internal static byte[] eye {
             get {
                 object obj = ResourceManager.GetObject("eye", resourceCulture);
