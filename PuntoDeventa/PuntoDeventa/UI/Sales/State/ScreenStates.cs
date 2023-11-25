@@ -29,13 +29,22 @@ namespace PuntoDeventa.UI.Sales.State
         }
         public sealed class Success : ScreenStates
         {
-            private Success(Stream pdfStream)
+            private Success(string pdf)
             {
-                PdfStream = pdfStream;
+                PathPdf = pdf;
+                PdfStream = new StreamReader(pdf).BaseStream;
+            }
+            private Success(Stream pdf, string pathPdf)
+            {
+                PdfStream = pdf;
+                PathPdf = pathPdf;
             }
 
+            public string PathPdf { get; }
+
             public Stream PdfStream { get; }
-            public static Success Instance(Stream pdfStream = null) => new Success(pdfStream);
+            public static Success Instance(string pathPdf) => new Success(pathPdf);
+            public static Success Instance(Stream pdf, string path = null) => new Success(pdf, path);
         }
 
     }

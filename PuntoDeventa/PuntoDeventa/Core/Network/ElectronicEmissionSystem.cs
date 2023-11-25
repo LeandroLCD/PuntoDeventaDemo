@@ -30,26 +30,18 @@ namespace PuntoDeventa.Core.Network
         }
         public async Task<HttpResponseMessage> GetAsync(string apiKey, Uri url)
         {
-            if (!_httpClient.DefaultRequestHeaders.Contains("apikey"))
-            {
-                _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
-
-            };
+            AddHeader();
             return await _httpClient.GetAsync(url);
         }
         public async Task<HttpResponseMessage> GetAsync(Uri url)
         {
-            if (!_httpClient.DefaultRequestHeaders.Contains("apikey"))
-            {
-                _httpClient.DefaultRequestHeaders.Add("apikey", _ecommerceData.ApiKey);
-
-            };
+            AddHeader();
             return await _httpClient.GetAsync(url);
         }
 
         public Task<HttpResponseMessage> PostAsync<T>(T model, Uri url)
         {
-
+            AddHeader();
             var body = JsonConvert.SerializeObject(model);
 
             var content = new StringContent(body, Encoding.UTF8, "application/json");

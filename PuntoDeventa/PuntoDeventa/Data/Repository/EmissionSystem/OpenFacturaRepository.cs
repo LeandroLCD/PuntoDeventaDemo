@@ -134,47 +134,9 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                 Rut = paymentSales.Sale.Client.Rut,
                 Amount = paymentSales.Sale.TotalSale(_ecommerceData.Iva),
                 SellerCode = "01",
-                Payments = new List<PaymentTypeDto>()
+                Payments = paymentSales.PaymentTypes.Select(p => p.ToPaymentDto()).ToList()
 
             };
-            paymentSales.PaymentTypes?.ForEach(p =>
-            {
-                switch (p)
-                {
-                    case PaymentType.BankCheck bankCheck:
-                        _accounting.Payments.Add(new PaymentTypeDto.BankCheckDto()
-                        {
-                            Date = DateTime.Now,
-                            Amount = bankCheck.Amount
-
-                        });
-                        break;
-                    case PaymentType.BankDeposit bankDeposit:
-                        _accounting.Payments.Add(new PaymentTypeDto.BankDepositDto()
-                        {
-                            Date = DateTime.Now,
-                            Amount = bankDeposit.Amount
-
-                        });
-                        break;
-                    case PaymentType.BankTransfer bankTransfer:
-                        _accounting.Payments.Add(new PaymentTypeDto.BankTransferDto()
-                        {
-                            Date = DateTime.Now,
-                            Amount = bankTransfer.Amount
-
-                        });
-                        break;
-                    case PaymentType.Cash cash:
-                        _accounting.Payments.Add(new PaymentTypeDto.CashDto()
-                        {
-                            Date = DateTime.Now,
-                            Amount = cash.Amount
-
-                        });
-                        break;
-                }
-            });
 
             var uri = paymentSales.PaymentMethod == PaymentMethod.Counted
                 ? FactoryUrlRealDataBase("Accounting", paymentSales.Sale.Date, localId)
@@ -240,8 +202,8 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             return new Uri(Path.Combine(new[]
             {
                 Properties.Resources.BaseUrlRealDataBase,
-                path, date.Year.ToString(),
-                $"{date.Day:D2}/{localId}.json?auth={_userData.IdToken}"
+                path,
+                $"{date.Year}/{date.Month:M2}/{localId}.json?auth={_userData.IdToken}"
             }));
 
 

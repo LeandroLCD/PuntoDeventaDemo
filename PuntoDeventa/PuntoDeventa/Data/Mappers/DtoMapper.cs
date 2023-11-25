@@ -138,7 +138,7 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
-        public static Product ToProduct(this ProductEntity model)
+        public static Product ToProduct(this ProductEntity model, double iva)
         {
             if (model.IsNotNull())
             {
@@ -156,6 +156,7 @@ namespace PuntoDeventa.Data.Mappers
                     Sku = model.Code,
                     CategoryId = model.CategoryId,
                     InReport = model.InReport,
+                    Vat = iva
                 };
             }
 

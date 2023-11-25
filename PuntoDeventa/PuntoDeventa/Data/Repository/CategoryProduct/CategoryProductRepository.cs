@@ -24,6 +24,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
         private readonly IDataPreferences _dataPreferences;
         private readonly IDataAccessObject _DAO;
         private string tokenID;
+        private double _iva;
 
         public CategoryProductRepository()
         {
@@ -31,6 +32,8 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             _dataPreferences = DependencyService.Get<IDataPreferences>();
             _DAO = DependencyService.Get<IDataAccessObject>();
             tokenID = _dataPreferences.GetUserData().IdToken;
+            var ecommerce = _dataPreferences.GetEcommerceData();
+            _iva = ecommerce.IsNull() ? 0.19 : ecommerce.Iva;
         }
 
         public async Task<CategoryStates> DeleteAsync(Category item)
@@ -151,13 +154,13 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                 Brand = c.Brand,
                 Id = c.Id,
                 Name = c.Name,
-                Products = c.Products?.Select(p => p.ToProduct()).ToList()
+                Products = c.Products?.Select(p => p.ToProduct(_iva)).ToList()
             }).ToList();
         }
 
         public List<Product> GetProductsAll()
         {
-            return _DAO.GetAll<ProductEntity>()?.Select(p => p.ToProduct()).ToList();
+            return _DAO.GetAll<ProductEntity>()?.Select(p => p.ToProduct(_iva)).ToList();
         }
 
         public void SyncData()
@@ -224,7 +227,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
                     Name = categoryEntity.Name,
                     Id = categoryEntity.Id,
                     Brand = categoryEntity.Brand,
-                    Products = categoryEntity.Products.Select(p => p.ToProduct()).ToList(),
+                    Products = categoryEntity.Products.Select(p => p.ToProduct(_iva)).ToList(),
                 };
                 return new CategoryStates.Success(category);
             }
@@ -237,7 +240,7 @@ namespace PuntoDeventa.Data.Repository.CategoryProduct
             if (productEntity.IsNotNull())
             {
 
-                return new CategoryStates.Success(productEntity.ToProduct());
+                return new CategoryStates.Success(productEntity.ToProduct(_iva));
             }
             return new CategoryStates.Error("Producto no encontrado");
         }

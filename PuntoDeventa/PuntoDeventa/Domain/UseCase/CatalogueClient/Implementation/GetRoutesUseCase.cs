@@ -39,7 +39,7 @@
         {
             while (token.IsCancellationRequested.Equals(false))
             {
-                await Task.Delay(inMilliseconds);
+                await Task.Delay(inMilliseconds, token);
                 yield return _repository.GetRoutesAll();
             }
         }
