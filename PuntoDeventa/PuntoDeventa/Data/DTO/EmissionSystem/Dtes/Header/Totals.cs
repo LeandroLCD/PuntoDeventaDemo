@@ -10,7 +10,7 @@ namespace PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header
         [JsonProperty("TasaIVA")]
         public string VatRate { get; set; }
 
-        [JsonProperty("IVA")]
+        [JsonProperty("Vat")]
         public int Vat { get; set; }
 
         [JsonProperty("MntTotal")]

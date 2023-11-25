@@ -5,6 +5,7 @@ using PuntoDeventa.Data.DTO.EmissionSystem;
 using PuntoDeventa.Data.DTO.EmissionSystem.Dtes;
 using PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Detail;
 using PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header;
+using PuntoDeventa.Data.DTO.Sales;
 using PuntoDeventa.Data.Models;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.UI.Sales.Models;
@@ -84,6 +85,13 @@ namespace PuntoDeventa.Data.Mappers
                 DocumentType = nameof(dto),
                 DocumentDataJson = JsonConvert.SerializeObject(dto)
             };
+        }
+
+        public static PaymentDto ToPaymentDto(this Payment model)
+        {
+            var dto = new PaymentDto();
+            dto.CopyPropertiesFrom(model);
+            return dto;
         }
 
     }

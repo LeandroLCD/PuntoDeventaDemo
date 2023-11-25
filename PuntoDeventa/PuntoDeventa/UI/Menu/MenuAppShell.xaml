@@ -5,6 +5,7 @@
              xmlns:categories="clr-namespace:PuntoDeventa.UI.CategoryProduct" 
             xmlns:catalogue="clr-namespace:PuntoDeventa.UI.CatalogueClient" 
         xmlns:sales="clr-namespace:PuntoDeventa.UI.Sales"
+             xmlns:reports="clr-namespace:PuntoDeventa.UI.Reports;assembly=PuntoDeventa"
        xmlns:converter="clr-namespace:PuntoDeventa.UI.Controls.Converters">
     <Shell.Resources>
         <ResourceDictionary>
@@ -72,19 +73,23 @@
 
         </ResourceDictionary>
     </Shell.Resources>
+    
 
-    <FlyoutItem Title="Ventas" Icon="ic_venta.png">
+    
+    <FlyoutItem Title="Ventas" Icon="calculate">
         <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate sales:SalesPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Catalgo Productos" Icon="ic_product.png">
+    <FlyoutItem Title="Catalgo Productos" Icon="product">
         <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate categories:CategoryHome}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Catalgo Clientes" Icon="ic_cliente.png">
+    <FlyoutItem Title="Catalgo Clientes" Icon="clients">
         <ShellContent Route="CatalogueClient" ContentTemplate="{DataTemplate catalogue:CatalogueClientPage}" />
     </FlyoutItem>
-
+    <FlyoutItem Title="Reports" Icon="report">
+        <ShellContent Route="ReportProductPage" ContentTemplate="{DataTemplate reports:ReportProductPage}" />
+    </FlyoutItem> 
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <ContentView Padding="-5" HeightRequest="200" BackgroundColor="Transparent">

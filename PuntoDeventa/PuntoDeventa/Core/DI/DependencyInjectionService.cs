@@ -6,6 +6,7 @@ using PuntoDeventa.Data.Repository.Auth;
 using PuntoDeventa.Data.Repository.CatalogueClient;
 using PuntoDeventa.Data.Repository.CategoryProduct;
 using PuntoDeventa.Data.Repository.EmissionSystem;
+using PuntoDeventa.Data.Repository.Reports;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
@@ -13,6 +14,8 @@ using PuntoDeventa.Domain.UseCase.CatalogueClient;
 using PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
+using PuntoDeventa.Domain.UseCase.Report;
+using PuntoDeventa.Domain.UseCase.Report.Implementation;
 using PuntoDeventa.Domain.UseCase.Sales;
 using PuntoDeventa.Domain.UseCase.Sales.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
@@ -72,6 +75,10 @@ namespace PuntoDeventa.Core.DI
             DependencyService.Register<ICategoryProductRepository, CategoryProductRepository>();
             DependencyService.Register<ICatalogueClientRepository, CatalogueClientRepository>();
             DependencyService.Register<IOpenFacturaRepository, OpenFacturaRepository>();
+
+            DependencyService.Register<IReportRepository, ReportRepository>();
+
+
         }
         /// <summary>
         /// Registra las dependencias de la capa Domain utilizando DependencyService.
@@ -129,6 +136,11 @@ namespace PuntoDeventa.Core.DI
 
             #endregion
 
+            #region Report
+
+            DependencyService.Register<IGetReportSales, GetReportSales>();
+
+            #endregion
         }
         /// <summary>
         /// Registra las dependencias de la capa UserInterface utilizando DependencyService.

@@ -1,18 +1,33 @@
-﻿using Syncfusion.SfPdfViewer.XForms;
+﻿using PuntoDeventa.Domain.Helpers;
+using Syncfusion.SfPdfViewer.XForms;
 using System.IO;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Sales.Screen
 {
     internal class PdfViewScreen : ContentView
     {
+        private readonly string _pathPdf;
         private readonly Stream _pdfStream;
         private readonly ICommand _commandActions;
         private readonly string _titleAction;
 
+        public PdfViewScreen(string pathPdf, ICommand commandActions = null, string titleAction = "Aceptar")
+        {
+            _pathPdf = pathPdf;
+            _pdfStream = new StreamReader(pathPdf).BaseStream;
+            _commandActions = commandActions;
+            _titleAction = titleAction;
+            Content = LoadContent();
+        }
         public PdfViewScreen(Stream pdfStream, ICommand commandActions = null, string titleAction = "Aceptar")
         {
+            var fn = "Preview.pdf";
+            var pathPdf = Path.Combine(FileSystem.CacheDirectory, fn);
+            File.WriteAllBytes(pathPdf, pdfStream.ToBytes());
+            _pathPdf = pathPdf;
             _pdfStream = pdfStream;
             _commandActions = commandActions;
             _titleAction = titleAction;
@@ -51,6 +66,15 @@ namespace PuntoDeventa.UI.Sales.Screen
                         WidthRequest = 40,
                         CornerRadius = 25,
                         Margin = new Thickness(10),
+                        Command = new Command(async () =>
+                        {
+
+                            await Share.RequestAsync(new ShareFileRequest
+                            {
+                                Title = "Compartir Documento",
+                                File = new ShareFile(_pathPdf)
+                            });
+                        })
 
                     },
                     new Button()

@@ -13,7 +13,7 @@ namespace PuntoDeventa.Data.DTO.Sales
         public double Amount { get; set; }
 
         [JsonProperty("Payments")]
-        public List<PaymentTypeDto> Payments { get; set; }
+        public List<PaymentDto> Payments { get; set; }
 
         public double TotalPayment => (Payments.IsNull() ? 0 : Payments.Sum(p => p.Amount));
 

@@ -293,7 +293,7 @@ namespace PuntoDeventa.Core.LocalData.Files
                 Style TotalStyle = new Style().SetHeight(height).SetFontSize(8).SetBorder(new SolidBorder(ColorConstants.BLACK, 1));
                 FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph("Monto Neto:").SetBold()).AddStyle(TotalStyle));
                 FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph($"{totals.Net:N2} ")).AddStyle(TotalStyle)).SetTextAlignment(TextAlignment.RIGHT);
-                FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph($"IVA {totals.VatRate} %:").SetBold()).AddStyle(TotalStyle));
+                FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph($"Vat {totals.VatRate} %:").SetBold()).AddStyle(TotalStyle));
                 FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph($"{totals.Vat:N2} ")).AddStyle(TotalStyle)).SetTextAlignment(TextAlignment.RIGHT);
                 FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph("Monto Total:").SetBold()).AddStyle(TotalStyle));
                 FosterTotales.AddCell(new Cell(1, 1).Add(new Paragraph($"{totals.Amount:N2} ")).AddStyle(TotalStyle)).SetTextAlignment(TextAlignment.RIGHT);

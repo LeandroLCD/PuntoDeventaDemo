@@ -26,8 +26,8 @@
         public float Percentage { get; set; }
 
         public double PriceOffer => IsOffer && Percentage > 0 ? Math.Round(PriceGross - (PriceGross * (Percentage / 100)), 0) : PriceGross;
-        public double PriceNeto => Math.Round(PriceOffer + (PriceOffer * (IVA / 100)));
-        public float IVA { get; set; }
+        public double PriceNeto => Math.Round(PriceOffer + (PriceOffer * (Vat / 100)));
+        public double Vat { get; set; }
 
         public int Stock { get; set; }
 

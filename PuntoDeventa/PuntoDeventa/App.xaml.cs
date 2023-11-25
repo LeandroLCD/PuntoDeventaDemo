@@ -3,11 +3,11 @@ using PuntoDeventa.Core.LocalData.DataBase;
 using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
 using PuntoDeventa.Data.Repository.CatalogueClient;
 using PuntoDeventa.Data.Repository.EmissionSystem;
+using PuntoDeventa.UI.Auth;
 using PuntoDeventa.UI.Sales.Screen;
 using System;
 using System.IO;
 using System.Linq;
-using PuntoDeventa.UI.Auth;
 using Xamarin.Forms;
 
 namespace PuntoDeventa
