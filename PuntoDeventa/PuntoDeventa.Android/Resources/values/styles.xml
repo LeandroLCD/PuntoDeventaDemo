@@ -2,17 +2,45 @@
 <resources>
 
   <style name="MainTheme" parent="MainTheme.Base">
-    <!-- As of Xamarin.Forms 4.6 the theme has moved into the Forms binary -->
-    <!-- If you want to override anything you can do that here. -->
-    <!-- Underneath are a couple of entries to get you started. -->
-
-    <!-- Set theme colors from https://aka.ms/material-colors -->
-    <!-- colorPrimary is used for the default action bar background -->
-    <!--<item name="colorPrimary">#2196F3</item>-->
-    <!-- colorPrimaryDark is used for the status bar -->
-    <!--<item name="colorPrimaryDark">#1976D2</item>-->
-    <!-- colorAccent is used as the default value for colorControlActivated
-         which is used to tint widgets -->
-    <!--<item name="colorAccent">#FF4081</item>-->
+    
   </style>
+	<style name="MainTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:windowBackground">@layout/splashscreen</item>
+		<!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
+		<item name="windowNoTitle">true</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		
+		<!-- colorPrimary is used for the default action bar background -->
+		<item name="colorPrimary">#f70505</item>
+		<item name="colorPrimaryDark">#E43901</item>
+		<item name="colorAccent">#f70505</item>
+
+		<item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
+		
+		<item name="android:windowFullscreen">true</item>
+		<item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
+		<!-- 
+		<item name="android:windowSplashScreenBackground">@color/...</item>
+		<item name="android:windowSplashScreenAnimationDuration">1</item>
+		<item name="android:windowSplashScreenAnimatedIcon">@drawable/...</item>
+		<item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
+		<item name="android:windowSplashScreenBrandingImage">@drawable/...</item>
+		-->
+		<item name="android:windowSplashScreenBehavior">icon_preferred</item>
+
+	</style>
+	<style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+
+		<item name="colorAccent">#f70505</item>
+		<item name="android:windowBackground">@layout/windowBackground</item>
+
+	</style>
+	<style name="OverflowButton" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+		<item name="android:src">@drawable/overflow</item>
+		<item name="android:tint">@color/black</item>
+	</style>
+	
+
+	
 </resources>

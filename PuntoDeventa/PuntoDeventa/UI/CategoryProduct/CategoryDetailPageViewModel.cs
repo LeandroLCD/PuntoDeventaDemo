@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using Xamarin.Forms;
 
@@ -22,6 +21,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         private IGetCategoryUseCase _getCategoryUseCase;
         private string _searchText;
         private Category _getCategory;
+        private string _title;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace PuntoDeventa.UI.CategoryProduct
 
             _addCProductUseCase = DependencyService.Get<IAddProductUseCase>();
             _getCategoryUseCase = DependencyService.Get<IGetCategoryUseCase>();
-
+            TokenSource = new CancellationTokenSource();
         }
 
         #endregion
@@ -69,6 +69,12 @@ namespace PuntoDeventa.UI.CategoryProduct
             }
         }
 
+        public string TitlePage
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);
+        }
+
         private CancellationTokenSource TokenSource { set; get; }
 
         #endregion
@@ -77,7 +83,9 @@ namespace PuntoDeventa.UI.CategoryProduct
 
         public Command<string> SearchBarCommand { get; set; }
 
-        public Command<Product> AddProductCommand { get; set; }
+        public Command<Product> ProductChangedCommand { get; set; }
+
+        public Command NewProductCommand { get; set; }
         #endregion
 
         #region Methods
@@ -93,7 +101,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             TokenSource.Dispose();
         }
         private void InicializeProperties()
-        {            
+        {
 
             ProductsList = new ObservableCollection<Product>();
         }
@@ -106,7 +114,20 @@ namespace PuntoDeventa.UI.CategoryProduct
                 _searchText = test;
             });
 
+            ProductChangedCommand = new Command<Product>(async (product) =>
+            {
+                if (product.IsNotNull())
+                {
+                    await Shell.Current.GoToAsync($"{nameof(ProductPage)}?ProductId={product.Id}&CategoryId={product.CategoryId}", true);
+                }
+            });
 
+            NewProductCommand = new Command(async () =>
+            {
+
+                await Shell.Current.GoToAsync($"{nameof(ProductPage)}?CategoryId={GetCategory.Id}", true);
+
+            });
         }
 
         private async void HandlerStates(CategoryStates categoryStates)
@@ -115,10 +136,10 @@ namespace PuntoDeventa.UI.CategoryProduct
             {
                 case CategoryStates.Success success:
                     GetCategory = (Category)success.Data;
+                    _title = GetCategory == null ? "S/Ruta" : GetCategory.Name;
                     break;
                 case CategoryStates.Error error:
                     await Shell.Current.DisplayAlert("Error", error.Message, "Ok");
-                    await Shell.Current.Navigation.PopAsync();
                     break;
             }
         }
@@ -138,10 +159,9 @@ namespace PuntoDeventa.UI.CategoryProduct
                 var id = HttpUtility.UrlDecode(query["CategoryId"]);
                 HandlerStates(_getCategoryUseCase.Get(id));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                await Shell.Current.Navigation.PopAsync();
+                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok");
             }
 
         }

@@ -1,9 +1,14 @@
-﻿using PuntoDeventa.Core.LocalData.DataBase.Entities;
+﻿using PuntoDeventa.Core.LocalData.DataBase.Entities.CatalogueClient;
+using PuntoDeventa.Core.LocalData.DataBase.Entities.CategoryProduct;
 using PuntoDeventa.Data.DTO;
+using PuntoDeventa.Data.DTO.Auth;
+using PuntoDeventa.Data.DTO.CatalogueClient;
+using PuntoDeventa.Data.DTO.CatalogueProduct;
+using PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
+using PuntoDeventa.UI.CatalogueClient.Model;
 using PuntoDeventa.UI.CategoryProduct.Models;
-using System;
 using System.Collections.Generic;
 using Xamarin.Forms.Internals;
 
@@ -16,7 +21,7 @@ namespace PuntoDeventa.Data.Mappers
             if (dto.IsNotNull())
                 return new UserData()
                 {
-                    DateLogin = DateTime.Now,
+                    DateLogin = dto.DateLogin,
                     DisplayName = dto.DisplayName,
                     Email = dto.Email,
                     IdToken = dto.IdToken,
@@ -25,7 +30,6 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
-
         public static RemembermeUser ToRemembermeUser(this RemembermeUserDTO dto)
         {
             if (dto.IsNotNull())
@@ -41,8 +45,6 @@ namespace PuntoDeventa.Data.Mappers
             else
                 return null;
         }
-
-
 
         public static CategoryDTO ToCategoryDTO(this Category model)
         {
@@ -110,6 +112,19 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
+        public static Category ToCategory(this CategoryDTO model)
+        {
+            if (model.IsNotNull())
+            {
+                var category = new Category();
+                category.CopyPropertiesFrom(model);
+                return category;
+            }
+
+            else
+                return null;
+        }
+
         public static ProductDTO ToProductDTO(this Product model)
         {
             if (model.IsNotNull())
@@ -123,7 +138,7 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
-        public static Product ToProduct(this ProductEntity model)
+        public static Product ToProduct(this ProductEntity model, double iva)
         {
             if (model.IsNotNull())
             {
@@ -137,10 +152,50 @@ namespace PuntoDeventa.Data.Mappers
                     Description = model.Description,
                     UDM = model.UDM,
                     Percentage = model.Percentage,
-                    PriceGross= model.PriceGross,
+                    PriceGross = model.PriceGross,
                     Sku = model.Code,
-                    CategoryId = model.CategoryId
+                    CategoryId = model.CategoryId,
+                    InReport = model.InReport,
+                    Vat = iva
                 };
+            }
+
+            else
+                return null;
+        }
+
+        public static ProductEntity ToProductEntity(this ProductDTO model, string productId, string categoryId)
+        {
+            if (model.IsNotNull())
+            {
+
+                return new ProductEntity()
+                {
+                    Name = model.Name,
+                    Id = productId,
+                    IsOffer = model.IsOffer,
+                    BarCode = model.BarCode,
+                    Description = model.Description,
+                    UDM = model.UDM,
+                    Percentage = model.Percentage,
+                    PriceGross = model.PriceGross,
+                    Code = model.Sku,
+                    CategoryId = categoryId,
+                    InReport = model.InReport
+                };
+            }
+
+            else
+                return null;
+        }
+        public static ProductEntity ToProductEntity(this Product model)
+        {
+            if (model.IsNotNull())
+            {
+
+                var entity = new ProductEntity();
+                entity.CopyPropertiesFrom(model);
+                return entity;
             }
 
             else
@@ -181,6 +236,73 @@ namespace PuntoDeventa.Data.Mappers
                 return null;
         }
 
+        public static Client ToClient(this ClientEntity model)
+        {
+            if (model.IsNotNull())
+            {
+                var client = new Client();
+                client.CopyPropertiesFrom(model);
+                return client;
+            }
+
+            else
+                return null;
+        }
+
+        public static ClientEntity ToClientEntity(this Client model)
+        {
+            if (model.IsNotNull())
+            {
+                var client = new ClientEntity();
+                client.CopyPropertiesFrom(model);
+                return client;
+            }
+
+            else
+                return null;
+        }
+
+        public static ClientDTO ToClientDTO(this Client model)
+        {
+            if (model.IsNotNull())
+            {
+                var client = new ClientDTO();
+                client.CopyPropertiesFrom(model);
+                return client;
+            }
+
+            else
+                return null;
+        }
+
+        public static SalesRoutesEntity ToSalesRoutesEntity(this SalesRoutes model)
+        {
+            if (model.IsNotNull())
+            {
+                var route = new SalesRoutesEntity();
+                route.CopyPropertiesFrom(model);
+                return route;
+            }
+
+            else
+                return null;
+        }
+
+        public static IssuingCompany ToIssuingCompany(this EcommerceDTO dto, int ecoActIndex = 0)
+        {
+            var activityEconomic = dto.EconomicActivities[ecoActIndex];
+            return new IssuingCompany()
+            {
+                Address = dto.Address,
+                AddressCode = dto.CdgSIISucur,
+                Commune = dto.Commune,
+                EconomicActivityCode = activityEconomic!.Code,
+                Name = dto.Name,
+                Phone = dto.Phone,
+                Rut = dto.Rut,
+                Turn = activityEconomic!.Turn,
+            };
+        }
 
     }
 }

@@ -1,39 +1,65 @@
-﻿namespace PuntoDeventa.Core.LocalData.Preferences
+﻿using PuntoDeventa.Data.DTO;
+
+namespace PuntoDeventa.Core.LocalData.Preferences
 {
-    using Xamarin.Essentials;
     using Newtonsoft.Json;
-    using PuntoDeventa.Data.DTO;
+    using PuntoDeventa.Data.DTO.Auth;
+    using System;
+    using Xamarin.Essentials;
+
+    internal class InClassName<TT>
+    {
+        public InClassName(string key, TT value)
+        {
+            Key = key;
+            Value = value;
+        }
+
+        public string Key { get; private set; }
+        public TT Value { get; private set; }
+    }
+
     internal class DataPreferences : IDataPreferences
     {
         #region fields
         private UserDataDTO _userData;
-        private RemembermeUserDTO _remembermeUser;
-        private readonly string _remembermeKey = "RemembermeUser";
+        private RemembermeUserDTO _rememberMe;
+        private EcommerceDTO _ecommerce;
+        private readonly string _rememberMeKey = "RememberMeUser";
         private readonly string _userKey = "UserData";
+        private readonly string _ecommerceKey = "EcommerceData";
         #endregion fields
-        public RemembermeUserDTO GetRemembermeUser()
+        public RemembermeUserDTO GetRememberMeUser()
         {
-            return GetDataPreferencesKey(_remembermeKey, _remembermeUser); ;
+            return GetDataPreferencesKey(_rememberMeKey, _rememberMe); ;
         }
         public UserDataDTO GetUserData()
         {
             return GetDataPreferencesKey(_userKey, _userData);
         }
-
-        public void SetRemembermeUser(RemembermeUserDTO user)
+        public EcommerceDTO GetEcommerceData()
         {
-            _remembermeUser = SetDataPreferencesKey(_remembermeKey, user);
+            return GetDataPreferencesKey(_ecommerceKey, _ecommerce);
+        }
+        public void SetEcommerceData(EcommerceDTO ecommerce)
+        {
+            _ecommerce = SetDataPreferencesKey(new InClassName<EcommerceDTO>(_ecommerceKey, ecommerce));
+        }
+        public void SetRememberMeUser(RemembermeUserDTO user)
+        {
+            _rememberMe = SetDataPreferencesKey(new InClassName<RemembermeUserDTO>(_rememberMeKey, user));
         }
 
         public void SetUserData(UserDataDTO user)
         {
-            _userData = SetDataPreferencesKey(_userKey, user);
+            user.DateLogin = DateTime.Now;
+            _userData = SetDataPreferencesKey(new InClassName<UserDataDTO>(_userKey, user));
         }
 
-        private T SetDataPreferencesKey<T>(string key, T value)
+        private T SetDataPreferencesKey<T>(InClassName<T> inClassName)
         {
-            Preferences.Set(key, JsonConvert.SerializeObject(value));
-            return value;
+            Preferences.Set(inClassName.Key, JsonConvert.SerializeObject(inClassName.Value));
+            return inClassName.Value;
         }
 
         private T GetDataPreferencesKey<T>(string key, T model)

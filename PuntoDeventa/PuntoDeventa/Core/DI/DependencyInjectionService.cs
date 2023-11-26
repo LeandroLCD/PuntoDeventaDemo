@@ -1,16 +1,26 @@
 ﻿using PuntoDeventa.Core.LocalData.DataBase;
+using PuntoDeventa.Core.LocalData.Files;
 using PuntoDeventa.Core.LocalData.Preferences;
 using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.Repository.Auth;
+using PuntoDeventa.Data.Repository.CatalogueClient;
 using PuntoDeventa.Data.Repository.CategoryProduct;
+using PuntoDeventa.Data.Repository.EmissionSystem;
+using PuntoDeventa.Data.Repository.Reports;
 using PuntoDeventa.Demo.Domain.UsesCase.Auth.Implementation;
 using PuntoDeventa.Domain.UseCase.Auth;
 using PuntoDeventa.Domain.UseCase.Auth.Implementation;
+using PuntoDeventa.Domain.UseCase.CatalogueClient;
+using PuntoDeventa.Domain.UseCase.CatalogueClient.Implementation;
 using PuntoDeventa.Domain.UseCase.CategoryProduct;
 using PuntoDeventa.Domain.UseCase.CategoryProduct.Implementation;
+using PuntoDeventa.Domain.UseCase.Report;
+using PuntoDeventa.Domain.UseCase.Report.Implementation;
+using PuntoDeventa.Domain.UseCase.Sales;
+using PuntoDeventa.Domain.UseCase.Sales.Implementation;
 using PuntoDeventa.Domain.UsesCase.Auth;
 using PuntoDeventa.UI.Auth;
-using System;
+using Syncfusion.Licensing;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Core.DI
@@ -30,13 +40,9 @@ namespace PuntoDeventa.Core.DI
 
             RegisterUserInterfaceDependencies();
 
-            Sync();
-        }
+            SyncfusionLicenseProvider.RegisterLicense(LicenseProvider.LicenseKey);
 
-        private void Sync()
-        {
-            var useCase = DependencyService.Get<ISyncDataUseCase>();
-            useCase.Sync();
+
         }
 
 
@@ -48,9 +54,12 @@ namespace PuntoDeventa.Core.DI
         private void RegisterCoreDependencies()
         {
             //Registro de dependencia DataPreferences
+            DependencyService.Register<IFileManager, FileManager>();
             DependencyService.Register<IDataPreferences, DataPreferences>();
             DependencyService.Register<IDataAccessObject, DataAccessObject>();
             DependencyService.Register<IDataStore, DataStore>();
+            DependencyService.Register<IElectronicEmissionSystem, ElectronicEmissionSystem>();
+
 
 
         }
@@ -59,10 +68,17 @@ namespace PuntoDeventa.Core.DI
         /// </summary>
         private void RegisterDataDependencies()
         {
+
             _authRepository = new AuthRepository(DependencyService.Get<IDataPreferences>());
             DependencyService.RegisterSingleton<IAuthRepository>(_authRepository);
             DependencyService.RegisterSingleton<IUserRepository>(_authRepository);
             DependencyService.Register<ICategoryProductRepository, CategoryProductRepository>();
+            DependencyService.Register<ICatalogueClientRepository, CatalogueClientRepository>();
+            DependencyService.Register<IOpenFacturaRepository, OpenFacturaRepository>();
+
+            DependencyService.Register<IReportRepository, ReportRepository>();
+
+
         }
         /// <summary>
         /// Registra las dependencias de la capa Domain utilizando DependencyService.
@@ -79,12 +95,52 @@ namespace PuntoDeventa.Core.DI
 
             #region Categories
             DependencyService.Register<IGetCategoryListUseCase, GetCategoryListUseCase>();
+            DependencyService.Register<IGetCategoryUseCase, GetCategoryUseCase>();
+            DependencyService.Register<IGetProductUseCase, GetProductUseCase>();
+
             DependencyService.Register<ISyncDataUseCase, SyncDataUseCase>();
+
             DependencyService.Register<IAddCategoryUseCase, AddCategoryUseCase>();
             DependencyService.Register<IAddProductUseCase, AddProductUseCase>();
-            DependencyService.Register<IGetCategoryUseCase, GetCategoryUseCase>();
+
+            DependencyService.Register<IDeleteCategoryUseCase, DeleteCategoryUseCase>();
+            DependencyService.Register<IDeleteProductUseCase, DeleteProductUseCase>();
+
+            DependencyService.Register<IEdictCategoryUseCase, EdictCategoryUseCase>();
+            DependencyService.Register<IEditProductUseCase, EditProductUseCase>();
+
             #endregion
 
+            #region Client
+
+
+            DependencyService.Register<IAddClientUseCase, AddClientUseCase>();
+            DependencyService.Register<IAddSalesRouteUseCase, AddSalesRouteUseCase>();
+
+            DependencyService.Register<IDeleteClientUseCase, DeleteClientUseCase>();
+            DependencyService.Register<IDeleteRouteUseCase, DeleteRouteUseCase>();
+
+            DependencyService.Register<IGetSalesRoutesUseCase, GetSalesRoutesUseCase>();
+            DependencyService.Register<IGetRoutesUseCase, GetRroutesUseCase>();
+            DependencyService.Register<ISyncCatalogueUseCase, SyncCatalogueUseCase>();
+
+            DependencyService.Register<ITributaryInformationUseCase, TributaryInformationUseCase>();
+            DependencyService.Register<IUpdateClient, UpdateClient>();
+
+            #endregion
+
+            #region Sales
+            DependencyService.Register<IEmitFacturaUseCase, EmitFacturaUseCase>();
+            DependencyService.Register<IEmitNotaDePedidoUseCase, InsertNotaDePedidoUseCase>();
+            DependencyService.Register<ISyncInformationTributaryUseCase, SyncInformationTributaryUseCase>();
+
+            #endregion
+
+            #region Report
+
+            DependencyService.Register<IGetReportSales, GetReportSales>();
+
+            #endregion
         }
         /// <summary>
         /// Registra las dependencias de la capa UserInterface utilizando DependencyService.

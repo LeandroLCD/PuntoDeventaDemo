@@ -26,6 +26,8 @@ namespace PuntoDeventa.UI.Auth.Models
 
         public bool HasPassword => !string.IsNullOrEmpty(PasswordErrorText);
 
+        public bool IsRememberme { get; set; }
+
         public void ErrorClear()
         {
             PasswordErrorText = string.Empty;

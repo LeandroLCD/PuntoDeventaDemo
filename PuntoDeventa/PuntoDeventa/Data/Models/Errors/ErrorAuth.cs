@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PuntoDeventa.Data.Models.Errors
 {
@@ -22,5 +20,5 @@ namespace PuntoDeventa.Data.Models.Errors
         [JsonProperty("errors")]
         public List<Error> Errors { get; set; }
     }
-     
+
 }

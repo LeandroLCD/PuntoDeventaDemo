@@ -9,7 +9,7 @@ namespace PuntoDeventa.IU.Auth.Screen
 {
     public class LoginScreen : ContentView
     {
-        public LoginScreen(AuthDataUser dataUser, bool IsRememberme, Command LoginCommand, Command RegisterCommand)
+        public LoginScreen(AuthDataUser dataUser, Command<bool> isRemembermeCommand, Command LoginCommand, Command RegisterCommand)
         {
             Grid mainGrid = new Grid
             {
@@ -27,7 +27,7 @@ namespace PuntoDeventa.IU.Auth.Screen
 
 
 
-            mainGrid.Children.Add(PancakeContent(dataUser, IsRememberme, LoginCommand, RegisterCommand), 0, 1, 1, 3);
+            mainGrid.Children.Add(PancakeContent(dataUser, isRemembermeCommand, LoginCommand, RegisterCommand), 0, 1, 1, 3);
 
             Image iconImage = new Image
             {
@@ -39,7 +39,7 @@ namespace PuntoDeventa.IU.Auth.Screen
 
             Content = mainGrid;
         }
-        private PancakeView PancakeContent(AuthDataUser dataUser, bool isRememberme, Command loginCommand, Command recoveryCommand)
+        private PancakeView PancakeContent(AuthDataUser dataUser, Command<bool> isRemembermeCommand, Command loginCommand, Command recoveryCommand)
         {
             BindingContext = dataUser;
             Grid gridLayout = new Grid
@@ -59,7 +59,7 @@ namespace PuntoDeventa.IU.Auth.Screen
 
             gridLayout.Children.Add(PasswordInput(dataUser), 0, 1);
 
-            gridLayout.Children.Add(Rememberme(isRememberme), 0, 2);
+            gridLayout.Children.Add(Rememberme(isRemembermeCommand, string.IsNullOrEmpty(dataUser.Email) ? false : true), 0, 2);
 
             gridLayout.Children.Add(LoginButton(loginCommand), 0, 3);
 
@@ -105,10 +105,13 @@ namespace PuntoDeventa.IU.Auth.Screen
             };
         }
 
-        private StackLayout Rememberme(bool IsRememberme)
+        private StackLayout Rememberme(Command<bool> IsRemembermeCommand, bool isRemember)
         {
-            var rememberme = new CheckBox();
-            rememberme.SetBinding(CheckBox.IsCheckedProperty, nameof(IsRememberme));
+            var rememberme = new CheckBox() { IsChecked = isRemember };
+            rememberme.CheckedChanged += (s, e) =>
+            {
+                IsRemembermeCommand.Execute(e.Value);
+            };
 
             return new StackLayout()
             {

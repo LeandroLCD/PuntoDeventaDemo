@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:control="clr-namespace:PuntoDeventa.UI.Controls"
+             xmlns:reports="clr-namespace:PuntoDeventa.UI.Reports;assembly=PuntoDeventa"
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
+             xmlns:tigger="clr-namespace:PuntoDeventa.UI.Controls.Trigger;assembly=PuntoDeventa"
+             xmlns:xForms="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
+             xmlns:converters="clr-namespace:PuntoDeventa.UI.Controls.Converters;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.Reports.ReportProductPage">
+
+    <ContentPage.Resources>
+        <tigger:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+        <converters:ResizeDp x:Key="ResizeDp" />
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Frame Padding="0" BorderColor="Black" Margin="0,5">
+            <SearchBar HorizontalOptions="FillAndExpand" 
+                       Placeholder="Buscar" 
+                       FontSize="15" 
+                       x:Name="Search"                                   
+                       SearchCommand="{Binding SearchBarCommand}" 
+                       SearchCommandParameter="{Binding Source={x:Reference Search}, Path=Text}"
+                       Text="{Binding SearchText}">
+                <SearchBar.Behaviors>
+                    <behaviorsPack:EventToCommandBehavior Command="{Binding SearchBarCommand}"
+                                                          EventArgsPropertyPath="NewTextValue"
+                                                          EventName="TextChanged"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+        </Frame>
+    </Shell.TitleView>
+   
+    <ContentPage.BindingContext>
+        <reports:ReportProductPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="calendar"
+                     Command="{Binding VisibleCalendarCommand}">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout Margin="10" x:Name="parents">
+
+                <Label Text="Reporte de Productos" 
+                       TextColor="Black" 
+                       FontSize="30" Margin="0,20"
+                       HorizontalOptions="CenterAndExpand" 
+                       VerticalTextAlignment="Center"/>
+
+                <StackLayout Orientation="Horizontal" Padding="0,5">
+                <Label TextColor="Black" FontSize="12" Text="Sku" HorizontalOptions="Start"  WidthRequest="91"></Label>
+                <Label TextColor="Black" FontSize="12" Text="Producto" HorizontalOptions="FillAndExpand"></Label>
+                <Label TextColor="Black" FontSize="12"  Text="Cantidad" HorizontalOptions="End"></Label>
+
+            </StackLayout>
+                <control:ColorListView SelectionMode="None" 
+                                       IsPullToRefreshEnabled="True"
+                                       IsRefreshing="{Binding IsLoading}"
+                                       RefreshControlColor="Red"
+                                       RefreshCommand="{Binding SyncCommand}"
+                                       VerticalOptions="FillAndExpand" 
+                                       ItemsSource="{Binding ProductSales}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" >
+                                <Label TextColor="Black" 
+                                       FontSize="12" 
+                                       Text="{Binding Sku}" 
+                                       HorizontalOptions="Start" 
+                                       Padding="0,0,10,0" 
+                                       VerticalTextAlignment="Center" WidthRequest="60"/>
+                                <Label TextColor="Black" FontSize="12" Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Center"></Label>
+                                <Label TextColor="Black" FontSize="12" FontAttributes="Bold" Text="{Binding Quantity}" WidthRequest="20" HorizontalOptions="End" VerticalTextAlignment="Center"></Label>
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </control:ColorListView>
+        </StackLayout>
+            <Label Text="No se logró obtener datos!" 
+                   HorizontalOptions="CenterAndExpand" 
+                   VerticalOptions="CenterAndExpand">
+                <Label.IsVisible>
+                    <Binding 
+                        Source="{Binding ProductSales.Count}" 
+                        Converter="{StaticResource CountToVisibilityConverter}" />
+                </Label.IsVisible>
+            </Label>
+
+            <ImageButton Source="ic_share.png" 
+                         BackgroundColor="Transparent" 
+                         HorizontalOptions="EndAndExpand" 
+                         VerticalOptions="EndAndExpand" 
+                         WidthRequest="40"
+                         Margin="10" 
+                         Command="{Binding ShareCommand}"
+                        />
+            
+
+            <ContentView Padding="0,0" 
+                         BackgroundColor="#C0808080" 
+                         IsVisible="{Binding IsVisibleCalendar}" 
+                         AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <Grid HorizontalOptions="FillAndExpand" 
+                      VerticalOptions="FillAndExpand">
+                    <Frame BorderColor="Black" 
+                           BackgroundColor="White" 
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           WidthRequest="{Binding Source={x:Reference parents}, Path=Width, Converter={StaticResource ResizeDp}, ConverterParameter=0.70}"
+                           HeightRequest="{Binding Source={x:Reference parents}, Path=Height, Converter={StaticResource ResizeDp}, ConverterParameter=0.50}">
+
+                            <xForms:SfCalendar ViewMode="MonthView"
+                                       SelectionMode="RangeSelection"
+                                       SelectedRange="{Binding DateRangeNow, Mode=TwoWay}"
+                                       SelectionChangedCommand="{Binding SelectionChangedCommand}">
+
+
+                        </xForms:SfCalendar>
+
+                    </Frame>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding VisibleCalendarCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </ContentView>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

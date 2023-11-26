@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct" xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Tigger"
-             x:Class="PuntoDeventa.UI.CategoryProduct.CategoryHome">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls"
+             xmlns:trigger="clr-namespace:PuntoDeventa.UI.Controls.Trigger;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.CategoryProduct.CategoryHome"
+             Title="Rutas de Clientes">
     <ContentPage.BindingContext>
         <viewModel:CategoryHomeViewModel/>
     </ContentPage.BindingContext>
@@ -12,8 +18,8 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
-            
-            <StackLayout Margin="0,0,0,0">
+
+            <StackLayout Margin="15">
 
 
 

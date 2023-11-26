@@ -1,0 +1,377 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:behaviors="clr-namespace:PuntoDeventa.UI.Controls.Converters" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Sales" xmlns:controls="clr-namespace:PuntoDeventa.UI.Controls"
+             x:Class="PuntoDeventa.UI.Sales.SalesPage">
+
+    <ContentPage.BindingContext>
+        <viewModel:SalesPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <behaviors:BoolToColorConverter x:Key="BoolToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding DateDte, StringFormat='{0:dd/MM/yyyy}'}"
+                     Command="{Binding DateDteCommand}"
+                     CommandParameter="{Binding Source={x:Reference DateDte} }">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <Grid >
+            <StackLayout Margin="20,20,20,10" >
+                <Frame Padding="20,1" BorderColor="Black" CornerRadius="5">
+                    <StackLayout Padding="0">
+                        <StackLayout Orientation="Horizontal" Padding="0,10,0,0">
+                            <ImageButton x:Name="MostrarActEco" Source="eye.png" WidthRequest="20" HeightRequest="20" 
+                         BackgroundColor="Transparent" Command="{Binding IsVisibleTributaryDataCommand}" />
+
+                            <Label Text="{Binding ClientName}" 
+                       Margin="10,0" 
+                       LineBreakMode="NoWrap"
+                   HeightRequest="45" TextColor="Black"
+                   VerticalTextAlignment="Center" FontSize="Medium"
+                       
+                    HorizontalOptions="FillAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding IsVisibleModalRoutesCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+
+
+                        </StackLayout>
+                        <StackLayout IsVisible="{Binding IsVisibleTributaryData}" x:Name="GrupActEco">
+
+                            <Picker IsEnabled="{Binding IsVisibleTributaryData}"
+                    Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.EconomicActivities}"
+                    TitleColor="Black" HorizontalTextAlignment="Center" SelectedItem="{Binding ClientSelect.EconomicActivities}"
+                    x:Name="Actividades" FontSize="Medium" HeightRequest="45"
+                    ItemDisplayBinding="{Binding Name}" IsTabStop ="False"
+                    HorizontalOptions="FillAndExpand"/>
+                            <Picker IsEnabled="{Binding IsVisibleTributaryData}"
+                    Title="Seleccione" TextColor="Black" ItemsSource="{Binding ClientSelect.BranchOffices}"
+                    TitleColor="Black" HorizontalTextAlignment="Center"  
+                    x:Name="Sucursales" FontSize="Medium" HeightRequest="45"
+                    ItemDisplayBinding="{Binding Address}" IsTabStop ="False"
+                    HorizontalOptions="FillAndExpand"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Grid >
+                            <controls:StandardEntry x:Name="BarCode" 
+                              FontSize="16" HorizontalTextAlignment="Center"
+                              VerticalOptions="Center" MaxLength="13"
+                              Padding="13"  HeightRequest="50"
+                              IsVisibleKeyboard="{Binding Source={x:Reference isVisible}, Path=IsToggled}"
+                              BorderColor="Black" 
+                              BorderColorFocus="Red"
+                              BorderThickness="1"
+                              CornerRadius="5"
+                              Placeholder="BarCode">
+                                <controls:StandardEntry.Behaviors>
+                                    <behaviorsPack:EventToCommandBehavior EventName="TextChanged"
+                                                          Command="{Binding BarCodeChangedCommand}"
+                                                          CommandParameter="{Binding Source={x:Reference BarCode}}"/>
+                                </controls:StandardEntry.Behaviors>
+
+                            </controls:StandardEntry>
+                            <Switch x:Name="isVisible" IsToggled="{Binding IsVisibleKeyboard}" HorizontalOptions="Start"/>
+                        </Grid>
+                    </StackLayout>
+                    <ImageButton  WidthRequest="55" Source="ic_helado1.png" BackgroundColor="White" Padding="3" Command="{Binding IsVisibleProductCommand}" />
+
+                </StackLayout>
+                <CollectionView x:Name="ProductsSales" 
+                    HorizontalOptions="StartAndExpand" 
+                    ItemsSource="{Binding ProductsSales, Mode=OneWay}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Transparent" x:Name="productS"
+                       
+                       Padding="10">
+                                <StackLayout Orientation="Horizontal">
+                                    <inputLayout:SfTextInputLayout
+                                FocusedColor="Transparent"
+                                UnfocusedColor="Transparent"
+                              ContainerType="Outlined">
+                                        <Entry TextColor="Black" x:Name="quantity"
+                                   FontSize="Medium" 
+                                   HorizontalTextAlignment="Start"
+                                   HorizontalOptions="CenterAndExpand"
+                                   Keyboard="Numeric" WidthRequest="40"
+                                   MaxLength="2"
+                                   FontAttributes="Bold"
+                                   Text="{Binding Quantity}" 
+                                   VerticalOptions="Center">
+                                            <Entry.Behaviors>
+                                                <behaviorsPack:EventToCommandBehavior Command="{Binding Source={x:Reference ProductsSales}, Path=BindingContext.QuantityChangedCommand}"
+                                       CommandParameter="{Binding Source={x:Reference quantity}}"
+                                       EventName="Completed"/>
+                                            </Entry.Behaviors>
+
+                                        </Entry>
+
+                                    </inputLayout:SfTextInputLayout>
+                                    <StackLayout
+                                HorizontalOptions="FillAndExpand">
+                                        <Label TextColor="Black" FontSize="13" Text="{Binding Name}" />
+                                        <StackLayout  Orientation="Horizontal" 
+                                HorizontalOptions="FillAndExpand">
+
+                                            <Label TextColor="Black" 
+                                           FontSize="Small" 
+                                           HorizontalOptions="StartAndExpand"
+                                           Text="{Binding PriceNeto, StringFormat='{0:N0}/Uds'}" />
+
+                                            <Label TextColor="Black" 
+                                           FontSize="Small"  
+                                           IsVisible="{Binding Path=IsToggled, 
+                                                    Source={x:Reference offer}}" 
+                                           HorizontalOptions="CenterAndExpand"
+                                           Text="{Binding Percentage, StringFormat='Oft: {0}%'}" ></Label>
+
+                                            <Label TextColor="Black" 
+                                           FontSize="Small"  
+                                           FontAttributes="Bold" 
+                                           HorizontalOptions="End"
+                                           Text="{Binding SubTotal, StringFormat='{0:C0}'}"/>
+                                        </StackLayout>
+                                        <Switch  HorizontalOptions="StartAndExpand" 
+                                         x:Name="offer" 
+                                         IsToggled="{Binding IsOffer}" >
+                                            <Switch.Behaviors>
+                                                <behaviorsPack:EventToCommandBehavior Command="{Binding Source={x:Reference ProductsSales}, Path=BindingContext.EditProductCommand}"
+                                       CommandParameter="{Binding Source={x:Reference offer}, Path=BindingContext}"
+                                       EventName="Toggled"/>
+                                            </Switch.Behaviors>
+
+                                        </Switch>
+
+                                    </StackLayout>
+
+                                </StackLayout>
+                            </Frame>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+
+                </CollectionView>
+
+
+                <StackLayout Orientation="Horizontal">
+
+                    <DatePicker x:Name="DateDte" FontSize="15"  Format="dd/MM/yy" Date="{Binding DateDte}" IsVisible="False"/>
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Grid >
+                            <Frame HorizontalOptions="FillAndExpand" BorderColor="Black"></Frame>
+                            <StackLayout Margin="10,0" >
+                                <StackLayout Orientation="Horizontal" VerticalOptions="Center" Margin="0,3,0,0" Spacing="0">
+                                    <Label Text="Total:" TextColor="Black" FontSize="15" FontAttributes="Bold"></Label>
+                                    <Label x:Name="Total" Text="{Binding TotalSale, StringFormat='{0:C2}'}"  TextColor="Black" FontSize="15" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"></Label>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" VerticalOptions="Start" Margin="0,-8,0,10" Spacing="0">
+                                    <Label Text="Neto:" TextColor="Black" FontSize="Micro"></Label>
+                                    <Label x:Name="Neto" Text="{Binding TotalNeto, StringFormat='{0:C2}'}" TextColor="Black" FontSize="Micro"  HorizontalOptions="CenterAndExpand"></Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
+
+                    </StackLayout>
+                    <Button Text="Ingresar" FontSize="14" Command="{Binding InsertSale}"  ></Button>
+
+
+                </StackLayout>
+
+            </StackLayout>
+
+
+            <ContentView x:Name="ModalProductList" Padding="10,0" BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleProduct}"  AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Frame BorderColor="Black" BackgroundColor="White">
+
+                        <StackLayout HeightRequest="600" MinimumHeightRequest="500" >
+
+                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined" WidthRequest="150" HeightRequest="56"
+                                Hint="Marca">
+                                    <combobox:SfComboBox 
+                                         HeightRequest="52"
+                                         ShowClearButton="False"
+                                         IsEditableMode="false"
+                                            DataSource="{Binding Brands}">
+                                        <combobox:SfComboBox.Behaviors>
+                                            <behaviorsPack:EventToCommandBehavior Command="{Binding SelectBrandCommand}"
+                                                                      EventArgsPropertyPath="Value"
+                                                                      EventName="SelectionChanged"/>
+                                        </combobox:SfComboBox.Behaviors>
+                                    </combobox:SfComboBox>
+
+                                </inputLayout:SfTextInputLayout>
+                                <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined" HeightRequest="56"
+                                HorizontalOptions="FillAndExpand"
+                                Hint="Categoria">
+                                    <combobox:SfComboBox 
+                                         HeightRequest="52"
+                                    HorizontalOptions="FillAndExpand"
+                                    DataSource="{Binding CategoryProductList}"
+                                             DisplayMemberPath="Name"
+                                             ShowClearButton="False"
+                                             IsEditableMode="false">
+                                        <combobox:SfComboBox.Behaviors>
+                                            <behaviorsPack:EventToCommandBehavior Command="{Binding CategorySelectCommand}"
+                                                                      EventArgsPropertyPath="Value"
+                                                                      EventName="SelectionChanged"/>
+                                        </combobox:SfComboBox.Behaviors>
+                                    </combobox:SfComboBox>
+
+
+                                </inputLayout:SfTextInputLayout>
+
+                            </StackLayout>
+                            <CollectionView x:Name="CollectionProduct"
+                                            Margin="0,10,0,0" 
+                                            SelectionMode="Multiple" 
+                                            ItemsSource="{Binding GetProducts}" 
+                                            SelectionChangedCommand="{Binding ProductChangedCommand}" 
+                                            SelectionChangedCommandParameter="{Binding Source={x:Reference CollectionProduct}}">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout VerticalItemSpacing="5" Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Frame CornerRadius="5" Padding="0" BorderColor="Transparent" VerticalOptions="CenterAndExpand">
+                                            <StackLayout>
+                                                <Label TextColor="Black" FontSize="13" Text="{Binding Name}" />
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label TextColor="Black" FontSize="13" Text="{Binding PriceGross, StringFormat='Neto: {0:C2}'}" HorizontalOptions="StartAndExpand"/>
+                                                    <Label TextColor="Black" FontSize="Small"  IsVisible="{Binding IsOffer}"
+                                                                               Text="{Binding Percentage, StringFormat='Oft: {0}%'}" HorizontalOptions="CenterAndExpand" ></Label>
+                                                    <Label TextColor="Black" FontSize="13" Text="{Binding PriceNeto, StringFormat='+ Iva: {0:C2}'}" HorizontalOptions="EndAndExpand"/>
+                                                </StackLayout>
+                                                <Label TextColor="Black" FontSize="13" Text="{Binding Stock, StringFormat='{0} En Stock'}" HorizontalOptions="EndAndExpand"/>
+
+
+                                            </StackLayout>
+                                        </Frame>
+
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+
+
+                            </CollectionView>
+                            <StackLayout Orientation="Horizontal" BackgroundColor="White" >
+                                <Label Text="{Binding ProductCount, StringFormat='Prod #{0}/22.'}" 
+                                       FontSize="15" 
+                                       VerticalTextAlignment="Center" 
+                                       TextColor="Black" 
+                                       HorizontalOptions="StartAndExpand"/>
+                                <Button 
+                                    Text="Cancelar" 
+                                    TextColor="Red" 
+                                    BackgroundColor="White" 
+                                    FontAttributes="Bold" 
+                                    Command="{Binding IsVisibleProductCommand}" />
+                                <Button Text="Aceptar" 
+                                        TextColor="Red" 
+                                        BackgroundColor="White" 
+                                        FontAttributes="Bold" 
+                                        Command="{Binding AddProductsCommand}" 
+                                        CommandParameter="{x:Reference CollectionProduct}" />
+                            </StackLayout>
+
+                        </StackLayout>
+                    </Frame>
+                    <StackLayout Padding="3,0" HorizontalOptions="End" VerticalOptions="Start">
+                        <ImageButton WidthRequest="25" 
+                                     HeightRequest="25" 
+                                     Source="x.png" 
+                                     CornerRadius="50" 
+                                     Command="{Binding IsVisibleProductCommand}" />
+                    </StackLayout>
+                </Grid>
+            </ContentView>
+
+            <ContentView Padding="10,0" BackgroundColor="#C0808080" IsVisible="{Binding IsVisibleModalRoutes}" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                    <Frame BorderColor="Black" BackgroundColor="White">
+
+                        <StackLayout HeightRequest="600" MinimumHeightRequest="500" >
+
+                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+
+                                <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined" HeightRequest="56"
+                                HorizontalOptions="FillAndExpand"
+                                Hint="Seleccione Ruta">
+                                    <combobox:SfComboBox 
+                                         HeightRequest="52"
+                                    HorizontalOptions="FillAndExpand"
+                                    DataSource="{Binding SalesRoutesList}"
+                                             DisplayMemberPath="Name"
+                                            SelectedIndex="{Binding RoutesIndex}"
+                                             ShowClearButton="False"
+                                             IsEditableMode="false">
+                                        <combobox:SfComboBox.Behaviors>
+                                            <behaviorsPack:EventToCommandBehavior Command="{Binding SalesRoutesSelectCommand}"
+                                                                                  
+                                                                      EventArgsPropertyPath="Value"
+                                                                      EventName="SelectionChanged"/>
+                                        </combobox:SfComboBox.Behaviors>
+                                    </combobox:SfComboBox>
+
+
+                                </inputLayout:SfTextInputLayout>
+
+                            </StackLayout>
+                            <CollectionView x:Name="ModalClient" Margin="0,10,0,0" SelectionMode="Single" ItemsSource="{Binding GetClients}"
+                                        SelectionChangedCommand="{Binding ClientSelectCommand}" SelectionChangedCommandParameter="{Binding Source={x:Reference ModalClient}, Path=SelectedItem}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Frame CornerRadius="5"  VerticalOptions="CenterAndExpand" BorderColor="Transparent" BackgroundColor="{Binding IsAttended, Converter={StaticResource BoolToColorConverter}}">
+
+                                            <StackLayout>
+                                                <Label TextColor="Black" FontSize="13" Text="{Binding Name}" />
+
+                                            </StackLayout>
+                                        </Frame>
+
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+
+
+                            </CollectionView>
+                            <Button Text="Cancelar" TextColor="Red" 
+                                    BackgroundColor="White" 
+                                    HorizontalOptions="EndAndExpand"
+                                    FontAttributes="Bold" WidthRequest="120" 
+                                    Command="{Binding IsVisibleModalRoutesCommand}"/>
+
+
+                        </StackLayout>
+                    </Frame>
+                    <StackLayout Padding="3,0" HorizontalOptions="End" VerticalOptions="Start">
+                        <ImageButton WidthRequest="25" HeightRequest="25" Source="x.png" Command="{Binding IsVisibleModalRoutesCommand}" CornerRadius="50"/>
+                    </StackLayout>
+                </Grid>
+            </ContentView>
+
+
+
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
