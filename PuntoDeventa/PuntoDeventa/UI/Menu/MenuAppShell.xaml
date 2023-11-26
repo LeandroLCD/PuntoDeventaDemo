@@ -87,10 +87,14 @@
     <FlyoutItem Title="Catalgo Clientes" Icon="clients">
         <ShellContent Route="CatalogueClient" ContentTemplate="{DataTemplate catalogue:CatalogueClientPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Reports" Icon="report">
+    <FlyoutItem Title="Reporte de Ventas" Icon="report">
+        <ShellContent Route="ReportSalePage" ContentTemplate="{DataTemplate reports:ReportSalePage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Reporte de Productos" Icon="report">
         <ShellContent Route="ReportProductPage" ContentTemplate="{DataTemplate reports:ReportProductPage}" />
-    </FlyoutItem> 
-    <Shell.FlyoutHeaderTemplate>
+    </FlyoutItem>
+
+<Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <ContentView Padding="-5" HeightRequest="200" BackgroundColor="Transparent">
                 <Image Source="logo.png" VerticalOptions="FillAndExpand" />

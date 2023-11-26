@@ -3,6 +3,7 @@ using PuntoDeventa.Core.Network;
 using PuntoDeventa.Data.DTO.Sales;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.UI.Reports.Models;
+using PuntoDeventa.UI.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,10 @@ namespace PuntoDeventa.Data.Repository.Reports
         {
             var resultType = await MakeCallNetwork<Dictionary<string, ReportSaleDto>>(async () => await _dataStore.GetAsync<ReportSaleDto>(FactoryUri($"{date:yyyy}/{date:MM}")));
 
-            if (!resultType.Success || resultType.Data.IsNull()) yield break;
+            if (!resultType.Success || resultType.Data.IsNull())
+            {
+                throw new CustomException(8, string.Join(Environment.NewLine, resultType.Errors));
+            }
 
             foreach (KeyValuePair<string, ReportSaleDto> item in resultType.Data)
             {

@@ -144,6 +144,9 @@
     <PackageReference Include="Syncfusion.Xamarin.Core">
       <Version>23.1.44</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar">
+      <Version>23.1.44</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox">
       <Version>23.1.44</Version>
     </PackageReference>

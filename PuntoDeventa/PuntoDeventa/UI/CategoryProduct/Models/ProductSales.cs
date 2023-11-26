@@ -15,15 +15,17 @@ namespace PuntoDeventa.UI.CategoryProduct.Models
             Quantity = quantity;
         }
         public int Quantity { get; set; }
+
         public double SubTotal => PriceNeto * Quantity;
 
+        public double SubTotalGross => PriceGross * Quantity;
         public override bool Equals(object obj)
         {
             if (obj is ProductSales other)
             {
                 return Id == other.Id &&
                     Name == other.Name &&
-                    Quantity == other.Quantity &&
+                    Sku == other.Sku &&
                     BarCode == other.BarCode;
             }
             return false;

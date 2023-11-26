@@ -1,5 +1,5 @@
-﻿using PuntoDeventa.Data.DTO.Sales;
-using PuntoDeventa.Domain.Helpers;
+﻿using PuntoDeventa.Domain.Helpers;
+using PuntoDeventa.UI.CategoryProduct.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +18,6 @@ namespace PuntoDeventa.UI.Reports.Models
 
         public double AmountIva => Iva == 0 ? 0 : Math.Floor(TotalNet * (1 + Iva));
 
-        public IEnumerable<ProductSalesDto> Products { get; set; }
+        public IEnumerable<ProductSales> Products { get; set; }
     }
 }

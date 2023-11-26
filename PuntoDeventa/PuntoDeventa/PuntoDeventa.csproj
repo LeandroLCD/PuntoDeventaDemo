@@ -19,6 +19,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="23.1.44" />
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfNumericTextBox" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="23.1.44" />
@@ -39,6 +40,9 @@
     </Compile>
     <Compile Update="UI\CatalogueClient\CatalogueDetailPage.xaml.cs">
       <DependentUpon>CatalogueDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Reports\ReportSalePage.xaml.cs">
+      <DependentUpon>ReportSalePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -69,6 +73,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UI\Reports\ReportProductPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UI\Reports\ReportSalePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UI\Sales\PaymentSale.xaml">

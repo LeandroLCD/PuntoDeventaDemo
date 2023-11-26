@@ -175,7 +175,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
 
             };
             return await _dataStore.PutAsync(_reportSale,
-                FactoryUrlRealDataBase("ReportSales", paymentSales.Sale.Date, localId)); //MakeCallNetwork<ReportSaleDto>(() => _dataStore.PutAsync(dto, FactoryUrlRealDataBase("ReportSale", paymentSales.Sale.Date, data.Token)));
+                FactoryUrlRealDataBase("ProductSales", paymentSales.Sale.Date, localId)); //MakeCallNetwork<ReportSaleDto>(() => _dataStore.PutAsync(dto, FactoryUrlRealDataBase("ReportSale", paymentSales.Sale.Date, data.Token)));
         }
 
         private void SaveDataBase(PendingDocumentEntity obj)

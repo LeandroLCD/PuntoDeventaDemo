@@ -38,7 +38,12 @@ namespace PuntoDeventa.UI.Menu
 
             #endregion
 
+            #region Reports
+
+            Routing.RegisterRoute(nameof(ReportSalePage), typeof(ReportSalePage));
             Routing.RegisterRoute(nameof(ReportProductPage), typeof(ReportProductPage));
+
+            #endregion
 
         }
     }

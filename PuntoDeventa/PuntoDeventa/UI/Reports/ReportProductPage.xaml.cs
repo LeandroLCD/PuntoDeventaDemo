@@ -6,18 +6,18 @@ namespace PuntoDeventa.UI.Reports
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ReportProductPage : ContentPage
     {
-        private readonly ExportReportViewModel _viewModel;
+        private readonly ReportProductPageViewModel _viewModel;
 
         public ReportProductPage()
         {
             InitializeComponent();
-            _viewModel = (ExportReportViewModel)BindingContext;
+            _viewModel = (ReportProductPageViewModel)BindingContext;
         }
 
         protected override void OnAppearing()
         {
-            _viewModel.OnAppearing();
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }
