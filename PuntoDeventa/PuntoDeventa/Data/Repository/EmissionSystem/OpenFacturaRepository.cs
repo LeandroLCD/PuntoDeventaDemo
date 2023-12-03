@@ -16,6 +16,7 @@ using PuntoDeventa.UI.Sales.Models;
 using PuntoDeventa.UI.Sales.State;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -67,8 +68,6 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                 return SalesState.Error.Instance(string.Join(Environment.NewLine, resultType.Errors));
 
 
-            //TODO create pdfManager
-
             var pathPdf = await _fileManager.CreatePdf(dteDto.Dte, resultType.Data, _ecommerceData.RegionalDirection);
 
 
@@ -99,13 +98,14 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             _ecommerceData.CopyPropertiesFrom(ecommerceDto);
 
             _dataPreferences.SetEcommerceData(_ecommerceData);
-
+            Console.WriteLine(_ecommerceData);
+            Debug.WriteLine(_ecommerceData);
             return SalesState.Success.Instance("Actualización Exitosa");
         }
 
         public async Task<SalesState> InsertNotaDePedido(PaymentSales paymentSales)
         {
-            var invoice = int.Parse($"{paymentSales.Sale.Date:yyMMddmmss}");
+            var invoice = int.Parse($"{paymentSales.Sale.Date:yyMMddmm}");
 
             var pathPdf = await _fileManager.CreatePdf(paymentSales.ToDocumentElectronicDto(_ecommerceData, new[] { "" }, DteType.NotaDePedido).Dte, new EmissionReposeDTO(), _ecommerceData.RegionalDirection);
 
@@ -134,7 +134,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                 Rut = paymentSales.Sale.Client.Rut,
                 Amount = paymentSales.Sale.TotalSale(_ecommerceData.Iva),
                 SellerCode = "01",
-                Payments = paymentSales.PaymentTypes.Select(p => p.ToPaymentDto()).ToList()
+                Payments = paymentSales.PaymentTypes?.Select(p => p.ToPaymentDto()).ToList()
 
             };
 
@@ -152,6 +152,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                 Dte = paymentSales.DocumentType,
                 Date = paymentSales.Sale.Date,
                 Delivery = paymentSales.Sale.Date,
+                PdfBase64 = base64StringPdf,
                 Iva = _ecommerceData.Iva,
                 Invoice = invoice,
                 Name = paymentSales.Sale.Client.Name,
@@ -203,7 +204,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             {
                 Properties.Resources.BaseUrlRealDataBase,
                 path,
-                $"{date.Year}/{date.Month:M2}/{localId}.json?auth={_userData.IdToken}"
+                $"{date.Year}/{date.Month:D2}/{localId}.json?auth={_userData.IdToken}"
             }));
 
 
@@ -224,7 +225,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
                     if (!task.IsFaulted || task.Exception.IsNull()) return;
                     foreach (var exception in task.Exception.InnerExceptions)
                     {
-                        Console.WriteLine($"Error: {exception.Message}");
+                        Console.WriteLine($"Punto de Venta Error: {exception.Message}");
                         //Todo mapear errores de firebase // se puede usar crashlytics
                         //https://medium.com/@freakyali/firebase-crashlytics-with-xamarin-5421089bb561
                     }
@@ -272,7 +273,7 @@ namespace PuntoDeventa.Data.Repository.EmissionSystem
             }
             catch (Exception e)
             {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
 

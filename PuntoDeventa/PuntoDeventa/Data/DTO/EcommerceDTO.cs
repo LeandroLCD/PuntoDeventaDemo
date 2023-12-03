@@ -52,5 +52,9 @@ namespace PuntoDeventa.Data.DTO
         [JsonProperty("actividades")]
         public List<EconomicActivities> EconomicActivities { get; set; }
 
+        public override string ToString()
+        {
+            return $"Empresa:{Name}, apiKey: {ApiKey}";
+        }
     }
 }

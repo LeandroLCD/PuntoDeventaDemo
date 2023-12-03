@@ -13,12 +13,14 @@
 
   <ItemGroup>
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.1.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-fips-adapter" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="23.1.44" />
+    <PackageReference Include="Syncfusion.Xamarin.SfCalendar" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfNumericTextBox" Version="23.1.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="23.1.44" />
@@ -39,6 +41,12 @@
     </Compile>
     <Compile Update="UI\CatalogueClient\CatalogueDetailPage.xaml.cs">
       <DependentUpon>CatalogueDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Reports\ReportSalePage.xaml.cs">
+      <DependentUpon>ReportSalePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Sales\PaymentSalePage.xaml.cs">
+      <DependentUpon>PaymentSalePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -71,7 +79,10 @@
     <EmbeddedResource Update="UI\Reports\ReportProductPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="UI\Sales\PaymentSale.xaml">
+    <EmbeddedResource Update="UI\Reports\ReportSalePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UI\Sales\PaymentSalePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UI\Sales\SalesPage.xaml">

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PuntoDeventa.Data.Repository.Reports;
+﻿using PuntoDeventa.Data.Repository.Reports;
 using PuntoDeventa.UI.Reports.Models;
+using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.Domain.UseCase.Report.Implementation
 {
-    internal class GetReportSales: IGetReportSales
+    internal class GetReportSales : IGetReportSales
     {
         private readonly IReportRepository _repository;
 
@@ -17,11 +16,12 @@ namespace PuntoDeventa.Domain.UseCase.Report.Implementation
         }
         public async IAsyncEnumerable<ReportSale> EmitSales(DateTime date)
         {
-           await foreach (var report in _repository.GetReportSale(date))
-           {
-               yield return report;
-           }
-            
+
+            await foreach (var report in _repository.GetReportSale(date))
+            {
+                yield return report;
+            }
+
         }
     }
 }

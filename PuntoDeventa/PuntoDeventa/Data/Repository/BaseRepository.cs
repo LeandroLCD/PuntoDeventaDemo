@@ -35,7 +35,14 @@ namespace PuntoDeventa.Data.Repository
                         if (data.IsNotNull())
                         {
                             resultType.Data = data;
+                            break;
                         }
+
+                        resultType.Success = false;
+
+                        resultType.Errors.Add(new ErrorMessage("Error", "no se pudo desereaizar la respuesta."));
+
+                        resultType.Errors.Add(new ErrorMessage("response", jsonResult));
                         break;
 
                     case HttpStatusCode.Unauthorized:

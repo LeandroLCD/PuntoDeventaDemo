@@ -1,15 +1,12 @@
 ﻿using Lottie.Forms;
 using PuntoDeventa.Domain.Helpers;
-using PuntoDeventa.UI.Sales.Models;
 using Syncfusion.SfNumericTextBox.XForms;
 using Syncfusion.XForms.Editors;
 using Syncfusion.XForms.TextInputLayout;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
-using static PuntoDeventa.UI.Sales.Models.PaymentType;
 
 namespace PuntoDeventa.UI.Sales.Screen
 {
@@ -17,16 +14,27 @@ namespace PuntoDeventa.UI.Sales.Screen
     {
         private readonly ICommand _commandCash;
         private readonly ICommand _commandCredit;
+        private readonly ICommand _castCommand;
+        private readonly ICommand _checkCommand;
+        private readonly ICommand _depositCommand;
+        private readonly ICommand _transferCommand;
         private Grid _gridParen;
 
         public PaymentListScreen(ICommand commandCash = null,
-            ICommand commandCredit = null,
-            ICommand changedPaymentCommand = null)
+                                 ICommand commandCredit = null,
+                                 ICommand castCommand = null,
+                                 ICommand checkCommand = null,
+                                 ICommand depositCommand = null,
+                                 ICommand transferCommand = null)
         {
             _commandCash = commandCash;
             _commandCredit = commandCredit;
+            _castCommand = castCommand;
+            _checkCommand = checkCommand;
+            _depositCommand = depositCommand;
+            _transferCommand = transferCommand;
 
-            Content = LoadContent(changedPaymentCommand);
+            Content = LoadContent();
         }
 
         private AnimationView AnimationPay()
@@ -46,7 +54,7 @@ namespace PuntoDeventa.UI.Sales.Screen
             };
         }
 
-        private View LoadContent(ICommand changedPayment)
+        private View LoadContent()
         {
             var styleButtons = new Style(typeof(Button))
             {
@@ -85,15 +93,14 @@ namespace PuntoDeventa.UI.Sales.Screen
                     {
                         Text = "Efectivo",
                         Style = styleButtons,
-                        Command = paymentCash(changedPayment)
+                        Command = paymentCash()
 
                     },
                     new Button()
                     {
-                        //BackgroundColor = Color.FromRgb(39, 89, 148),
                         Text = "Crédito",
                         Style = styleButtons,
-                        Command = paymentCredit(changedPayment)
+                        Command = paymentCredit()
                     }
                 }
             };
@@ -107,23 +114,23 @@ namespace PuntoDeventa.UI.Sales.Screen
             return _gridParen;
         }
 
-        private ICommand paymentCredit(ICommand changedPayment)
+        private ICommand paymentCredit()
         {
             return new Command(() =>
             {
-                LoadPaymentList(_commandCredit, changedPayment);
+                LoadPaymentList(_commandCredit);
             });
         }
 
-        private ICommand paymentCash(ICommand changedPayment)
+        private ICommand paymentCash()
         {
             return new Command(() =>
             {
-                LoadPaymentList(_commandCash, changedPayment);
+                LoadPaymentList(_commandCash);
             });
         }
 
-        private void LoadPaymentList(ICommand commandCast, ICommand changedPayment)
+        private void LoadPaymentList(ICommand command)
         {
             View aniView = _gridParen.Children.FirstOrDefault(p => p.GetType() == typeof(AnimationView));
             aniView?.Apply(() =>
@@ -165,10 +172,10 @@ namespace PuntoDeventa.UI.Sales.Screen
                 _gridParen.Children.Remove(buttonView);
             });
 
-            _gridParen.Children.Add(Payment(commandCast, changedPayment));
+            _gridParen.Children.Add(Payment(command));
         }
 
-        private View Payment(ICommand commandActions, ICommand changedPayment)
+        private View Payment(ICommand commandActions)
         {
 
 
@@ -176,13 +183,16 @@ namespace PuntoDeventa.UI.Sales.Screen
             {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                Padding = new Thickness(20),
+                Padding = new Thickness(20, 50, 20, 10),
                 Children =
                 {
-                    EntryPayment("Efectivo", Cash, changedPayment),
-                    EntryPayment("Cheque", BankCheck,changedPayment),
-                    EntryPayment("Transferencia",BankTransfer, changedPayment),
-                    EntryPayment("Deposito", BankDeposit,changedPayment),
+                    EntryPayment("Efectivo", _castCommand),
+                    EntryPayment("Cheque", _checkCommand),
+                    EntryPayment("Transferencia",_transferCommand),
+                    EntryPayment("Deposito", _depositCommand),
+                    new BoxView(){ VerticalOptions = LayoutOptions.FillAndExpand},
+                    EntryPaymentTotal(),
+
                 }
             };
 
@@ -206,7 +216,7 @@ namespace PuntoDeventa.UI.Sales.Screen
             };
         }
 
-        private SfTextInputLayout EntryPayment(string title, PaymentType paymentType, ICommand changedPayment)
+        private SfTextInputLayout EntryPayment(string title, ICommand paymentCommand)
         {
             var numericTextBox = new SfNumericTextBox
             {
@@ -214,15 +224,21 @@ namespace PuntoDeventa.UI.Sales.Screen
                 ClearButtonVisibility = ClearButtonVisibilityMode.WhileEditing,
                 EnableGroupSeparator = true,
                 AllowDefaultDecimalDigits = true,
-                SelectAllOnFocus = true
+                SelectAllOnFocus = true,
 
             };
-            numericTextBox.ReturnCommand = changedPayment;
-            numericTextBox.ReturnCommandParameter = new KeyValue<string, double>
+            numericTextBox.Unfocused += (sender, e) =>
             {
-                Key = nameof(paymentType),
-                Value = (double)numericTextBox.Value
+                var value = ((SfNumericTextBox)sender).Value.ToString();
+                var parameter = int.TryParse(value, out var result);
+
+                if (parameter && paymentCommand.CanExecute(result))
+                {
+                    paymentCommand.Execute(result);
+                }
             };
+            //numericTextBox.ReturnCommand = paymentCommand;
+            //numericTextBox.SetBinding(SfNumericTextBox.ReturnCommandParameterProperty ,new Binding("Value", source: numericTextBox));
 
             return new SfTextInputLayout()
             {
@@ -235,16 +251,9 @@ namespace PuntoDeventa.UI.Sales.Screen
 
         }
 
-        private void ValueChange(ICommand changedPayment, PaymentType paymentType, double eValue)
-        {
-            changedPayment.Execute(new KeyValue<string, double>
-            {
-                Key = nameof(paymentType),
-                Value = (double)eValue
-            });
-        }
 
-        private SfTextInputLayout EntryPaymentTotal(IEnumerable<Payment> paymentTypes)
+
+        private SfTextInputLayout EntryPaymentTotal()
         {
             var numericTextBox = new SfNumericTextBox
             {
@@ -255,8 +264,10 @@ namespace PuntoDeventa.UI.Sales.Screen
                 AllowDefaultDecimalDigits = true,
                 SelectAllOnFocus = true,
                 IsReadOnly = true,
-                Value = paymentTypes.Sum(p => p.Amount)
             };
+
+            numericTextBox.SetBinding(SfNumericTextBox.ValueProperty, new Binding("TotalPay"));
+
             return new SfTextInputLayout()
             {
                 Hint = "Total",

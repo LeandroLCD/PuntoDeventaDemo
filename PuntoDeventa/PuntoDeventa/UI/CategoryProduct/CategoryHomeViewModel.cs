@@ -28,7 +28,7 @@ namespace PuntoDeventa.UI.CategoryProduct
         #region Contructor
         public CategoryHomeViewModel()
         {
-            InicilizeCommand();
+            InitializeCommand();
 
             _categoryListUseCase = DependencyService.Get<IGetCategoryListUseCase>();
 
@@ -103,7 +103,7 @@ namespace PuntoDeventa.UI.CategoryProduct
 
         public void OnApperning()
         {
-            InicializeProperties();
+            InitializeProperties();
         }
 
         public void OnStop()
@@ -111,7 +111,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             TokenSource.Cancel();
             IsVisibleAddCategory = false;
         }
-        private void InicializeProperties()
+        private void InitializeProperties()
         {
             TokenSource = new CancellationTokenSource();
 
@@ -134,7 +134,7 @@ namespace PuntoDeventa.UI.CategoryProduct
             _categoryList = new ObservableCollection<Category>();
         }
 
-        private void InicilizeCommand()
+        private void InitializeCommand()
         {
             IsVisibleAddCategoryCommand = new Command(() =>
             {
