@@ -133,12 +133,14 @@ namespace PuntoDeventa.Core.DI
             DependencyService.Register<IEmitFacturaUseCase, EmitFacturaUseCase>();
             DependencyService.Register<IEmitNotaDePedidoUseCase, InsertNotaDePedidoUseCase>();
             DependencyService.Register<ISyncInformationTributaryUseCase, SyncInformationTributaryUseCase>();
-
+            DependencyService.Register<IPreViewPdf, PreViewPdf>();
             #endregion
 
             #region Report
 
             DependencyService.Register<IGetReportSales, GetReportSales>();
+            DependencyService.Register<IReportToExcelUseCase, ReportToExcel>();
+            DependencyService.Register<IReportToPdfUseCase, ReportToPdfUseCase>();
 
             #endregion
         }

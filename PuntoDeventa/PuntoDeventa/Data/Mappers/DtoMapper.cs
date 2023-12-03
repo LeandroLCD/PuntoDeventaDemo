@@ -5,6 +5,7 @@ using PuntoDeventa.Data.DTO.Auth;
 using PuntoDeventa.Data.DTO.CatalogueClient;
 using PuntoDeventa.Data.DTO.CatalogueProduct;
 using PuntoDeventa.Data.DTO.EmissionSystem.Dtes.Header;
+using PuntoDeventa.Data.DTO.Sales;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.Models;
 using PuntoDeventa.UI.CatalogueClient.Model;
@@ -302,6 +303,13 @@ namespace PuntoDeventa.Data.Mappers
                 Rut = dto.Rut,
                 Turn = activityEconomic!.Turn,
             };
+        }
+
+        public static ProductSalesDto ToProductSalesDto(this ProductSales model)
+        {
+            var dto = new ProductSalesDto();
+            dto.CopyPropertiesFrom(model);
+            return dto;
         }
 
     }

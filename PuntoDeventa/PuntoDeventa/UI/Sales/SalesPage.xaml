@@ -96,8 +96,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame BorderColor="Transparent" x:Name="productS"
-                       
-                       Padding="10">
+                                Padding="10">
                                 <StackLayout Orientation="Horizontal">
                                     <inputLayout:SfTextInputLayout
                                 FocusedColor="Transparent"
@@ -105,7 +104,7 @@
                               ContainerType="Outlined">
                                         <Entry TextColor="Black" x:Name="quantity"
                                    FontSize="Medium" 
-                                   HorizontalTextAlignment="Start"
+                                   HorizontalTextAlignment="Start" 
                                    HorizontalOptions="CenterAndExpand"
                                    Keyboard="Numeric" WidthRequest="40"
                                    MaxLength="2"
@@ -114,8 +113,8 @@
                                    VerticalOptions="Center">
                                             <Entry.Behaviors>
                                                 <behaviorsPack:EventToCommandBehavior Command="{Binding Source={x:Reference ProductsSales}, Path=BindingContext.QuantityChangedCommand}"
-                                       CommandParameter="{Binding Source={x:Reference quantity}}"
-                                       EventName="Completed"/>
+                                                   CommandParameter="{Binding Source={x:Reference quantity}}"
+                                                   EventName="Unfocused"/>
                                             </Entry.Behaviors>
 
                                         </Entry>

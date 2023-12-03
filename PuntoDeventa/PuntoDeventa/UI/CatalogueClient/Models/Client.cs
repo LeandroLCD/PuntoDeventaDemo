@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace PuntoDeventa.UI.CatalogueClient.Model
 {
@@ -27,9 +26,9 @@ namespace PuntoDeventa.UI.CatalogueClient.Model
         {
             if (obj is Client other)
             {
-                return Rut == other.Rut && Name == other.Name &&
-                    BranchOffices.Count().Equals(other.BranchOffices.Count) &&
-                    EconomicActivities.Count().Equals(other.EconomicActivities.Count);
+                return Rut == other.Rut && Name == other.Name;
+                //BranchOffices.Count().Equals(other.BranchOffices.Count) &&
+                //EconomicActivities.Count().Equals(other.EconomicActivities.Count);
             }
             return false;
         }

@@ -63,20 +63,20 @@ namespace PuntoDeventa.IU
         }
 
         /// <summary>
-        /// Ejecuta el NavigationBack, para retirnar a la vista anterior.
+        /// Ejecuta el NavigationBack, para retornar a la vista anterior.
         /// </summary>
-        public async void NavigationBack(Type page, string backDataPass = null)
+        public async void NavigationBack(Type pageCurrentType, string backDataPass = null)
         {
             var uri = Shell.Current.CurrentState.Location.OriginalString;
-            var remove = page.Name.Length + 1;
-            var path = uri.Remove(uri.Length - remove);
+            var remove = pageCurrentType.Name.Length + 1;
+            var path = uri.Remove(uri.Length - remove).Replace("//", "///");
             if (!string.IsNullOrEmpty(backDataPass))
             {
-                await Shell.Current.GoToAsync($"//{path}?{backDataPass}");
+                await Shell.Current.GoToAsync($"{path}?{backDataPass}");
             }
             else
             {
-                await Shell.Current.GoToAsync($"//{path}");
+                await Shell.Current.GoToAsync($"{path}");
             }
 
         }

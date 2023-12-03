@@ -4,7 +4,7 @@ namespace PuntoDeventa.UI.Sales.Models
 {
     public class Payment
     {
-        public Payment(double amount, PaymentType type)
+        public Payment(int amount, PaymentType type)
         {
             Amount = amount;
             Type = type;
@@ -13,7 +13,7 @@ namespace PuntoDeventa.UI.Sales.Models
 
         public DateTime Date { get; set; } = DateTime.Now;
 
-        public double Amount { get; set; }
+        public int Amount { get; set; }
 
         public int Invoice { get; set; }
 

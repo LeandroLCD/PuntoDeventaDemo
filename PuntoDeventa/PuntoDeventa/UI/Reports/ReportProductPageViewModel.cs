@@ -1,12 +1,16 @@
 ﻿using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.Report;
 using PuntoDeventa.UI.CategoryProduct.Models;
+using PuntoDeventa.UI.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using PuntoDeventa.UI.Utilities;
+using PuntoDeventa.UI.Reports.State;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace PuntoDeventa.UI.Reports
 {
@@ -17,7 +21,10 @@ namespace PuntoDeventa.UI.Reports
         private int _totalNeto;
         private int _amountVat;
         private string _searchText;
+        private readonly IReportToPdfUseCase _reportToPdfUseCase;
         private readonly IGetReportSales _reportUseCase;
+        private readonly IReportToExcelUseCase _reportToExcelUseCase;
+
         #endregion
 
         #region Constructor
@@ -30,7 +37,8 @@ namespace PuntoDeventa.UI.Reports
 
         public ReportProductPageViewModel()
         {
-
+            _reportToPdfUseCase = DependencyService.Get<IReportToPdfUseCase>();
+            _reportToExcelUseCase = DependencyService.Get<IReportToExcelUseCase>();
             _reportUseCase = DependencyService.Get<IGetReportSales>();
             InitializeCommands();
         }
@@ -41,7 +49,7 @@ namespace PuntoDeventa.UI.Reports
 
         #region Properties
         private LinkedList<ProductSales> GetProductSales { get; set; } = new LinkedList<ProductSales>();
-        
+
         public ObservableCollection<ProductSales> ProductSales
         {
             get
@@ -84,6 +92,8 @@ namespace PuntoDeventa.UI.Reports
         #region Commands
         public Command SyncCommand { get; set; }
 
+        public Command ShareCommand { get; set; }
+
         public Command<string> SearchBarCommand { get; set; }
 
         public Command VisibleCalendarCommand { get; set; }
@@ -116,6 +126,51 @@ namespace PuntoDeventa.UI.Reports
                 }
             });
             VisibleCalendarCommand = new Command(() => IsVisibleCalendar = !IsVisibleCalendar);
+
+            ShareCommand = new Command(ShareMethods);
+        }
+
+        private async void ShareMethods(object obj)
+        {
+            var respose = await Shell.Current.DisplayActionSheet(
+                "Exportar Reporte.pdf", 
+                "Cancelar ",  null,
+                buttons: new[] { "En Pdf", "En Excel" });
+            ExportState state = null;
+            if (respose.Contains("En Pdf"))
+            {
+                state = await _reportToPdfUseCase.Create("Reporte de Producto", ProductSales);
+            }
+            else if (respose.Contains("En Excel"))
+            {
+                var header = new[] { "Sku", "Producto", "Cantidad", "Precio", "Precio mas iva", "Sub total" };
+                var values = ProductSales.Select(p => new List<string>
+                {
+                    p.Sku.ToString(),
+                    p.Name,
+                    p.Quantity.ToString(),
+                    p.PriceGross.ToString(CultureInfo.CurrentCulture),
+                    p.PriceNeto.ToString(CultureInfo.CurrentCulture),
+
+                }).ToList();
+                state = await _reportToExcelUseCase.Create("Reporte de Producto.xls", header, values);
+
+            }
+
+            switch (state)
+            {
+                case ExportState.Error error:
+                    //logica de error
+                    break;
+                case ExportState.Success success:
+                    await Share.RequestAsync(new ShareFileRequest
+                    {
+                        Title = "Exportar Archivo",
+                        File = new ShareFile(success.Data.ToString())
+                    });
+                    break;
+            }
+            Debug.WriteLine(respose);
         }
 
         private void ProductFilter(string text)
@@ -187,7 +242,7 @@ namespace PuntoDeventa.UI.Reports
                 return;
 
             }
-            
+
             IsVisibleCalendar = IsLoading = false;
         }
 

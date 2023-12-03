@@ -15,11 +15,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Xamarin.Forms;
 
 namespace PuntoDeventa.UI.Sales
 {
-    internal class SalesPageViewModel : BaseViewModel
+    internal class SalesPageViewModel : BaseViewModel, IQueryAttributable
     {
         #region Fields
         private readonly IGetRoutesUseCase _routesUseCase;
@@ -262,10 +263,10 @@ namespace PuntoDeventa.UI.Sales
             RoutesIndex = -1;
             DateDte = DateTime.Now;
             ClientName = "Seleccione un Cliente";
+            GetProductSales = new List<ProductSales>();
 
             GetSalesRoutes = new LinkedList<SalesRoutes>();
             GetCategories = new LinkedList<Category>();
-            GetProductSales = new List<ProductSales>();
 
             InitializeCommand();
         }
@@ -376,7 +377,7 @@ namespace PuntoDeventa.UI.Sales
 
                 productTarget?.Apply(() =>
                 {
-                    if (productTarget.Equals(product)) return;
+                    if (!productTarget.Equals(product)) return;
 
                     productTarget.Quantity = q;
                     var index = _productSales.IndexOf(product);
@@ -400,8 +401,6 @@ namespace PuntoDeventa.UI.Sales
                     productSales.Quantity = product.Quantity;
                     productSales.IsOffer = product.IsOffer;
                     var index = _productSales.IndexOf(product);
-                    //ProductsSales.RemoveAt(index);
-                    //ProductsSales.Insert(index, productSales.Clone<ProductSales>());  
                     ProductsSales[index] = product.Clone<ProductSales>();
                     NotifyPropertyChanged(nameof(ProductsSales));
 
@@ -467,7 +466,7 @@ namespace PuntoDeventa.UI.Sales
                     return;
                 }
                 var json = JsonConvert.SerializeObject(NewSale);
-                await Shell.Current.GoToAsync($"{nameof(PaymentSale)}?Sale={json}");
+                await Shell.Current.GoToAsync($"{nameof(PaymentSalePage)}?Sale={json}");
             }
             catch (Exception ex)
             {
@@ -593,5 +592,24 @@ namespace PuntoDeventa.UI.Sales
 
         #endregion
 
+        public async void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            try
+            {
+                var isNew = HttpUtility.UrlDecode(query["isNew"]);
+                bool.TryParse(isNew, out var result);
+                if (!result) return;
+                DateDte = DateTime.Now;
+                ClientName = "Seleccione un Cliente";
+                GetProductSales.Clear();
+                ProductsSales.Clear();
+                ClientSelect = null;
+            }
+            catch (Exception ex)
+            {
+                if (!ex.Message.Contains("The given key 'isNew'"))
+                    await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok");
+            }
+        }
     }
 }

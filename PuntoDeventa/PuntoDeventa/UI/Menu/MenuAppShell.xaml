@@ -77,7 +77,7 @@
 
     
     <FlyoutItem Title="Ventas" Icon="calculate">
-        <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate sales:SalesPage}" />
+        <ShellContent Route="SalesPage" ContentTemplate="{DataTemplate sales:SalesPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Catalgo Productos" Icon="product">
