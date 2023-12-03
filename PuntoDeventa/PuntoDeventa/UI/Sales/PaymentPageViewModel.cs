@@ -3,18 +3,17 @@ using PuntoDeventa.Data.Models;
 using PuntoDeventa.Domain.Helpers;
 using PuntoDeventa.Domain.UseCase.Sales;
 using PuntoDeventa.IU;
-using PuntoDeventa.UI.Controls.Animations;
 using PuntoDeventa.UI.Sales.Models;
 using PuntoDeventa.UI.Sales.Screen;
 using PuntoDeventa.UI.Sales.State;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
+using static PuntoDeventa.UI.Sales.State.ScreenStates;
 
 namespace PuntoDeventa.UI.Sales
 {
@@ -23,10 +22,13 @@ namespace PuntoDeventa.UI.Sales
         #region Fields
         private readonly IPreViewPdf _previewUseCase;
         private readonly IEmitFacturaUseCase _emitFacturaUseCase;
-        private readonly IEmitFacturaUseCase _emitNotaDePedidoUseCase;
-        private Dictionary<string, Payment> _dictionaryPay;
-        const double Tolerance = 1;
+        private readonly IEmitNotaDePedidoUseCase _emitNotaDePedidoUseCase;
+        private Dictionary<PaymentType, Payment> _dictionaryPay;
+        private int _totalPay;
+        private const double Tolerance = 1;
         #endregion
+
+
 
         public PaymentPageViewModel()
         {
@@ -34,64 +36,234 @@ namespace PuntoDeventa.UI.Sales
 
             _emitFacturaUseCase = DependencyService.Get<IEmitFacturaUseCase>();
 
-            _emitNotaDePedidoUseCase = DependencyService.Get<IEmitFacturaUseCase>();
+            _emitNotaDePedidoUseCase = DependencyService.Get<IEmitNotaDePedidoUseCase>();
 
-            CastCommand = new Command<object>((obj) =>
-            {
-                var payment = (KeyValuePair<string, double>)obj;
-                object key = null;
-                switch (payment.Key)
-                {
-                    case nameof(PaymentType.Cash):
-                        key = PaymentType.Cash;
-                        break;
-                    case nameof(PaymentType.BankCheck):
-                        key = PaymentType.BankCheck;
-                        break;
-                    case nameof(PaymentType.BankTransfer):
-                        key = PaymentType.BankTransfer;
-                        break;
-                    case nameof(PaymentType.BankDeposit):
-                        key = PaymentType.BankDeposit;
-                        break;
-
-                }
-                if (PaymentList.ContainsKey(payment.Key))
-                    PaymentList[payment.Key] = new Payment(payment.Value, (PaymentType)key);
-                else
-                {
-                    PaymentList.Add(payment.Key, new Payment(payment.Value, (PaymentType)key));
-                }
-            });
+            InitializeCommand();
         }
 
-        private PaymentSales PaymentSales { get; set; }
-        private Grid Content { get; set; }
 
-        public Command<object> CastCommand { get; set; }
-
-        public Dictionary<string, Payment> PaymentList
+        #region Properties
+        public Dictionary<PaymentType, Payment> PaymentList
         {
             get
             {
                 if (_dictionaryPay.IsNull())
-                    _dictionaryPay = new Dictionary<string, Payment>();
+                    _dictionaryPay = new Dictionary<PaymentType, Payment>();
                 return _dictionaryPay;
             }
             set => SetProperty(ref _dictionaryPay, value);
         }
 
-        private ScreenStates ScreenStates { get; set; }
 
-        public bool ChangedPayment(PaymentType key, double value)
+        public int TotalPay
+        {
+            get => _totalPay;
+            set => SetProperty(ref _totalPay, value);
+        }
+        private ScreenStates CurrentScreenStates { get; set; }
+        private PaymentSales PaymentSales { get; set; }
+        private Grid Content { get; set; }
+
+        #endregion
+
+        #region Command
+        public Command<int> CastCommand { get; set; }
+        public Command<int> CheckCommand { get; set; }
+        public Command<int> TransferCommand { get; set; }
+        public Command<int> DepositCommand { get; set; }
+        public Command PreviewCommand { get; set; }
+        public Command BackButtonCommand { get; set; }
+
+
+        #endregion
+
+        private void InitializeCommand()
+        {
+            CastCommand = new Command<int>((value) =>
+            {
+                AddPayment(PaymentType.Cash, value);
+            });
+
+            DepositCommand = new Command<int>((value) =>
+            {
+                AddPayment(PaymentType.BankDeposit, value);
+            });
+
+            TransferCommand = new Command<int>((value) =>
+            {
+                AddPayment(PaymentType.BankTransfer, value);
+            });
+
+            CheckCommand = new Command<int>((value) =>
+            {
+                AddPayment(PaymentType.BankCheck, value);
+            });
+
+            BackButtonCommand = new Command(() =>
+            {
+                var state = CurrentScreenStates.BackState();
+                switch (state)
+                {
+                    case null:
+                        NavigationBack(typeof(PaymentSalePage), "isNew=false");
+                        break;
+                    case Success success:
+                        NavigationBack(typeof(PaymentSalePage), "isNew=true");
+                        break;
+                    default:
+                        HandlerScreenState(state);
+                        break;
+                }
+
+
+            });
+
+            PreviewCommand = new Command(async () =>
+            {
+
+                var state = await _previewUseCase.ToCreate(PaymentSales);
+                switch (state)
+                {
+                    case SalesState.Error error:
+                        break;
+                    case SalesState.Success success:
+
+                        HandlerScreenState(Preview.Instance(success.Data.ToString()));
+                        break;
+                }
+
+            });
+        }
+
+        private void AddPayment(PaymentType type, int value)
         {
 
-            return true;
+            if (PaymentList.ContainsKey(type))
+                PaymentList[type] = new Payment(value, type);
+            else
+            {
+                PaymentList.Add(type, new Payment(value, type));
+            }
+
+            TotalPay = PaymentList.Sum(p => p.Value.Amount);
         }
-        public void OnAppernig(Grid view)
+
+        public void OnAppearing(Grid view)
         {
             Content = view;
-            HandlerScreenState(ScreenStates.DocumentSelection.Instance);
+            HandlerScreenState(DocumentSelection.Instance);
+        }
+
+        private async void CreditEmit()
+        {
+
+            PaymentSales.PaymentMethod = PaymentMethod.Credit;
+            var paymentSalesPaymentTypes = PaymentList.Select(p => p.Value).ToList();
+
+            if (paymentSalesPaymentTypes.Any())
+                PaymentSales.PaymentTypes = paymentSalesPaymentTypes.Where(p => p.Amount > 0);
+
+            //SalesState state;
+            //if (PaymentSales.DocumentType.Equals(DteType.Factura))
+            //    state = await _emitFacturaUseCase.DoEmit(PaymentSales);
+            //else
+            //    state = await _emitNotaDePedidoUseCase.DoEmit(PaymentSales);
+
+            var state = PaymentSales.DocumentType == DteType.Factura
+                ? await _emitFacturaUseCase.DoEmit(PaymentSales)
+                : await _emitNotaDePedidoUseCase.DoEmit(PaymentSales);
+
+
+            switch (state)
+            {
+                case SalesState.Error error:
+                    await Shell.Current.DisplayToastAsync(string.Join(Environment.NewLine, error));
+                    break;
+                case SalesState.Success success:
+                    HandlerScreenState(Success.Instance(success.Data.ToString()));
+                    break;
+            }
+
+
+        }
+
+        private async void CaskEmit()
+        {
+            PaymentSales.PaymentMethod = PaymentMethod.Counted;
+
+            var paymentList = PaymentList.Select(p => p.Value).ToList();
+            var total = PaymentSales.Sale.Products.Sum(s => Math.Floor(s.SubTotal * (1 + s.Vat)));
+            var pay = paymentList.Sum(p => p.Amount);
+
+
+            if (Math.Abs(total - pay) < Tolerance)
+            {
+                PaymentSales.PaymentTypes = PaymentList.Select(p => p.Value).Where(p => p.Amount > 0);
+
+                PaymentSales.PaymentTypes = paymentList;
+
+                var state = PaymentSales.DocumentType == DteType.Factura
+                    ? await _emitFacturaUseCase.DoEmit(PaymentSales)
+                    : await _emitNotaDePedidoUseCase.DoEmit(PaymentSales);
+
+                switch (state)
+                {
+                    case SalesState.Error error:
+                        await Shell.Current.DisplayToastAsync(string.Join(Environment.NewLine, error));
+                        break;
+                    case SalesState.Success success:
+                        HandlerScreenState(Success.Instance(success.Data.ToString()));
+                        break;
+                }
+
+            }
+            else
+            {
+                await Shell.Current.DisplaySnackBarAsync(
+                    $"El monto {total:C2}, ingresado no es igual al monto total de la venta {total:C2}",
+                    "Aceptar", action: () => Task.CompletedTask,
+                    duration: TimeSpan.FromSeconds(10));
+            }
+        }
+
+        private void HandlerScreenState(ScreenStates state)
+        {
+            CurrentScreenStates = state;
+            switch (state)
+            {
+                case Preview preview:
+                    Content.Children.Clear();
+                    Content.Children.Add(new PdfViewScreen(
+                        preview.PdfStream, preview.PathPdf,
+                        new Command(() => HandlerScreenState(DocumentSelection.Instance)),
+                        "Pagar"));
+
+                    break;
+                case DocumentSelection documentSelection:
+                    Content.Children.Clear();
+                    Content.Children.Add(new DocumentTypeScreen(
+                        new Command<object>((type) =>
+                        {
+                            PaymentSales.DocumentType = (DteType)type;
+                            HandlerScreenState(PaymentSelection.Instance);
+                        })));
+                    break;
+
+                case PaymentSelection paymentSelection:
+                    Content.Children.Clear();
+                    Content.Children.Add(new PaymentListScreen(
+                        new Command(CaskEmit),
+                        commandCredit: new Command(CreditEmit),
+                        CastCommand, CheckCommand, DepositCommand, TransferCommand));
+                    break;
+                case Success success:
+                    Content.Children.Clear();
+                    Content.Children.Add(new PdfViewScreen(success.PdfStream, success.PathPdf, new Command(() =>
+                    {
+                        BackButtonCommand.Execute(null);
+                    })));
+                    break;
+            }
         }
 
         public async void ApplyQueryAttributes(IDictionary<string, string> query)
@@ -103,114 +275,7 @@ namespace PuntoDeventa.UI.Sales
             }
             catch (Exception ex)
             {
-                await App.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok");
-            }
-        }
-
-        private void HandlerScreenState(ScreenStates state)
-        {
-            switch (state)
-            {
-                case ScreenStates.Preview preview:
-                    ScreenStates = preview;
-                    Content.ClearAllAnimate();
-                    Content.Children.Add(new PdfViewScreen(
-                        preview.PdfStream,
-                        new Command(() => HandlerScreenState(ScreenStates.DocumentSelection.Instance)),
-                        "Pagar"));
-                    break;
-                case ScreenStates.DocumentSelection documentSelection:
-                    // Content.ClearAllAnimate();
-                    Content.Children.Add(new DocumentTypeScreen(
-                        new Command<object>((type) =>
-                        {
-                            PaymentSales.DocumentType = (DteType)type;
-                            HandlerScreenState(ScreenStates.PaymentSelection.Instance);
-                        })));
-                    ScreenStates = documentSelection;
-                    break;
-                case ScreenStates.PaymentSelection paymentSelection:
-                    Content.Children.Clear();
-                    Content.Children.Add(new PaymentListScreen(
-                        new Command<Dictionary<PaymentType, Payment>>(CaskEmit),
-                        commandCredit: new Command<Dictionary<PaymentType, Payment>>(CreditEmit),
-                        CastCommand));
-                    break;
-                case ScreenStates.Success success:
-                    ScreenStates = success;
-                    Content.Children.Clear();
-                    Content.Children.Add(new PdfViewScreen(success.PdfStream, new Command(async () =>
-                    {
-                        //Como indicamos a la vista que debe borrar los datos?
-                        await Shell.Current.GoToAsync($"..");
-                    })));
-                    break;
-            }
-        }
-
-        private async void CreditEmit(Dictionary<PaymentType, Payment> paymentList)
-        {
-            PaymentSales.PaymentMethod = PaymentMethod.Credit;
-            var paymentSalesPaymentTypes = paymentList.Select(p => p.Value).ToList();
-
-            if (paymentSalesPaymentTypes.Any())
-                PaymentSales.PaymentTypes = paymentSalesPaymentTypes.Where(p => p.Amount > 0);
-
-            var state = PaymentSales.DocumentType == DteType.Factura
-                ? await _emitFacturaUseCase.DoEmit(PaymentSales)
-                : await _emitNotaDePedidoUseCase.DoEmit(PaymentSales);
-            switch (state)
-            {
-                case SalesState.Error error:
-                    await Shell.Current.DisplayToastAsync(string.Join(Environment.NewLine, error));
-                    break;
-                case SalesState.Success success:
-                    HandlerScreenState(ScreenStates.Success.Instance((string)success.Data));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(state));
-            }
-
-
-        }
-
-        private async void CaskEmit(Dictionary<PaymentType, Payment> paymentList)
-        {
-            PaymentSales.PaymentMethod = PaymentMethod.Counted;
-            var paymentSalesPaymentTypes = paymentList.Select(p => p.Value).ToList();
-            var total = PaymentSales.Sale.Products.Sum(s => s.SubTotal * (1 + s.Vat));
-            var pay = paymentSalesPaymentTypes.Sum(p => p.Amount);
-
-            if (paymentSalesPaymentTypes.Any())
-                PaymentSales.PaymentTypes = paymentSalesPaymentTypes.Where(p => p.Amount > 0);
-
-
-            if (Math.Abs(PaymentSales.Sale.Products.Sum(s => s.SubTotal * s.Vat) - paymentSalesPaymentTypes.Sum(p => p.Amount)) < Tolerance)
-            {
-                Console.WriteLine($"factura:{total}, pagado:-{pay}");
-                PaymentSales.PaymentTypes = paymentSalesPaymentTypes;
-                var state = PaymentSales.DocumentType == DteType.Factura
-                    ? await _emitFacturaUseCase.DoEmit(PaymentSales)
-                    : await _emitNotaDePedidoUseCase.DoEmit(PaymentSales);
-                switch (state)
-                {
-                    case SalesState.Error error:
-                        await Shell.Current.DisplayToastAsync(string.Join(Environment.NewLine, error));
-                        break;
-                    case SalesState.Success success:
-                        HandlerScreenState(ScreenStates.Success.Instance(new StreamReader((string)success.Data).BaseStream));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(state));
-                }
-
-            }
-            else
-            {
-                await Shell.Current.DisplaySnackBarAsync(
-                    $"El monto ingresado no es igual, al total de la venta {total:C0}",
-                    "Aceptar", action: () => Task.CompletedTask,
-                    duration: TimeSpan.FromSeconds(10));
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok");
             }
         }
 

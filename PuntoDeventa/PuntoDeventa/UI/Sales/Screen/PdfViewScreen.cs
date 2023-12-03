@@ -1,5 +1,4 @@
-﻿using PuntoDeventa.Domain.Helpers;
-using Syncfusion.SfPdfViewer.XForms;
+﻿using Syncfusion.SfPdfViewer.XForms;
 using System.IO;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -22,11 +21,9 @@ namespace PuntoDeventa.UI.Sales.Screen
             _titleAction = titleAction;
             Content = LoadContent();
         }
-        public PdfViewScreen(Stream pdfStream, ICommand commandActions = null, string titleAction = "Aceptar")
+        public PdfViewScreen(Stream pdfStream, string pathPdf, ICommand commandActions = null, string titleAction = "Aceptar")
         {
-            var fn = "Preview.pdf";
-            var pathPdf = Path.Combine(FileSystem.CacheDirectory, fn);
-            File.WriteAllBytes(pathPdf, pdfStream.ToBytes());
+
             _pathPdf = pathPdf;
             _pdfStream = pdfStream;
             _commandActions = commandActions;

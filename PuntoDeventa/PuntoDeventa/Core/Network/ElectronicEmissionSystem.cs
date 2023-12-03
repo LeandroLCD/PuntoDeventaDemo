@@ -30,7 +30,8 @@ namespace PuntoDeventa.Core.Network
         }
         public async Task<HttpResponseMessage> GetAsync(string apiKey, Uri url)
         {
-            AddHeader();
+            _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
+
             return await _httpClient.GetAsync(url);
         }
         public async Task<HttpResponseMessage> GetAsync(Uri url)

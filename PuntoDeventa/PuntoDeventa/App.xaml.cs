@@ -53,7 +53,7 @@ namespace PuntoDeventa
             var pdfStream = new MemoryStream(bytes);
             return new ContentPage()
             {
-                Content = new PdfViewScreen(pdfStream)
+                Content = new PdfViewScreen(pdfStream, string.Empty)
             };
         }
 

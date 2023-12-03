@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.1.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-fips-adapter" Version="8.0.2" />
@@ -43,6 +44,9 @@
     </Compile>
     <Compile Update="UI\Reports\ReportSalePage.xaml.cs">
       <DependentUpon>ReportSalePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Sales\PaymentSalePage.xaml.cs">
+      <DependentUpon>PaymentSalePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -78,7 +82,7 @@
     <EmbeddedResource Update="UI\Reports\ReportSalePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="UI\Sales\PaymentSale.xaml">
+    <EmbeddedResource Update="UI\Sales\PaymentSalePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UI\Sales\SalesPage.xaml">

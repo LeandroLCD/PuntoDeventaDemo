@@ -16,7 +16,7 @@ namespace PuntoDeventa.Domain.UseCase.Report.Implementation
         }
         public async IAsyncEnumerable<ReportSale> EmitSales(DateTime date)
         {
-            
+
             await foreach (var report in _repository.GetReportSale(date))
             {
                 yield return report;
