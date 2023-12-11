@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sales="clr-namespace:PuntoDeventa.UI.Sales;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.Sales.PaymentSalePage">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButtonCommand}"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="iconpdf" 
+                     Command="{Binding PreviewCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.BindingContext>
+        <sales:PaymentPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+
+        <Grid x:Name="ContentGrid">
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

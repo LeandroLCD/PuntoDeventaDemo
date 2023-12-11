@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=netstandard" 
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.CategoryProduct"
+             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.CategoryProduct.ProductPage"
+             Title="{Binding TitlePage}">
+    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButtonCommand}"/>
+    </Shell.BackButtonBehavior>
+    
+    
+    <ContentPage.BindingContext>
+        <viewModel:ProductPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid>
+                    <StackLayout Padding="15">
+                        <StackLayout Orientation="Horizontal">
+                            <inputLayout:SfTextInputLayout
+                    ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                    Hint="Código SKU" x:Name="inputSku">
+                                <Entry x:Name="sku" Keyboard="Numeric"
+                       MaxLength="8" HorizontalOptions="FillAndExpand"
+                       Text="{Binding GetProduct.Sku}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                        ContainerType="Outlined" WidthRequest="150" HeightRequest="56"
+                        Hint="Unidad">
+                                <combobox:SfComboBox x:Name="unidad" 
+                                         HeightRequest="52"
+                                         DisplayMemberPath="Unidad"
+                                         ShowClearButton="False"
+                                         IsEditableMode="false"
+                                         SelectedItem="{Binding GetProduct.UDM}">
+                                    <combobox:SfComboBox.ComboBoxSource >
+                                        <ListCollection:List x:TypeArguments="x:String">
+                                            <x:String>UND</x:String>
+                                            <x:String>CAJA</x:String>
+                                        </ListCollection:List>
+                                    </combobox:SfComboBox.ComboBoxSource>
+                                </combobox:SfComboBox>
+
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <inputLayout:SfTextInputLayout
+                    ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                    Hint="Código de Barra">
+                                    <Entry x:Name="barCode" Keyboard="Numeric" 
+                       MaxLength="14" HorizontalOptions="FillAndExpand"
+                       Text="{Binding GetProduct.BarCode}"/>
+                                </inputLayout:SfTextInputLayout>
+                                <Switch x:Name="inReport" IsToggled="{Binding GetProduct.InReport}" IsVisible="False"/>
+                                <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined" WidthRequest="150" 
+                        
+                                Hint="Is Report">       
+                                    <combobox:SfComboBox  HeightRequest="52"
+                                               ShowClearButton="False"
+                                               IsEditableMode="false">
+                                        <combobox:SfComboBox.SelectedItem>
+                                            <Binding Source="{x:Reference inReport}" Path="IsToggled">
+                                                
+                                            </Binding>
+                                        </combobox:SfComboBox.SelectedItem>
+                                        <combobox:SfComboBox.ComboBoxSource >
+                                            <ListCollection:List x:TypeArguments="x:String">
+                                                <x:String>Si</x:String>
+                                                <x:String>No</x:String>
+                                            </ListCollection:List>
+                                        </combobox:SfComboBox.ComboBoxSource>
+                                    </combobox:SfComboBox>
+                                </inputLayout:SfTextInputLayout>
+
+                            </StackLayout>
+                            <inputLayout:SfTextInputLayout
+                    ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                    Hint="Nombre del Producto">
+                                <Entry x:Name="name"
+                       MaxLength="100" HorizontalOptions="FillAndExpand"
+                       Text="{Binding GetProduct.Name}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                    ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                    Hint="Descripción del Producto">
+                                <Entry x:Name="description"
+                       HorizontalOptions="FillAndExpand"
+                       Text="{Binding GetProduct.Description}"/>
+                            </inputLayout:SfTextInputLayout>
+                            
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Grid>
+                                    <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                            HelperText="Ej: 10,151"
+                            Hint="Producto en Oferta">
+                                        <Entry Keyboard="Numeric" IsReadOnly="{Binding GetProduct.IsOffer, Converter={StaticResource InverseBoolConverter}}"
+                                   Text="{Binding Percentage}"
+                                   HorizontalTextAlignment="Center" 
+                                   MaxLength="6" x:Name="percentage"
+                                   HorizontalOptions="FillAndExpand">
+                                            <!-- -->
+
+                                            <Entry.Behaviors>
+                                                <behaviorsPack:EventToCommandBehavior Command="{Binding PercentageChangedCommand}"
+                                                                          EventName="TextChanged"
+                                                                          EventArgsPropertyPath="NewTextValue"/>
+
+
+                                            </Entry.Behaviors>
+
+
+                                        </Entry>
+                                    </inputLayout:SfTextInputLayout>
+                                    <Switch IsToggled="{Binding GetProduct.IsOffer}" 
+                                
+                                HorizontalOptions="StartAndExpand" Margin="0,-10,0,0">
+                                        <!-- -->
+                                        <Switch.Behaviors>
+                                            <behaviorsPack:EventToCommandBehavior Command="{Binding NotifyChangedCommand}"
+                                                                      EventName="Toggled"/>
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </Grid>
+
+                            </StackLayout>
+                            <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                            HelperText="No incluye Iva."
+                            Hint="Precio Bruto">
+                                <Entry Keyboard="Numeric" 
+                           HorizontalTextAlignment="Center"
+                           
+                            MaxLength="8" HorizontalOptions="FillAndExpand"
+                            Text="{Binding GetProduct.PriceGross}">
+                                    <!-- -->
+                                    <Entry.Behaviors>
+                                        <behaviorsPack:EventToCommandBehavior Command="{Binding NotifyChangedCommand}"
+                                                                  EventName="TextChanged"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </inputLayout:SfTextInputLayout>
+
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                            HelperText="Iva inclido." IsEnabled="{Binding GetProduct.PriceOffer}"
+                            Hint="Precio En Oferta">
+                                <Entry IsReadOnly="True" FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="FillAndExpand"
+                            Text="{Binding GetProduct.PriceNeto}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined" HorizontalOptions="FillAndExpand"
+                            HelperText="Iva inclido." HeightRequest="56" IsEnabled="{Binding GetProduct.IsOffer, Converter={StaticResource InverseBoolConverter}}"
+                            Hint="Precio Lista">
+                                <Entry IsReadOnly="True" 
+                           HorizontalTextAlignment="Center" FontAttributes="Bold"
+                           Text="{Binding GetProduct.PriceGross}" 
+                           HorizontalOptions="FillAndExpand"/>
+
+
+
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand">
+
+                            <Button Text="Agregar"  WidthRequest="150" 
+                        IsVisible="{Binding IsEdit,Converter={x:StaticResource InverseBoolConverter}}" 
+                        Command="{Binding AddProductCommand}" CommandParameter="{Binding GetProduct}"/>
+                            <Button Text="Actualizar" IsVisible="{Binding IsEdit}" WidthRequest="150" 
+                        Command="{Binding EditProductCommand}" CommandParameter="{Binding GetProduct}"/>
+
+
+                        </StackLayout>
+
+                    </StackLayout>
+                </Grid>
+
+                 <controls:CustomActivity IsRunning="{Binding IsLoanding}" Icon="icon" Text="{Binding StatusMessage}"/>
+            </Grid>
+
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

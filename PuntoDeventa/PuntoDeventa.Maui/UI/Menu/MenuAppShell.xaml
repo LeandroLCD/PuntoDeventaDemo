@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PuntoDeventa.UI.Menu.MenuAppShell"
+             xmlns:categories="clr-namespace:PuntoDeventa.UI.CategoryProduct" 
+            xmlns:catalogue="clr-namespace:PuntoDeventa.UI.CatalogueClient" 
+        xmlns:sales="clr-namespace:PuntoDeventa.UI.Sales"
+             xmlns:reports="clr-namespace:PuntoDeventa.UI.Reports;assembly=PuntoDeventa"
+       xmlns:converter="clr-namespace:PuntoDeventa.UI.Controls.Converters">
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.ForegroundColor" Value="Black" />
+                <Setter Property="Shell.TitleColor" Value="Black" />
+                <Setter Property="Shell.DisabledColor" Value="Black" />
+                <Setter Property="Shell.UnselectedColor" Value="White" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
+                <Setter Property="Shell.TabBarUnselectedColor" Value="White"/>
+                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
+            </Style>
+            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+
+
+            <!--
+            Default Styles for all Flyout Items
+            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
+            -->
+            <Style Class="FlyoutItemLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White"></Setter>
+            </Style>
+            <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{x:OnPlatform UWP=Transparent, iOS=White}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <!--
+            Custom Style you can apply to any Flyout Item
+            -->
+            <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+
+            <converter:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+        </ResourceDictionary>
+    </Shell.Resources>
+    
+
+    
+    <FlyoutItem Title="Ventas" Icon="calculate">
+        <ShellContent Route="SalesPage" ContentTemplate="{DataTemplate sales:SalesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Catalgo Productos" Icon="product">
+        <ShellContent Route="CategoryHome" ContentTemplate="{DataTemplate categories:CategoryHome}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Catalgo Clientes" Icon="clients">
+        <ShellContent Route="CatalogueClient" ContentTemplate="{DataTemplate catalogue:CatalogueClientPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Reporte de Ventas" Icon="report">
+        <ShellContent Route="ReportSalePage" ContentTemplate="{DataTemplate reports:ReportSalePage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Reporte de Productos" Icon="report">
+        <ShellContent Route="ReportProductPage" ContentTemplate="{DataTemplate reports:ReportProductPage}" />
+    </FlyoutItem>
+
+<Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <ContentView Padding="-5" HeightRequest="200" BackgroundColor="Transparent">
+                <Image Source="logo.png" VerticalOptions="FillAndExpand" />
+
+                </ContentView>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+    <!--
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="60" BackgroundColor="Red">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <ImageButton  Source="ic_config.png" WidthRequest="25" Margin="20,0" BackgroundColor="Red"  HorizontalOptions="Start" Clicked="Button_Clicked"/>
+                    <Button BackgroundColor="Transparent" WidthRequest="140" TextTransform="None" Text="Configuración" Clicked="Button_Clicked" />
+                </StackLayout>
+            </Grid>
+            
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
+
+    // ItemTemplate is for ShellItems as displayed in a Flyout
+    // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-flyoutitem-appearance
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                Bindable Properties: Title, Icon
+            </ContentView>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    // MenuItemTemplate is for MenuItems as displayed in a Flyout
+    // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-menuitem-appearance
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                Bindable Properties: Text, Icon
+            </ContentView>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>-->
+
+</Shell>

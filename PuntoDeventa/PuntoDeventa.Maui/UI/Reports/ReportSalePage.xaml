@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
+             xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" 
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Reports;assembly=PuntoDeventa"
+             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.Reports.ReportSalePage">
+
+    
+    <Shell.TitleView>
+        <Frame Padding="0" BorderColor="Black" Margin="0,5">
+            <SearchBar HorizontalOptions="FillAndExpand" 
+                           Placeholder="Buscar" 
+                           FontSize="15" 
+                           x:Name="Searsh"                                   
+                           SearchCommand="{Binding SearchBarCommand}" 
+                           SearchCommandParameter="{Binding Source={x:Reference Searsh}, Path=Text}"
+                           Text="{Binding SearchText}">
+                <SearchBar.Behaviors>
+                    <behaviorsPack:EventToCommandBehavior Command="{Binding SearchBarCommand}"
+                                                              EventArgsPropertyPath="NewTextValue"
+                                                              EventName="TextChanged"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+        </Frame>
+    </Shell.TitleView>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" IconImageSource="sync" Command="{Binding SyncCommand}"/>
+        <ToolbarItem Order="Secondary" Text="Rango de Fechas."/>
+        <ToolbarItem Order="Secondary" Text="Venedores."/>
+        <ToolbarItem Order="Secondary" Text="Fecha A-Z."/>
+        <ToolbarItem Order="Secondary" Text="Fecha Z-A."/>
+        <ToolbarItem Order="Secondary" Text="Folio A-Z."/>
+        <ToolbarItem Order="Secondary" Text="Folio Z-A."/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.BindingContext>
+        <viewModel:ReportSalesPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+       <StackLayout>
+           <controls:CustomActivity IsRunning="{Binding IsLoading}" Icon="icon" Source="report" Text="{Binding StatusMessage}"/>
+
+            <CollectionView ItemsSource="{Binding ReportSales}" VerticalOptions="FillAndExpand">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="5" HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <pancakeView:PancakeView BackgroundColor="White" CornerRadius="15" Padding="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="100" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Primera fila con el nombre del cliente -->
+                                <Label Grid.Row="0" Text="{Binding Name}" FontSize="14" VerticalOptions="Center">
+                                    
+                                </Label>
+
+                                <!-- Segunda fila con la información adicional -->
+                                <StackLayout Grid.Row="1" Orientation="Horizontal">
+                                    <!-- Imagen con clip redondeado -->
+                                    <Image Source="{Binding Photo}" Aspect="AspectFill" HeightRequest="80" WidthRequest="80" >
+                                        
+                                    </Image>
+
+                                    <!-- StackLayout vertical con información adicional -->
+                                    <StackLayout>
+                                        <Label Text="{Binding Dte}" FontSize="12" />
+                                        <Label Text="{Binding TotalNet}" FontSize="12" />
+                                        <Label Text="{Binding AmountIva}" FontSize="12" />
+
+                                        <!-- ImageButton para realizar una acción -->
+                                        <ImageButton Source="eye.png"  />
+                                    </StackLayout>
+                                </StackLayout>
+                            </Grid>
+                        </pancakeView:PancakeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+           
+           <StackLayout Orientation="Horizontal" Padding="7" HeightRequest="50">
+
+               <pancakeView:PancakeView 
+                    VerticalOptions="Fill"
+                    Margin="1"
+                    HorizontalOptions="FillAndExpand" 
+                    CornerRadius="5"
+                    Padding="5"
+                    OffsetAngle="5">
+                    <pancakeView:PancakeView.Border>
+                        <pancakeView:Border Color="Black" 
+                                            Thickness="1"/>
+                    </pancakeView:PancakeView.Border>
+                    <Label FontSize="Medium" 
+                           TextColor="Black"
+                           HorizontalTextAlignment="Center" 
+                           VerticalTextAlignment="Center"
+                           Text="199.999.900" />
+
+                </pancakeView:PancakeView>
+
+               <pancakeView:PancakeView 
+                   VerticalOptions="Fill" 
+                   Margin="1"
+                   HorizontalOptions="FillAndExpand" 
+                   CornerRadius="5"
+                   Padding="5"
+                   OffsetAngle="5">
+                   <pancakeView:PancakeView.Border>
+                       <pancakeView:Border Color="Black" 
+                                           Thickness="1"/>
+                   </pancakeView:PancakeView.Border>
+                   <Label FontSize="Medium" 
+                          TextColor="Black"
+                          HorizontalTextAlignment="Center" 
+                          VerticalTextAlignment="Center"
+                          Text="39.200.000"/>
+                </pancakeView:PancakeView>
+               
+               <Button Text="Exportar" 
+                       CornerRadius="5" 
+                       BorderColor="Black" 
+                       BorderWidth="1"/>
+
+
+            </StackLayout>
+       </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewModel="clr-namespace:PuntoDeventa.UI.Auth" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:controls="clr-namespace:PuntoDeventa.IU.Controls;assembly=PuntoDeventa"
+             x:Class="PuntoDeventa.UI.Auth.LoginPage"
+             BackgroundColor="#A7A7A7">
+    
+    
+   <!--  <ContentPage.BindingContext>
+        <viewModel:LoginPageViewModel/>-->
+    <!--</ContentPage.BindingContext>/ -->
+    
+    <ContentPage.Content>
+        <Grid x:Name="GridParent" >
+            <Grid Padding=" 50" VerticalOptions="CenterAndExpand" RowDefinitions="40,40,400" >
+
+
+                <Frame Padding="20" Grid.Row="1" Grid.RowSpan="2"  BackgroundColor="White" HorizontalOptions="End">
+
+
+                    <StackLayout HorizontalOptions="Center" Margin="0,100,0,0" >
+
+
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined" HorizontalOptions="FillAndExpand" 
+                            Hint="Email" ErrorText="{Binding DataUser.EmailErrorText}"
+                                ErrorColor="Red" HasError="{Binding DataUser.HasEmail}">
+                            <Entry Text="{Binding DataUser.Email}"/>
+                        </inputLayout:SfTextInputLayout>
+                        <Grid VerticalOptions="Center">
+                            <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined" 
+                                HorizontalOptions="FillAndExpand" Hint="Contraseña"
+                                ErrorText="{Binding DataUser.PasswordErrorText}"
+                                ErrorColor="Red" HasError="{Binding DataUser.HasPassword}">
+                                <Entry Text="{Binding DataUser.Password}" 
+                                       IsPassword="{Binding IsPassword}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <ImageButton 
+                                    Source="eye.png" Margin="5"
+                                    WidthRequest="30"
+                                    HeightRequest="25"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="Blue" 
+                                    Command="{Binding IsPasswordCommand}"/>
+
+                        </Grid>
+
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding IsRemembermeCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="Recordar usuario" VerticalOptions="Center"/>
+                            <CheckBox IsChecked="{Binding IsRememberme}"/>
+                        </StackLayout>
+
+                        <Button 
+                               Text="Iniciar Sesión" 
+                               HorizontalOptions="Center" 
+                               HeightRequest="40" 
+                               WidthRequest="160" CornerRadius="15" 
+                               Command="{Binding LoginCommand}"
+                               Margin="0,25,0,0"/>
+
+
+                        <Label HorizontalOptions="CenterAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="¿Recuperar contraseña?" TextColor="#2196f3">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding RecoveryCommand}" CommandParameter="{Binding GetUser.email}" />
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                    </StackLayout>
+
+
+                </Frame>
+                <Image Source="icon.png" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+            </Grid>
+
+
+
+            <controls:CustomActivity IsRunning="False" Source="ic_activity_red" Icon="icon.png"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
