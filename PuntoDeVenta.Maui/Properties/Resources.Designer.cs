@@ -22,7 +22,7 @@ namespace PuntoDeVenta.Maui.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace PuntoDeVenta.Maui.Properties {
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PuntoDeVenta.Maui.Properties.Resources", typeof(Resources).Assembly);
@@ -51,12 +51,48 @@ namespace PuntoDeVenta.Maui.Properties {
         ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a https://identitytoolkit.googleapis.com/v1/.
+        /// </summary>
+        public static string BaseUrlAuth {
+            get {
+                return ResourceManager.GetString("BaseUrlAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a https://dev-api.haulmer.com/v2/dte/.
+        /// </summary>
+        public static string BaseUrlEelectronicEmission {
+            get {
+                return ResourceManager.GetString("BaseUrlEelectronicEmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a https://puntodeventademo-c6c23-default-rtdb.firebaseio.com/.
+        /// </summary>
+        public static string BaseUrlRealDataBase {
+            get {
+                return ResourceManager.GetString("BaseUrlRealDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a AIzaSyAYR81n079m-eiWgukzYnaDgIp2AXVqGo8.
+        /// </summary>
+        public static string KeyApplication {
+            get {
+                return ResourceManager.GetString("KeyApplication", resourceCulture);
             }
         }
     }

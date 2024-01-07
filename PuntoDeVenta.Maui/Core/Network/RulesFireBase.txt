@@ -1,0 +1,17 @@
+﻿{
+  "rules": {
+  "CatalogueClient":{
+        ".read": "root.child('Users').child(auth.uid).exists()",  
+    	".write": "root.child('Users').child(auth.uid).exists()"
+    },
+    "CategoryProduct":{
+        ".read": "root.child('Users').child(auth.uid).exists()",  
+    		".write": "root.child('Users').child(auth.uid).exists()"
+    },
+      "Users":{
+        ".read": "auth.uid !== null && root.child('Users').child(auth.uid).exists()",
+    		".write": "root.child('Users').child(auth.uid).child('Rols').child('Admin').val() === true"
+    },
+}
+  
+}
